@@ -124,6 +124,7 @@ Ejemplo:
 
 - Vue.js
 - Vite
+- Tailwind CSS
 
 ## Arquitectura
 
@@ -638,4 +639,52 @@ Desarrollar un sistema administrativo simple, funcional y fácil de usar que per
 - y stock básico,
 
 mediante una plataforma moderna basada en Insforge y Vue.js.
+
+---
+
+# Estándares de Código
+
+## Naming
+
+- Variables, funciones y componentes en **ESPAÑOL**
+- Ejemplos: `obtenerProductos`, `actualizarStock`, `PedidosView.vue`
+- Nombres en camelCase para variables, PascalCase para componentes Vue
+
+## Vue.js
+
+- Usar **Composition API** con `<script setup>`
+- No usar Options API
+- Estado global con Pinia
+
+## Manejo de Errores
+
+- Toda llamada API (fetch/Insforge) debe estar en try/catch
+- Mostrar mensajes de error claros al usuario
+- Validar datos antes de enviar al backend
+
+## Validaciones
+
+- Validar stock disponible antes de confirmar pedido
+- Validar campos obligatorios en formularios
+- Validar rangos de precios (>= 0)
+
+## Seguridad
+
+- No exponer credenciales ni API keys en frontend
+- Usar métodos de Insforge SDK para consultas
+- Verificar rol del usuario antes de mostrar acciones administrativas
+
+## UI/UX
+
+- Una pantalla por cada vista del sistema
+- Cada pantalla debe mostrar TODO lo que el usuario necesita
+- Manejo de estados: carga, éxito, error
+- Responsive design para pantallas de admin (1024px+)
+
+## Estilos
+
+- Framework: Tailwind CSS
+- NO usar `<style scoped>` en Vue
+- Usar clases de Tailwind directamente en los componentes
+- Colores del negocio: tonos pasteles/cálidos (repostería artesanal)
 
