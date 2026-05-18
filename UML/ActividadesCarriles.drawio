@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ============================================================ -->
+    <!-- DIAGRAMA DE ACTIVIDADES CON CARRILES – FERCHASBAKERY         -->
+    <!-- ============================================================ -->
+
+    <!-- ===================== TÍTULO ===================== -->
+    <mxCell id="title_act" value="FerchasBakery – Diagrama de Actividades con Carriles" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="200" y="20" width="900" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- ============================================================ -->
+    <!--   FLUJO 1: INICIO DE SESIÓN                                  -->
+    <!-- ============================================================ -->
+
+    <mxCell id="lbl_fl1" value="FLUJO 1: Inicio de Sesión" style="text;html=1;strokeColor=none;fillColor=#dae8fc;align=center;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="60" y="70" width="1240" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- Carriles -->
+    <!-- Lane: Usuario -->
+    <mxCell id="lane_usr_1" value="Usuario (Admin / Empleado)" style="swimlane;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="60" y="100" width="380" height="360" as="geometry" />
+    </mxCell>
+    <!-- Lane: Sistema -->
+    <mxCell id="lane_sys_1" value="Sistema / Insforge Auth" style="swimlane;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="100" width="380" height="360" as="geometry" />
+    </mxCell>
+    <!-- Lane: Base de Datos -->
+    <mxCell id="lane_db_1" value="Base de Datos (PostgreSQL)" style="swimlane;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="820" y="100" width="380" height="360" as="geometry" />
+    </mxCell>
+
+    <!-- Nodo inicio -->
+    <mxCell id="start1" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;" vertex="1" parent="lane_usr_1">
+      <mxGeometry x="165" y="50" width="30" height="30" as="geometry" />
+    </mxCell>
+    <!-- Acción: Ingresar correo y contraseña -->
+    <mxCell id="a1_1" value="Ingresar correo&#xa;y contraseña" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_usr_1">
+      <mxGeometry x="100" y="110" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Acción: Enviar credenciales -->
+    <mxCell id="a1_2" value="Enviar credenciales" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_usr_1">
+      <mxGeometry x="100" y="200" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Acción: Ver mensaje error / redirect -->
+    <mxCell id="a1_err" value="Ver mensaje de error" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="lane_usr_1">
+      <mxGeometry x="100" y="280" width="180" height="50" as="geometry" />
+    </mxCell>
+
+    <!-- Acción: Validar credenciales -->
+    <mxCell id="a1_3" value="Validar credenciales&#xa;(Insforge Auth)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="lane_sys_1">
+      <mxGeometry x="100" y="110" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Decisión: Credenciales válidas? -->
+    <mxCell id="d1_1" value="¿Credenciales&#xa;válidas?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_sys_1">
+      <mxGeometry x="115" y="195" width="150" height="70" as="geometry" />
+    </mxCell>
+    <!-- Acción: Obtener perfil y rol -->
+    <mxCell id="a1_4" value="Obtener perfil y rol&#xa;del usuario" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="lane_sys_1">
+      <mxGeometry x="100" y="295" width="180" height="50" as="geometry" />
+    </mxCell>
+
+    <!-- Acción: Consultar tabla perfiles -->
+    <mxCell id="a1_5" value="Consultar tabla&#xa;perfiles" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="lane_db_1">
+      <mxGeometry x="100" y="110" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Acción: Retornar datos del usuario -->
+    <mxCell id="a1_6" value="Retornar nombre,&#xa;rol, permisos" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="lane_db_1">
+      <mxGeometry x="100" y="200" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Acción: Redirigir a Dashboard -->
+    <mxCell id="a1_7" value="Redirigir al Dashboard&#xa;según rol" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="lane_db_1">
+      <mxGeometry x="100" y="295" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Fin -->
+    <mxCell id="end1" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=#ffffff;" vertex="1" parent="lane_db_1">
+      <mxGeometry x="165" y="375" width="30" height="30" as="geometry" />
+    </mxCell>
+    <!-- Fin error -->
+    <mxCell id="end1b" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=#ffffff;" vertex="1" parent="lane_usr_1">
+      <mxGeometry x="165" y="350" width="30" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- Flechas flujo 1 -->
+    <mxCell id="f1_1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="start1" target="a1_1" parent="lane_usr_1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="f1_2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a1_1" target="a1_2" parent="lane_usr_1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <!-- Cross-lane: enviar credenciales → validar -->
+    <mxCell id="f1_3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a1_2" target="a1_3" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="f1_4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a1_3" target="a1_5" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="f1_5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a1_5" target="a1_6" parent="lane_db_1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="f1_6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a1_6" target="d1_1" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- Sí -->
+    <mxCell id="f1_7" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d1_1" target="a1_4" parent="lane_sys_1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="lbl_si1" value="Sí" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="f1_7">
+      <mxGeometry x="-0.2" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+    </mxCell>
+    <!-- No -->
+    <mxCell id="f1_8" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d1_1" target="a1_err" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="lbl_no1" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="f1_8">
+      <mxGeometry x="-0.2" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+    </mxCell>
+    <mxCell id="f1_9" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a1_4" target="a1_7" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="f1_10" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a1_7" target="end1" parent="lane_db_1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="f1_11" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a1_err" target="end1b" parent="lane_usr_1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ============================================================ -->
+    <!--   FLUJO 2: REGISTRO DE PEDIDO                                -->
+    <!-- ============================================================ -->
+
+    <mxCell id="lbl_fl2" value="FLUJO 2: Registro de Pedido" style="text;html=1;strokeColor=none;fillColor=#d5e8d4;align=center;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="60" y="490" width="1240" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- Lane: Empleado / Admin -->
+    <mxCell id="lane_emp_2" value="Empleado / Admin" style="swimlane;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="60" y="520" width="380" height="510" as="geometry" />
+    </mxCell>
+    <!-- Lane: Sistema -->
+    <mxCell id="lane_sys_2" value="Sistema (Controller)" style="swimlane;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="520" width="380" height="510" as="geometry" />
+    </mxCell>
+    <!-- Lane: Base de Datos -->
+    <mxCell id="lane_db_2" value="Base de Datos (PostgreSQL)" style="swimlane;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="820" y="520" width="380" height="510" as="geometry" />
+    </mxCell>
+
+    <!-- Nodo inicio -->
+    <mxCell id="start2" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;" vertex="1" parent="lane_emp_2">
+      <mxGeometry x="165" y="40" width="30" height="30" as="geometry" />
+    </mxCell>
+    <!-- Acción: Abrir módulo pedidos -->
+    <mxCell id="a2_1" value="Abrir módulo&#xa;de pedidos" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_emp_2">
+      <mxGeometry x="100" y="90" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Acción: Seleccionar cliente -->
+    <mxCell id="a2_2" value="Seleccionar cliente" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_emp_2">
+      <mxGeometry x="100" y="160" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Acción: Agregar productos y cantidades -->
+    <mxCell id="a2_3" value="Agregar productos&#xa;y cantidades" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_emp_2">
+      <mxGeometry x="100" y="240" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Acción: Seleccionar método pago y tipo -->
+    <mxCell id="a2_4" value="Seleccionar método pago&#xa;y tipo de pedido" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_emp_2">
+      <mxGeometry x="100" y="330" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Acción: Confirmar pedido -->
+    <mxCell id="a2_5" value="Confirmar pedido" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_emp_2">
+      <mxGeometry x="100" y="420" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Acción: Ver confirmación -->
+    <mxCell id="a2_ok" value="Ver confirmación&#xa;de pedido registrado" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="lane_emp_2">
+      <mxGeometry x="100" y="435" width="180" height="50" as="geometry" />
+    </mxCell>
+
+    <!-- Sistema: Validar stock disponible -->
+    <mxCell id="a2_s1" value="Validar stock&#xa;disponible" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="lane_sys_2">
+      <mxGeometry x="100" y="90" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Decisión: Stock suficiente? -->
+    <mxCell id="d2_1" value="¿Stock&#xa;suficiente?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_sys_2">
+      <mxGeometry x="115" y="165" width="150" height="70" as="geometry" />
+    </mxCell>
+    <!-- Sistema: Calcular subtotales y total -->
+    <mxCell id="a2_s2" value="Calcular subtotales&#xa;y total del pedido" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="lane_sys_2">
+      <mxGeometry x="100" y="260" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Sistema: Registrar pedido y detalles -->
+    <mxCell id="a2_s3" value="Registrar pedido&#xa;y detalles" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="lane_sys_2">
+      <mxGeometry x="100" y="340" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Sistema: Descontar stock -->
+    <mxCell id="a2_s4" value="Descontar stock&#xa;automáticamente" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="lane_sys_2">
+      <mxGeometry x="100" y="415" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Error stock -->
+    <mxCell id="a2_err" value="Mostrar error:&#xa;stock insuficiente" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="lane_sys_2">
+      <mxGeometry x="100" y="255" width="180" height="50" as="geometry" />
+    </mxCell>
+
+    <!-- BD: Consultar stock productos -->
+    <mxCell id="a2_d1" value="Consultar stock&#xa;de productos" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="lane_db_2">
+      <mxGeometry x="100" y="90" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- BD: Insertar en pedidos -->
+    <mxCell id="a2_d2" value="INSERT en pedidos&#xa;y detalles_pedido" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="lane_db_2">
+      <mxGeometry x="100" y="250" width="180" height="55" as="geometry" />
+    </mxCell>
+    <!-- BD: UPDATE stock -->
+    <mxCell id="a2_d3" value="UPDATE stock_disponible&#xa;en productos" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="lane_db_2">
+      <mxGeometry x="100" y="360" width="180" height="55" as="geometry" />
+    </mxCell>
+    <!-- Fin -->
+    <mxCell id="end2" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=#ffffff;" vertex="1" parent="lane_db_2">
+      <mxGeometry x="165" y="445" width="30" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- Flechas flujo 2 -->
+    <mxCell id="f2_1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="start2" target="a2_1" parent="lane_emp_2"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="f2_2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a2_1" target="a2_2" parent="lane_emp_2"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="f2_3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a2_2" target="a2_3" parent="lane_emp_2"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <!-- Cross-lane: agregar productos → validar stock -->
+    <mxCell id="f2_4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a2_3" target="a2_s1" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- Sistema: consultar stock → BD -->
+    <mxCell id="f2_5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a2_s1" target="a2_d1" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="f2_6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a2_d1" target="d2_1" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- Sí: calcular -->
+    <mxCell id="f2_7" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d2_1" target="a2_s2" parent="lane_sys_2">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="lbl_si2" value="Sí" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="f2_7">
+      <mxGeometry x="-0.2" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+    </mxCell>
+    <!-- No: error -->
+    <mxCell id="f2_7b" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d2_1" target="a2_err" parent="lane_sys_2">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="lbl_no2" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;" vertex="1" connectable="0" parent="f2_7b">
+      <mxGeometry x="-0.2" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+    </mxCell>
+    <!-- El empleado confirma -->
+    <mxCell id="f2_8" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a2_s2" target="a2_4" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="f2_9" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a2_4" target="a2_5" parent="lane_emp_2">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- Confirmar → registrar -->
+    <mxCell id="f2_10" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a2_5" target="a2_s3" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="f2_11" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a2_s3" target="a2_d2" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="f2_12" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a2_d2" target="a2_s4" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="f2_13" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a2_s4" target="a2_d3" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="f2_14" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a2_d3" target="end2" parent="lane_db_2">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ============================================================ -->
+    <!--   FLUJO 3: ACTUALIZACIÓN DE ESTADO DE PEDIDO                 -->
+    <!-- ============================================================ -->
+
+    <mxCell id="lbl_fl3" value="FLUJO 3: Actualización de Estado de Pedido" style="text;html=1;strokeColor=none;fillColor=#f8cecc;align=center;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="60" y="1060" width="1240" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- Lane: Empleado / Admin -->
+    <mxCell id="lane_emp_3" value="Empleado / Admin" style="swimlane;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="60" y="1090" width="380" height="400" as="geometry" />
+    </mxCell>
+    <!-- Lane: Sistema -->
+    <mxCell id="lane_sys_3" value="Sistema (Controller)" style="swimlane;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="440" y="1090" width="380" height="400" as="geometry" />
+    </mxCell>
+    <!-- Lane: Base de Datos -->
+    <mxCell id="lane_db_3" value="Base de Datos (PostgreSQL)" style="swimlane;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="820" y="1090" width="380" height="400" as="geometry" />
+    </mxCell>
+
+    <!-- Nodo inicio -->
+    <mxCell id="start3" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;" vertex="1" parent="lane_emp_3">
+      <mxGeometry x="165" y="40" width="30" height="30" as="geometry" />
+    </mxCell>
+    <!-- Acción: Buscar pedido -->
+    <mxCell id="a3_1" value="Buscar/seleccionar&#xa;pedido" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_emp_3">
+      <mxGeometry x="100" y="90" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Acción: Seleccionar nuevo estado -->
+    <mxCell id="a3_2" value="Seleccionar nuevo&#xa;estado del pedido" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_emp_3">
+      <mxGeometry x="100" y="180" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Nota estados -->
+    <mxCell id="nota_estados" value="Estados posibles:&#xa;Pendiente → Preparando&#xa;Preparando → Entregado&#xa;Cualquiera → Cancelado" style="text;html=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="lane_emp_3">
+      <mxGeometry x="10" y="250" width="180" height="70" as="geometry" />
+    </mxCell>
+    <!-- Acción: Confirmar cambio -->
+    <mxCell id="a3_3" value="Confirmar cambio&#xa;de estado" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_emp_3">
+      <mxGeometry x="100" y="290" width="180" height="50" as="geometry" />
+    </mxCell>
+
+    <!-- Sistema: validar transición -->
+    <mxCell id="a3_s1" value="Validar transición&#xa;de estado" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="lane_sys_3">
+      <mxGeometry x="100" y="90" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Decisión -->
+    <mxCell id="d3_1" value="¿Transición&#xa;válida?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="lane_sys_3">
+      <mxGeometry x="115" y="170" width="150" height="70" as="geometry" />
+    </mxCell>
+    <!-- OK: actualizar -->
+    <mxCell id="a3_s2" value="Actualizar estado&#xa;en BD" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="lane_sys_3">
+      <mxGeometry x="100" y="275" width="180" height="50" as="geometry" />
+    </mxCell>
+    <!-- Error -->
+    <mxCell id="a3_err" value="Mostrar error:&#xa;transición no permitida" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="lane_sys_3">
+      <mxGeometry x="100" y="175" width="180" height="50" as="geometry" />
+    </mxCell>
+
+    <!-- BD: UPDATE estado -->
+    <mxCell id="a3_d1" value="UPDATE estado_pedido&#xa;en tabla pedidos" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="lane_db_3">
+      <mxGeometry x="100" y="200" width="180" height="55" as="geometry" />
+    </mxCell>
+    <!-- Fin -->
+    <mxCell id="end3" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=#ffffff;" vertex="1" parent="lane_db_3">
+      <mxGeometry x="165" y="320" width="30" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- Flechas flujo 3 -->
+    <mxCell id="f3_1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="start3" target="a3_1" parent="lane_emp_3"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="f3_2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a3_1" target="a3_2" parent="lane_emp_3"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="f3_3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a3_2" target="a3_3" parent="lane_emp_3"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="f3_4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a3_3" target="a3_s1" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="f3_5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a3_s1" target="d3_1" parent="lane_sys_3"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <!-- Sí -->
+    <mxCell id="f3_6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d3_1" target="a3_s2" parent="lane_sys_3">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="lbl_si3" value="Sí" style="edgeLabel;html=1;align=center;fontSize=10;" vertex="1" connectable="0" parent="f3_6">
+      <mxGeometry x="-0.2" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+    </mxCell>
+    <!-- No -->
+    <mxCell id="f3_6b" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="d3_1" target="a3_err" parent="lane_sys_3">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="lbl_no3" value="No" style="edgeLabel;html=1;align=center;fontSize=10;" vertex="1" connectable="0" parent="f3_6b">
+      <mxGeometry x="-0.2" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+    </mxCell>
+    <mxCell id="f3_7" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a3_s2" target="a3_d1" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+    <mxCell id="f3_8" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="a3_d1" target="end3" parent="lane_db_3"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+  </root>
+</mxGraphModel>
