@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos personalizados artesanales */
+
+@layer base {
+  body {
+    @apply bg-ferchas-fondo text-ferchas-cafe font-cuerpo;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-titulo text-ferchas-cafe;
+  }
+
+  h1 {
+    @apply text-3xl font-bold;
+  }
+
+  h2 {
+    @apply text-2xl font-semibold;
+  }
+
+  h3 {
+    @apply text-xl font-semibold;
+  }
+}
+
+@layer components {
+  .btn-principal {
+    @apply bg-ferchas-rosa text-white font-cuerpo px-6 py-2.5 rounded-lg hover:bg-ferchas-rosa-oscuro transition-colors duration-200 cursor-pointer;
+  }
+
+  .btn-secundario {
+    @apply bg-ferchas-fondo text-ferchas-cafe font-cuerpo px-6 py-2.5 rounded-lg border-2 border-ferchas-cafe/30 hover:bg-ferchas-fondo-oscuro transition-colors duration-200 cursor-pointer;
+  }
+
+  .btn-peligro {
+    @apply bg-ferchas-error text-white font-cuerpo px-6 py-2.5 rounded-lg hover:bg-ferchas-error/90 transition-colors duration-200 cursor-pointer;
+  }
+
+  .input-base {
+    @apply w-full px-4 py-3 bg-white border-2 border-ferchas-cafe/20 rounded-lg text-ferchas-cafe placeholder-ferchas-cafe-claro focus:border-ferchas-rosa focus:ring-2 focus:ring-ferchas-rosa/20 outline-none transition-all duration-200;
+  }
+
+  .card-base {
+    @apply bg-ferchas-fondo border-2 border-ferchas-rosa/40 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 p-5;
+  }
+
+  .tabla-base {
+    @apply w-full border-collapse border-2 border-ferchas-cafe/10;
+  }
+
+  .tabla-header {
+    @apply bg-ferchas-fondo-oscuro text-ferchas-cafe font-semibold;
+  }
+
+  .tabla-fila {
+    @apply border-2 border-ferchas-cafe/10 hover:bg-ferchas-fondo transition-colors duration-200;
+  }
+
+  .badge-exito {
+    @apply inline-block bg-ferchas-exito/10 text-ferchas-exito px-3 py-1 rounded-full text-sm font-semibold;
+  }
+
+  .badge-error {
+    @apply inline-block bg-ferchas-error/10 text-ferchas-error px-3 py-1 rounded-full text-sm font-semibold;
+  }
+
+  .badge-advertencia {
+    @apply inline-block bg-ferchas-advertencia/10 text-ferchas-advertencia px-3 py-1 rounded-full text-sm font-semibold;
+  }
+
+  .badge-info {
+    @apply inline-block bg-ferchas-rosa/10 text-ferchas-rosa px-3 py-1 rounded-full text-sm font-semibold;
+  }
+}
+
+/* Animaciones suaves */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-in-out;
+}
