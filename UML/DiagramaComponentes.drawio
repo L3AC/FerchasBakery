@@ -16,27 +16,27 @@
       <mxGeometry x="40" y="80" width="1560" height="420" as="geometry" />
     </mxCell>
 
-    <!-- ---- Sub-bloque: Router ---- -->
+    <!-- Sub-bloque: Router-->
     <mxCell id="comp_router" value="«component»&#xa;router/index.js&#xa;(Vue Router)" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;" vertex="1" parent="layer_frontend">
       <mxGeometry x="30" y="70" width="170" height="70" as="geometry" />
     </mxCell>
 
-    <!-- ---- Sub-bloque: Middleware ---- -->
+    <!--   Sub-bloque: Middleware   -->
     <mxCell id="comp_middleware" value="«component»&#xa;authMiddleware.js" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;" vertex="1" parent="layer_frontend">
       <mxGeometry x="30" y="175" width="170" height="70" as="geometry" />
     </mxCell>
 
-    <!-- ---- Sub-bloque: Store ---- -->
+    <!--   Sub-bloque: Store   -->
     <mxCell id="comp_store" value="«component»&#xa;stores/authStore.js&#xa;(Pinia)" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;" vertex="1" parent="layer_frontend">
       <mxGeometry x="30" y="280" width="170" height="70" as="geometry" />
     </mxCell>
 
-    <!-- ---- Sub-bloque: Layout ---- -->
+    <!--   Sub-bloque: Layout   -->
     <mxCell id="comp_layout" value="«component»&#xa;AdminLayout.vue" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;" vertex="1" parent="layer_frontend">
       <mxGeometry x="240" y="70" width="170" height="70" as="geometry" />
     </mxCell>
 
-    <!-- ---- Sub-bloque: Views ---- -->
+    <!--   Sub-bloque: Views   -->
     <mxCell id="pkg_views" value="«package» Views" style="swimlane;startSize=25;fillColor=#fffde7;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="layer_frontend">
       <mxGeometry x="450" y="55" width="580" height="340" as="geometry" />
     </mxCell>
@@ -66,7 +66,7 @@
       <mxGeometry x="200" y="245" width="155" height="60" as="geometry" />
     </mxCell>
 
-    <!-- ---- Sub-bloque: Services ---- -->
+    <!--   Sub-bloque: Services   -->
     <mxCell id="pkg_services" value="«package» Services" style="swimlane;startSize=25;fillColor=#e8f5e9;strokeColor=#82b366;fontSize=11;" vertex="1" parent="layer_frontend">
       <mxGeometry x="1070" y="55" width="460" height="340" as="geometry" />
     </mxCell>
@@ -101,17 +101,17 @@
       <mxGeometry x="200" y="600" width="1200" height="320" as="geometry" />
     </mxCell>
 
-    <!-- ---- Auth Module ---- -->
+    <!--   Auth Module   -->
     <mxCell id="comp_insforge_auth" value="«component»&#xa;Insforge Auth&#xa;(Autenticación + JWT)" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;align=center;" vertex="1" parent="layer_backend">
       <mxGeometry x="40" y="65" width="200" height="80" as="geometry" />
     </mxCell>
 
-    <!-- ---- API REST Gateway ---- -->
+    <!--   API REST Gateway   -->
     <mxCell id="comp_api_gateway" value="«component»&#xa;API REST Gateway&#xa;(Endpoints / Rutas)" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;align=center;" vertex="1" parent="layer_backend">
       <mxGeometry x="290" y="65" width="200" height="80" as="geometry" />
     </mxCell>
 
-    <!-- ---- Controllers package ---- -->
+    <!--   Controllers package   -->
     <mxCell id="pkg_controllers" value="«package» Controllers (Lógica de Negocio)" style="swimlane;startSize=25;fillColor=#e8f5e9;strokeColor=#82b366;fontSize=11;" vertex="1" parent="layer_backend">
       <mxGeometry x="540" y="50" width="620" height="240" as="geometry" />
     </mxCell>
