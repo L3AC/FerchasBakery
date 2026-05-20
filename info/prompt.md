@@ -89,7 +89,7 @@ colors: {
   'ferchas-advertencia': '#D4A574',
   'ferchas-error': '#C47B7B',
 }
-##Tipografía
+## Tipografía
 - Títulos: Playfair Display (serif, elegante)
 - Cuerpo: Lato (limpio pero no robótico)
 - Añadir al HTML: <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">

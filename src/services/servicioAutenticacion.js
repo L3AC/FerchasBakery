@@ -8,28 +8,12 @@ export const servicioAutenticacion = {
         password: contrasena
       })
       
-      if (error) {
-        return {
-          exito: false,
-          error: error.message || 'Error al iniciar sesión'
-        }
-      }
-
-      // Guardar el token en localStorage
-      if (data?.accessToken) {
-        localStorage.setItem('insforge_token', data.accessToken)
-      }
-
-      return {
-        exito: true,
-        usuario: data?.user,
-        token: data?.accessToken
-      }
+      if (error) return { exito: false, error: error.message }
+      if (data?.accessToken) localStorage.setItem('insforge_token', data.accessToken)
+      
+      return { exito: true, usuario: data?.user, token: data?.accessToken }
     } catch (err) {
-      return {
-        exito: false,
-        error: err.message || 'Error desconocido'
-      }
+      return { exito: false, error: err.message }
     }
   },
 
@@ -40,47 +24,47 @@ export const servicioAutenticacion = {
         password: contrasena,
         name: nombre
       })
-
-      if (error) {
-        return {
-          exito: false,
-          error: error.message || 'Error al registrarse'
-        }
-      }
-
-      return {
-        exito: true,
+      
+      if (error) return { exito: false, error: error.message }
+      
+      return { 
+        exito: true, 
         usuario: data?.user,
-        requiereVerificacion: data?.requireEmailVerification || false
+        requiereVerificacion: data?.requireEmailVerification || false 
       }
     } catch (err) {
-      return {
-        exito: false,
-        error: err.message || 'Error desconocido'
-      }
+      return { exito: false, error: err.message }
+    }
+  },
+
+  async verificarEmail(email, otp) {
+    try {
+      const { data, error } = await insforgeClient.auth.verifyEmail({ email, otp })
+      if (error) return { exito: false, error: error.message }
+      if (data?.accessToken) localStorage.setItem('insforge_token', data.accessToken)
+      return { exito: true, usuario: data?.user }
+    } catch (err) {
+      return { exito: false, error: err.message }
+    }
+  },
+
+  async reenviarVerificacion(email) {
+    try {
+      const { data, error } = await insforgeClient.auth.resendVerificationEmail({ email })
+      if (error) return { exito: false, error: error.message }
+      return { exito: true }
+    } catch (err) {
+      return { exito: false, error: err.message }
     }
   },
 
   async obtenerUsuarioActual() {
     try {
       const { data, error } = await insforgeClient.auth.getCurrentUser()
-      
-      if (error || !data?.user) {
-        return {
-          exito: false,
-          usuario: null
-        }
-      }
-
-      return {
-        exito: true,
-        usuario: data.user
-      }
+      if (error || !data?.user) return { exito: false, usuario: null }
+      return { exito: true, usuario: data.user }
     } catch (err) {
-      return {
-        exito: false,
-        usuario: null
-      }
+      return { exito: false, usuario: null }
     }
   },
 
@@ -90,18 +74,11 @@ export const servicioAutenticacion = {
       localStorage.removeItem('insforge_token')
       return { exito: true }
     } catch (err) {
-      return {
-        exito: false,
-        error: err.message || 'Error al cerrar sesión'
-      }
+      return { exito: false, error: err.message }
     }
   },
 
   obtenerTokenGuardado() {
     return localStorage.getItem('insforge_token')
-  },
-
-  limpiarToken() {
-    localStorage.removeItem('insforge_token')
   }
 }

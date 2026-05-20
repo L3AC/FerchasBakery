@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { useAlmacenAutenticacion } from '../stores/almacenAutenticacion.js'
+import { useAlmacenAutenticacion } from '../../stores/almacenAutenticacion.js'
 import { useRouter } from 'vue-router'
 
 const almacenAuth = useAlmacenAutenticacion()

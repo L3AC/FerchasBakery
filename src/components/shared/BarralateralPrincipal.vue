@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-import { useAlmacenAutenticacion } from '../stores/almacenAutenticacion.js'
+import { useAlmacenAutenticacion } from '../../stores/almacenAutenticacion.js'
 
 const almacenAuth = useAlmacenAutenticacion()
 </script>

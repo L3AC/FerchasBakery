@@ -22,18 +22,11 @@ export const useAlmacenAutenticacion = defineStore('autenticacion', () => {
       if (resultado.exito) {
         usuario.value = resultado.usuario
         token.value = resultado.token
-
-        // Obtener perfil del usuario
-        const resultadoPerfil = await servicioPerfiles.obtenerPorUserId(resultado.usuario.id)
-        if (resultadoPerfil.exito) {
-          perfil.value = resultadoPerfil.perfil
-        }
-
+        await cargarPerfil()
         return { exito: true }
-      } else {
-        error.value = resultado.error
-        return { exito: false, error: resultado.error }
       }
+      error.value = resultado.error
+      return { exito: false, error: resultado.error }
     } catch (err) {
       error.value = err.message
       return { exito: false, error: err.message }
@@ -42,44 +35,18 @@ export const useAlmacenAutenticacion = defineStore('autenticacion', () => {
     }
   }
 
-  async function registrarse(correo, contrasena, nombre) {
-    cargando.value = true
-    error.value = null
-    try {
-      const resultado = await servicioAutenticacion.registrarse(correo, contrasena, nombre)
-      if (resultado.exito) {
-        // Crear perfil de empleado por defecto para nuevos usuarios
-        await servicioPerfiles.crear({
-          user_id: resultado.usuario.id,
-          nombre: nombre,
-          rol: 'empleado',
-          activo: true
-        })
-        return { exito: true, requiereVerificacion: resultado.requiereVerificacion }
-      } else {
-        error.value = resultado.error
-        return { exito: false, error: resultado.error }
-      }
-    } catch (err) {
-      error.value = err.message
-      return { exito: false, error: err.message }
-    } finally {
-      cargando.value = false
-    }
+  async function cargarPerfil() {
+    if (!usuario.value?.id) return
+    const resultado = await servicioPerfiles.obtenerPorUserId(usuario.value.id)
+    if (resultado.exito) perfil.value = resultado.perfil
   }
 
   async function cerrarSesion() {
-    try {
-      await servicioAutenticacion.cerrarSesion()
-      usuario.value = null
-      perfil.value = null
-      token.value = null
-      error.value = null
-      return { exito: true }
-    } catch (err) {
-      error.value = err.message
-      return { exito: false, error: err.message }
-    }
+    await servicioAutenticacion.cerrarSesion()
+    usuario.value = null
+    perfil.value = null
+    token.value = null
+    return { exito: true }
   }
 
   async function obtenerUsuarioActual() {
@@ -89,33 +56,17 @@ export const useAlmacenAutenticacion = defineStore('autenticacion', () => {
       if (resultado.exito && resultado.usuario) {
         usuario.value = resultado.usuario
         token.value = servicioAutenticacion.obtenerTokenGuardado()
-
-        // Obtener perfil
-        const resultadoPerfil = await servicioPerfiles.obtenerPorUserId(resultado.usuario.id)
-        if (resultadoPerfil.exito) {
-          perfil.value = resultadoPerfil.perfil
-        }
+        await cargarPerfil()
       }
       return resultado
-    } catch (err) {
-      return { exito: false, error: err.message }
     } finally {
       cargando.value = false
     }
   }
 
   return {
-    usuario,
-    perfil,
-    token,
-    cargando,
-    error,
-    estaAutenticado,
-    esAdmin,
-    esEmpleado,
-    iniciarSesion,
-    registrarse,
-    cerrarSesion,
-    obtenerUsuarioActual
+    usuario, perfil, token, cargando, error,
+    estaAutenticado, esAdmin, esEmpleado,
+    iniciarSesion, cerrarSesion, obtenerUsuarioActual
   }
 })

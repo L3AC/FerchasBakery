@@ -60,7 +60,7 @@ export const useAlmacenPedidos = defineStore('pedidos', () => {
     } finally {
       cargando.value = false
     }
-  },
+  }
 
   async function obtenerPendientes() {
     try {

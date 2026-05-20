@@ -18,6 +18,24 @@ export const servicioPerfiles = {
     }
   },
 
+  async verificarExistencia() {
+    try {
+      const { data, error } = await insforgeClient.database
+        .from('perfiles')
+        .select('id', { count: 'exact', head: true })
+
+      if (error) {
+        return { existenUsuarios: true }
+      }
+
+      return { 
+        existenUsuarios: (data?.length || 0) > 0 
+      }
+    } catch (err) {
+      return { existenUsuarios: true }
+    }
+  },
+
   async obtenerPorUserId(userId) {
     try {
       const { data, error } = await insforgeClient.database
