@@ -1,14 +1,53 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <link rel="icon" type="image/svg+xml" href="/vite.svg">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-  <title>FerchasBakery - Sistema Administrativo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FerchasBakery — Prototipo de interfaz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-ferchas-fondo text-ferchas-cafe font-cuerpo">
-  <div id="app"></div>
-  <script type="module" src="/src/main.js"></script>
+<body class="font-cuerpo">
+
+<div class="selector-prototipo">
+  <div class="font-titulo text-base mb-1">FerchasBakery</div>
+  <div class="text-xs opacity-80 mb-2">Navegación del prototipo</div>
+  <select id="selectorPantalla" onchange="mostrarPantalla(this.value)">
+    <optgroup label="Autenticación">
+      <option value="login">1. Login</option>
+    </optgroup>
+    <optgroup label="Dashboard">
+      <option value="dashboard">2. Dashboard</option>
+    </optgroup>
+    <optgroup label="Productos">
+      <option value="productos">3. Lista de productos</option>
+      <option value="form-producto">4. Form: nuevo producto</option>
+    </optgroup>
+    <optgroup label="Pedidos">
+      <option value="pedidos">5. Lista de pedidos</option>
+      <option value="form-pedido">6. Form: nuevo pedido</option>
+      <option value="detalle-pedido">7. Detalle del pedido</option>
+    </optgroup>
+    <optgroup label="Clientes">
+      <option value="clientes">8. Lista de clientes</option>
+      <option value="form-cliente">9. Form: nuevo cliente</option>
+    </optgroup>
+    <optgroup label="Proveedores">
+      <option value="proveedores">10. Lista de proveedores</option>
+      <option value="form-proveedor">11. Form: nuevo proveedor</option>
+    </optgroup>
+    <optgroup label="Usuarios">
+      <option value="usuarios">12. Gestión de usuarios</option>
+      <option value="mi-perfil">13. Mi perfil</option>
+    </optgroup>
+    <optgroup label="Estados">
+      <option value="error-stock">14. Validación: stock insuficiente</option>
+    </optgroup>
+  </select>
+</div>
+
+<div id="contenedor-pantallas"></div>
+<script src="script.js"></script>
+
 </body>
 </html>
