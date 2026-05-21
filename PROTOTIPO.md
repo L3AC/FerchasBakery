@@ -65,10 +65,10 @@ Las views (`src/views/*.vue`) usan datos mock importados de `src/lib/datosMock.j
 En cada view hay comentarios indicando qué descomentar para usar los stores y servicios reales:
 
 ```js
-// import { useAlmacenProductos } from '../stores/almacenProductos.js'
-// const almacenProductos = useAlmacenProductos()
-// onMounted(() => almacenProductos.obtenerTodos())
-const productos = mockProductos   // ← reemplazar por almacenProductos.lista
+ import { useAlmacenProductos } from '../stores/almacenProductos.js'
+ const almacenProductos = useAlmacenProductos()
+ onMounted(() => almacenProductos.obtenerTodos())
+const productos = almacenProductos   // ← reemplazar por almacenProductos.lista
 ```
 
 Los services (`src/services/`) y stores (`src/stores/`) **ya están conectados a Insforge**
