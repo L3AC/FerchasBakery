@@ -9,6 +9,8 @@ import PedidosView from '../views/PedidosView.vue'
 import ClientesView from '../views/ClientesView.vue'
 import ProveedoresView from '../views/ProveedoresView.vue'
 import UsuariosView from '../views/UsuariosView.vue'
+import CategoriasView from '../views/CategoriasView.vue'
+import PerfilView from '../views/PerfilView.vue'
 
 const rutas = [
   {
@@ -71,6 +73,23 @@ const rutas = [
     meta: {
       requiereAutenticacion: true,
       requiereAdmin: true
+    }
+  },
+  {
+    path: '/categorias',
+    name: 'Categorias',
+    component: CategoriasView,
+    meta: {
+      requiereAutenticacion: true,
+      requiereAdmin: true
+    }
+  },
+  {
+    path: '/perfil',
+    name: 'Perfil',
+    component: PerfilView,
+    meta: {
+      requiereAutenticacion: true
     }
   }
 ]

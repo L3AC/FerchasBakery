@@ -1,51 +1,54 @@
 <template>
-  <div class="flex min-h-screen bg-ferchas-fondo">
-    <BarralateralPrincipal />
-    <div class="flex-1 flex flex-col">
-      <EncabezadoPrincipal />
-      <main class="flex-1 p-8 overflow-y-auto">
-        <div class="max-w-6xl mx-auto">
-          <div class="flex justify-between items-center mb-8">
-            <h1 class="font-titulo text-4xl text-ferchas-cafe">🚚 Proveedores</h1>
-            <button @click="abrirFormulario" class="btn-principal">+ Nuevo Proveedor</button>
-          </div>
+  <div class="min-h-screen bg-ferchas-fondo">
+    <EncabezadoPrincipal />
+    <div class="flex">
+      <BarralateralPrincipal />
+      <main class="flex-1 p-8">
+        <h1 class="font-titulo text-3xl font-bold text-ferchas-cafe mb-8">Proveedores</h1>
 
-          <!-- Tabla de Proveedores -->
-          <div class="card-base overflow-x-auto">
-            <table class="tabla-base w-full">
-              <thead class="tabla-header">
-                <tr>
-                  <th class="px-4 py-3 text-left">Nombre</th>
-                  <th class="px-4 py-3 text-left">Teléfono</th>
-                  <th class="px-4 py-3 text-left">Contacto</th>
-                  <th class="px-4 py-3 text-left">Descripción</th>
-                  <th class="px-4 py-3 text-center">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="proveedor in proveedores" :key="proveedor.id_proveedor" class="tabla-fila border-b">
-                  <td class="px-4 py-3 font-semibold">{{ proveedor.nombre }}</td>
-                  <td class="px-4 py-3">{{ proveedor.telefono || '-' }}</td>
-                  <td class="px-4 py-3">{{ proveedor.contacto || '-' }}</td>
-                  <td class="px-4 py-3 text-sm">{{ proveedor.descripcion || '-' }}</td>
-                  <td class="px-4 py-3 text-center">
-                    <button @click="editarProveedor(proveedor)" class="text-ferchas-rosa hover:text-ferchas-rosa-oscuro">✏️</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <!-- Botón Crear -->
+        <div class="mb-6">
+          <button @click="abrirFormulario" class="btn-principal">+ Nuevo Proveedor</button>
+        </div>
 
-          <div v-if="proveedores.length === 0" class="card-base text-center py-12">
-            <p class="text-2xl mb-2">📦</p>
-            <p class="text-ferchas-cafe font-semibold">No hay proveedores registrados</p>
-          </div>
+        <!-- Tabla de Proveedores -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+          <table class="tabla-base w-full">
+            <thead class="tabla-header">
+              <tr>
+                <th class="px-4 py-3 text-left">Nombre</th>
+                <th class="px-4 py-3 text-left">Teléfono</th>
+                <th class="px-4 py-3 text-left">Contacto</th>
+                <th class="px-4 py-3 text-left">Descripción</th>
+                <th class="px-4 py-3 text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-if="proveedores.length === 0">
+                <td colspan="5" class="px-4 py-8 text-center text-ferchas-cafe-claro">No hay proveedores</td>
+              </tr>
+              <tr v-for="proveedor in proveedores" :key="proveedor.id_proveedor" class="tabla-fila border-b">
+                <td class="px-4 py-3 font-semibold">{{ proveedor.nombre }}</td>
+                <td class="px-4 py-3">{{ proveedor.telefono || '-' }}</td>
+                <td class="px-4 py-3">{{ proveedor.contacto || '-' }}</td>
+                <td class="px-4 py-3 text-sm">{{ proveedor.descripcion || '-' }}</td>
+                <td class="px-4 py-3 text-center">
+                  <button
+                    @click="editarProveedor(proveedor)"
+                    class="px-3 py-1 text-ferchas-rosa hover:bg-ferchas-rosa/10 rounded text-sm"
+                  >
+                    Editar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </main>
     </div>
 
     <!-- Modal Formulario -->
-    <div v-if="mostrarFormulario" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+    <div v-if="mostrarFormulario" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
         <h2 class="font-titulo text-2xl text-ferchas-cafe mb-4">{{ proveedorEditando ? 'Editar' : 'Nuevo' }} Proveedor</h2>
         <form @submit.prevent="guardarProveedor" class="space-y-4">

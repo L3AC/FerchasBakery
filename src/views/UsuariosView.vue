@@ -1,50 +1,49 @@
 <template>
-  <div class="flex min-h-screen bg-ferchas-fondo">
-    <BarralateralPrincipal />
-    <div class="flex-1 flex flex-col">
-      <EncabezadoPrincipal />
-      <main class="flex-1 p-8 overflow-y-auto">
-        <div class="max-w-6xl mx-auto">
-          <h1 class="font-titulo text-4xl text-ferchas-cafe mb-8">👨‍💼 Gestión de Usuarios</h1>
+  <div class="min-h-screen bg-ferchas-fondo">
+    <EncabezadoPrincipal />
+    <div class="flex">
+      <BarralateralPrincipal />
+      <main class="flex-1 p-8">
+        <h1 class="font-titulo text-3xl font-bold text-ferchas-cafe mb-8">Gestión de Usuarios</h1>
 
-          <!-- Tabla de Usuarios -->
-          <div class="card-base overflow-x-auto">
-            <table class="tabla-base w-full">
-              <thead class="tabla-header">
-                <tr>
-                  <th class="px-4 py-3 text-left">Nombre</th>
-                  <th class="px-4 py-3 text-left">Correo</th>
-                  <th class="px-4 py-3 text-left">Rol</th>
-                  <th class="px-4 py-3 text-center">Estado</th>
-                  <th class="px-4 py-3 text-center">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="usuario in usuarios" :key="usuario.user_id" class="tabla-fila border-b">
-                  <td class="px-4 py-3 font-semibold">{{ usuario.nombre }}</td>
-                  <td class="px-4 py-3 text-sm">{{ usuario.user_id }}</td>
-                  <td class="px-4 py-3">
-                    <span v-if="usuario.rol === 'admin'" class="badge-exito">{{ usuario.rol }}</span>
-                    <span v-else class="badge-info">{{ usuario.rol }}</span>
-                  </td>
-                  <td class="px-4 py-3 text-center">
-                    <span v-if="usuario.activo" class="badge-exito">Activo</span>
-                    <span v-else class="badge-error">Inactivo</span>
-                  </td>
-                  <td class="px-4 py-3 text-center space-x-2">
-                    <button @click="cambiarRol(usuario)" class="text-ferchas-rosa hover:text-ferchas-rosa-oscuro text-sm">
-                      Cambiar Rol
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div v-if="usuarios.length === 0" class="card-base text-center py-12">
-            <p class="text-2xl mb-2">👤</p>
-            <p class="text-ferchas-cafe font-semibold">No hay usuarios registrados</p>
-          </div>
+        <!-- Tabla de Usuarios -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+          <table class="tabla-base w-full">
+            <thead class="tabla-header">
+              <tr>
+                <th class="px-4 py-3 text-left">Nombre</th>
+                <th class="px-4 py-3 text-left">Correo</th>
+                <th class="px-4 py-3 text-left">Rol</th>
+                <th class="px-4 py-3 text-center">Estado</th>
+                <th class="px-4 py-3 text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-if="usuarios.length === 0">
+                <td colspan="5" class="px-4 py-8 text-center text-ferchas-cafe-claro">No hay usuarios</td>
+              </tr>
+              <tr v-for="usuario in usuarios" :key="usuario.user_id" class="tabla-fila border-b">
+                <td class="px-4 py-3 font-semibold">{{ usuario.nombre }}</td>
+                <td class="px-4 py-3 text-sm">{{ usuario.user_id }}</td>
+                <td class="px-4 py-3">
+                  <span v-if="usuario.rol === 'admin'" class="badge-exito">{{ usuario.rol }}</span>
+                  <span v-else class="badge-info">{{ usuario.rol }}</span>
+                </td>
+                <td class="px-4 py-3 text-center">
+                  <span v-if="usuario.activo" class="badge-exito">Activo</span>
+                  <span v-else class="badge-error">Inactivo</span>
+                </td>
+                <td class="px-4 py-3 text-center">
+                  <button
+                    @click="cambiarRol(usuario)"
+                    class="px-3 py-1 text-ferchas-rosa hover:bg-ferchas-rosa/10 rounded text-sm"
+                  >
+                    Cambiar Rol
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </main>
     </div>
