@@ -15,26 +15,8 @@
             {{ usuario.rolEtiqueta }}
           </span>
           <p class="text-xs text-ferchas-cafe-claro mt-4 leading-relaxed">
-            Carné {{ usuario.carne }}<br>
-            Cuenta creada el {{ usuario.registrado }}.<br>
-            Último acceso: {{ usuario.ultimoAcceso }}.
+            Miembro desde {{ usuario.registrado }}.
           </p>
-
-          <!-- Estadísticas -->
-          <div class="grid grid-cols-3 gap-2 mt-5 pt-5 border-t border-ferchas-cafe/10">
-            <div>
-              <div class="font-titulo text-xl text-ferchas-vino">{{ usuario.estadisticas.pedidosRegistrados }}</div>
-              <div class="text-[10px] text-ferchas-cafe-claro uppercase tracking-wider">Pedidos</div>
-            </div>
-            <div>
-              <div class="font-titulo text-xl text-ferchas-vino">{{ usuario.estadisticas.productosCreados }}</div>
-              <div class="text-[10px] text-ferchas-cafe-claro uppercase tracking-wider">Productos</div>
-            </div>
-            <div>
-              <div class="font-titulo text-xl text-ferchas-vino">{{ usuario.estadisticas.clientesAgregados }}</div>
-              <div class="text-[10px] text-ferchas-cafe-claro uppercase tracking-wider">Clientes</div>
-            </div>
-          </div>
         </div>
 
         <!-- Formularios -->
@@ -63,19 +45,15 @@
             <h2 class="font-titulo text-lg text-ferchas-vino mb-4 pb-2 border-b-2 border-ferchas-rosa/30">Cambiar contraseña</h2>
             <form @submit.prevent="cambiarContrasena" class="space-y-4">
               <label class="block">
-                <span class="text-sm font-semibold text-ferchas-cafe block mb-1.5">Contraseña actual</span>
-                <input v-model="contrasenas.actual" type="password" placeholder="••••••••" class="input-base">
+                <span class="text-sm font-semibold text-ferchas-cafe block mb-1.5">Nueva contraseña</span>
+                <input v-model="contrasenas.nueva" type="password" placeholder="Mínimo 8 caracteres" class="input-base">
               </label>
-              <div class="grid grid-cols-2 gap-4">
-                <label class="block">
-                  <span class="text-sm font-semibold text-ferchas-cafe block mb-1.5">Nueva contraseña</span>
-                  <input v-model="contrasenas.nueva" type="password" placeholder="Mínimo 8 caracteres" class="input-base">
-                </label>
-                <label class="block">
-                  <span class="text-sm font-semibold text-ferchas-cafe block mb-1.5">Confirmar nueva</span>
-                  <input v-model="contrasenas.confirmar" type="password" placeholder="Repite la contraseña" class="input-base">
-                </label>
-              </div>
+              <label class="block">
+                <span class="text-sm font-semibold text-ferchas-cafe block mb-1.5">Confirmar nueva</span>
+                <input v-model="contrasenas.confirmar" type="password" placeholder="Repite la contraseña" class="input-base">
+              </label>
+              <div v-if="errorContrasena" class="text-ferchas-error text-xs">{{ errorContrasena }}</div>
+              <div v-if="exitoContrasena" class="text-ferchas-exito text-xs">Contraseña actualizada correctamente</div>
               <div class="flex justify-end">
                 <button type="submit" class="btn-vino">Actualizar contraseña</button>
               </div>
@@ -88,20 +66,55 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import LayoutPanel from '../components/shared/LayoutPanel.vue'
-import { mockUsuarioActual } from '../lib/datosMock.js'
+import { useAlmacenAutenticacion } from '../stores/almacenAutenticacion.js'
 
-const usuario = mockUsuarioActual
-const formulario = ref({ nombre: usuario.nombreCompleto, correo: usuario.correo })
-const contrasenas = ref({ actual: '', nueva: '', confirmar: '' })
+const auth = useAlmacenAutenticacion()
+const errorContrasena = ref(null)
+const exitoContrasena = ref(false)
+
+const usuario = computed(() => {
+  const nombre = auth.perfil?.nombre || 'Usuario'
+  const partes = nombre.split(' ')
+  return {
+    iniciales: partes.map(p => p[0]).join('').toUpperCase().slice(0, 2),
+    nombreCompleto: nombre,
+    rolEtiqueta: auth.perfil?.rol === 'admin' ? 'Admin' : auth.perfil?.rol === 'empleado' ? 'Empleado' : 'Usuario',
+    registrado: auth.perfil?.created_at ? new Date(auth.perfil.created_at).toLocaleDateString('es-MX') : '-'
+  }
+})
+
+const formulario = ref({
+  nombre: auth.perfil?.nombre || '',
+  correo: auth.usuario?.email || ''
+})
+
+const contrasenas = ref({ nueva: '', confirmar: '' })
 
 function guardarInformacion() {
-  // En el sistema real: await servicioPerfiles.actualizar(...)
-  console.log('Guardar info (mock):', formulario.value)
+  console.log('Guardar info:', formulario.value)
 }
-function cambiarContrasena() {
-  // En el sistema real: await servicioAutenticacion.cambiarContrasena(...)
-  console.log('Cambiar contraseña (mock)')
+
+async function cambiarContrasena() {
+  errorContrasena.value = null
+  exitoContrasena.value = false
+
+  if (contrasenas.value.nueva.length < 6) {
+    errorContrasena.value = 'La contraseña debe tener al menos 6 caracteres'
+    return
+  }
+  if (contrasenas.value.nueva !== contrasenas.value.confirmar) {
+    errorContrasena.value = 'Las contraseñas no coinciden'
+    return
+  }
+
+  const resultado = await auth.cambiarContrasena(contrasenas.value.nueva)
+  if (resultado.exito) {
+    exitoContrasena.value = true
+    contrasenas.value = { nueva: '', confirmar: '' }
+  } else {
+    errorContrasena.value = resultado.error || 'Error al cambiar la contraseña'
+  }
 }
 </script>

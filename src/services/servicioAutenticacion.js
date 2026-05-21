@@ -78,7 +78,20 @@ export const servicioAutenticacion = {
     }
   },
 
-  obtenerTokenGuardado() {
-    return localStorage.getItem('insforge_token')
-  }
+   async cambiarContrasena(contrasenaNueva, contrasenaActual) {
+     try {
+       const { data, error } = await insforgeClient.auth.updateUser({
+         password: contrasenaNueva
+       })
+       
+       if (error) return { exito: false, error: error.message }
+       return { exito: true, usuario: data?.user }
+     } catch (err) {
+       return { exito: false, error: err.message }
+     }
+   },
+
+   obtenerTokenGuardado() {
+     return localStorage.getItem('insforge_token')
+   }
 }

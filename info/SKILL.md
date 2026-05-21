@@ -10,7 +10,7 @@ description: "Usa cuando trabajes en la interfaz Vue.js de FerchasBakery. Propor
 1. **NO usar tipografía de tipo IA**: Evitar fuentes como Inter, Roboto, system-ui. Usar Playfair Display para títulos y Lato para cuerpo.
 2. **NO usar emojis como iconos**: Los emojis se ven genéricos y feitos. Usar iconos SVG inline o de librerías como Heroicons/Lucide pero con estilo fill (no line), o mejor aún, crear iconos SVG personalizados que combinen con la paleta.
 3. **NO interfaces genéricas de IA**: Evitar layouts muy estructurados, bordes redondeados excesivos, gradientes azul/purple, spacing perfectamente uniforme.
-4. **USAR el logo de la repostería**: Located at `img/logo.jpg`. Incluir en el login y como favicon.
+4. **USAR el logo de la repostería**: Located at `img/logo.png`. Incluir en el login y como favicon.
 5. **USAR la paleta de colores del logo**: Colores cálidos pasteles - rosa, café, vino.
 
 ## filosofía de diseño
@@ -24,7 +24,7 @@ Evitar el aspecto "AI-generated" significa:
 
 ## Logo
 
-- **Ubicación**: `img/logo.jpg`
+- **Ubicación**: `img/logo.png`
 - **Uso obligatorio**: Incluir en la página de login, navbar, y como favicon
 - **Aplicación**: 
   - Login: Mostrar logo pequeño arriba del título
@@ -194,7 +194,7 @@ Tu spacing debe ser:
 
 - Background: `bg-ferchas-fondo`
 - Card: `bg-white border-2 border-ferchas-rosa/30`
-- **Logo**: Mostrar `img/logo.jpg` arriba del título (tamaño apropiado, ej: 80x80px)
+- **Logo**: Mostrar `img/logo.png` arriba del título (tamaño apropiado, ej: 80x80px)
 - Titulo: Playfair Display, color `ferchas-cafe`
 - Botón: `bg-ferchas-rosa`
 - NO usar emojis en botones o mensajes

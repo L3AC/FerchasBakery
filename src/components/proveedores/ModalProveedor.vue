@@ -1,5 +1,5 @@
 <template>
-  <ModalBase titulo="Nuevo proveedor" ancho="xl" padding-top="pt-16" @cerrar="$emit('cerrar')">
+  <ModalBase :titulo="proveedor ? 'Editar proveedor' : 'Nuevo proveedor'" ancho="xl" padding-top="pt-16" @cerrar="$emit('cerrar')">
     <form @submit.prevent="$emit('guardar', formulario)">
       <label class="block mb-4">
         <span class="text-sm font-semibold text-ferchas-cafe block mb-1.5">Nombre del proveedor <span class="text-ferchas-error">*</span></span>
@@ -31,8 +31,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import ModalBase from '../shared/ModalBase.vue'
+const props = defineProps({
+  proveedor: { type: Object, default: null }
+})
 defineEmits(['cerrar', 'guardar'])
-const formulario = ref({ nombre: '', telefono: '', contacto: '', descripcion: '' })
+const formulario = ref({ id_proveedor: null, nombre: '', telefono: '', contacto: '', descripcion: '' })
+
+onMounted(() => {
+  if (props.proveedor) {
+    formulario.value = {
+      id_proveedor: props.proveedor.id_proveedor,
+      nombre: props.proveedor.nombre,
+      telefono: props.proveedor.telefono || '',
+      contacto: props.proveedor.contacto || '',
+      descripcion: props.proveedor.descripcion || ''
+    }
+  }
+})
 </script>

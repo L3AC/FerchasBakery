@@ -71,6 +71,23 @@ export const servicioProveedores = {
     }
   },
 
+  async eliminar(idProveedor) {
+    try {
+      const { error } = await insforgeClient.database
+        .from('proveedores')
+        .delete()
+        .eq('id_proveedor', idProveedor)
+
+      if (error) {
+        return { exito: false, error: error.message }
+      }
+
+      return { exito: true }
+    } catch (err) {
+      return { exito: false, error: err.message }
+    }
+  },
+
   async buscar(termino) {
     try {
       const { data, error } = await insforgeClient.database

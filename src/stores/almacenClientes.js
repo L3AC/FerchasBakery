@@ -111,6 +111,28 @@ export const useAlmacenClientes = defineStore('clientes', () => {
     busqueda.value = termino
   }
 
+  async function eliminar(idCliente) {
+    try {
+      const resultado = await servicioClientes.eliminar(idCliente)
+      if (resultado.exito) {
+        const indice = clientes.value.findIndex(c => c.id_cliente === idCliente)
+        if (indice !== -1) {
+          clientes.value.splice(indice, 1)
+        }
+        if (clienteSeleccionado.value?.id_cliente === idCliente) {
+          clienteSeleccionado.value = null
+        }
+        return { exito: true }
+      } else {
+        error.value = resultado.error
+        return { exito: false, error: resultado.error }
+      }
+    } catch (err) {
+      error.value = err.message
+      return { exito: false, error: err.message }
+    }
+  }
+
   return {
     clientes,
     clienteSeleccionado,
@@ -123,6 +145,7 @@ export const useAlmacenClientes = defineStore('clientes', () => {
     crear,
     actualizar,
     buscar,
-    establecerBusqueda
+    establecerBusqueda,
+    eliminar
   }
 })

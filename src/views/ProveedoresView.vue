@@ -4,9 +4,9 @@
       <div class="flex items-start justify-between mb-6">
         <div>
           <h1 class="font-titulo text-3xl text-ferchas-cafe">Proveedores</h1>
-          <p class="text-sm text-ferchas-cafe-claro mt-1">{{ proveedores.length }} proveedores activos · {{ totalProductos }} productos asociados</p>
+          <p class="text-sm text-ferchas-cafe-claro mt-1">{{ proveedores.length }} proveedores activos</p>
         </div>
-        <button @click="mostrarModal = true" class="btn-principal flex items-center gap-2">
+        <button @click="abrirModalCrear" class="btn-principal flex items-center gap-2">
           <Icono nombre="mas" :tamano="16" /> Nuevo proveedor
         </button>
       </div>
@@ -21,23 +21,22 @@
 
       <!-- Cards de proveedores -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <div v-for="p in proveedores" :key="p.nombre"
+        <div v-for="p in proveedoresFiltrados" :key="p.id_proveedor"
              class="bg-white rounded-lg border border-ferchas-cafe/10 shadow-sm p-5 hover:shadow-md transition-shadow">
           <div class="flex items-start justify-between mb-3">
             <div>
               <h3 class="font-titulo text-lg text-ferchas-vino">{{ p.nombre }}</h3>
               <p class="text-sm text-ferchas-cafe-claro mt-0.5">{{ p.contacto }}</p>
             </div>
-            <span class="bg-ferchas-rosa-suave text-ferchas-vino text-xs font-bold px-2.5 py-1 rounded-full">{{ p.productos }} productos</span>
           </div>
           <p class="text-sm text-ferchas-cafe leading-relaxed mb-4">{{ p.descripcion }}</p>
-          <div class="flex items-center justify-between pt-3 border-t border-ferchas-cafe/10">
+            <div class="flex items-center justify-between pt-3 border-t border-ferchas-cafe/10">
             <span class="text-sm font-bold text-ferchas-cafe">{{ p.telefono }}</span>
             <div class="flex gap-1">
-              <button class="text-ferchas-cafe-claro hover:text-ferchas-vino hover:bg-ferchas-fondo p-1.5 rounded">
+              <button @click="abrirModalEditar(p)" class="text-ferchas-cafe-claro hover:text-ferchas-vino hover:bg-ferchas-fondo p-1.5 rounded">
                 <Icono nombre="editar" :tamano="16" />
               </button>
-              <button class="text-ferchas-error hover:bg-ferchas-error/10 p-1.5 rounded">
+              <button @click="eliminarProveedor(p)" class="text-ferchas-error hover:bg-ferchas-error/10 p-1.5 rounded">
                 <Icono nombre="basurero" :tamano="16" />
               </button>
             </div>
@@ -46,28 +45,74 @@
       </div>
     </div>
 
-    <ModalProveedor v-if="mostrarModal" @cerrar="mostrarModal = false" @guardar="guardar" />
+    <ModalProveedor v-if="mostrarModal" :proveedor="proveedorAEditar" @cerrar="cerrarModal" @guardar="guardarProveedor" />
   </LayoutPanel>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import LayoutPanel from '../components/shared/LayoutPanel.vue'
 import Icono from '../components/shared/Icono.vue'
 import ModalProveedor from '../components/proveedores/ModalProveedor.vue'
-import { mockProveedores } from '../lib/datosMock.js'
+import { useAlmacenProveedores } from '../stores/almacenProveedores.js'
 
-// Versión real (descomentar cuando Insforge esté conectado):
-// import { servicioProveedores } from '../services/servicioProveedores.js'
-// onMounted(async () => proveedores.value = await servicioProveedores.obtenerTodos())
+const almacenProveedores = useAlmacenProveedores()
 
-const proveedores = mockProveedores
+const proveedores = computed(() => almacenProveedores.proveedores)
 const busqueda = ref('')
 const mostrarModal = ref(false)
-const totalProductos = computed(() => proveedores.reduce((s, p) => s + p.productos, 0))
+const proveedorAEditar = ref(null)
 
-function guardar(formulario) {
-  console.log('Guardar proveedor (mock):', formulario)
-  mostrarModal.value = false
+const proveedoresFiltrados = computed(() => {
+  return almacenProveedores.proveedores.filter(p => {
+    if (!busqueda.value) return true
+    const t = busqueda.value.toLowerCase()
+    return p.nombre.toLowerCase().includes(t) || (p.contacto || '').toLowerCase().includes(t)
+  })
+})
+
+function abrirModalCrear() {
+  proveedorAEditar.value = null
+  mostrarModal.value = true
 }
+
+function abrirModalEditar(proveedor) {
+  proveedorAEditar.value = proveedor
+  mostrarModal.value = true
+}
+
+function cerrarModal() {
+  mostrarModal.value = false
+  proveedorAEditar.value = null
+}
+
+async function guardarProveedor(formulario) {
+  let resultado
+  if (formulario.id_proveedor) {
+    resultado = await almacenProveedores.actualizar(formulario.id_proveedor, {
+      nombre: formulario.nombre,
+      telefono: formulario.telefono || null,
+      contacto: formulario.contacto || null,
+      descripcion: formulario.descripcion || null
+    })
+  } else {
+    const { id_proveedor, ...datosCrear } = formulario
+    resultado = await almacenProveedores.crear(datosCrear)
+  }
+  if (resultado.exito) {
+    cerrarModal()
+  }
+}
+
+async function eliminarProveedor(proveedor) {
+  if (!confirm(`¿Eliminar a ${proveedor.nombre}?`)) return
+  const resultado = await almacenProveedores.eliminar(proveedor.id_proveedor)
+  if (!resultado.exito) {
+    alert(resultado.error)
+  }
+}
+
+onMounted(async () => {
+  await almacenProveedores.obtenerTodos()
+})
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <ModalBase titulo="Nuevo cliente" ancho="xl" padding-top="pt-16" @cerrar="$emit('cerrar')">
+  <ModalBase :titulo="cliente ? 'Editar cliente' : 'Nuevo cliente'" ancho="xl" padding-top="pt-16" @cerrar="$emit('cerrar')">
     <form @submit.prevent="$emit('guardar', formulario)">
       <label class="block mb-4">
         <span class="text-sm font-semibold text-ferchas-cafe block mb-1.5">Nombre completo <span class="text-ferchas-error">*</span></span>
@@ -37,8 +37,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import ModalBase from '../shared/ModalBase.vue'
+const props = defineProps({
+  cliente: { type: Object, default: null }
+})
 defineEmits(['cerrar', 'guardar'])
-const formulario = ref({ nombre: '', telefono: '', correo: '', direccion: '' })
+const formulario = ref({ id_cliente: null, nombre: '', telefono: '', correo: '', direccion: '' })
+
+onMounted(() => {
+  if (props.cliente) {
+    formulario.value = {
+      id_cliente: props.cliente.id_cliente,
+      nombre: props.cliente.nombre,
+      telefono: props.cliente.telefono || '',
+      correo: props.cliente.correo || '',
+      direccion: props.cliente.direccion || ''
+    }
+  }
+})
 </script>

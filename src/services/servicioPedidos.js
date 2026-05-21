@@ -126,6 +126,26 @@ export const servicioPedidos = {
 
   async registrarPedidoCompleto(datosPedido, detalles) {
     try {
+      // 0. Validar stock suficiente para todos los productos antes de empezar
+      for (const detalle of detalles) {
+        const { data: producto, error: errProd } = await insforgeClient.database
+          .from('productos')
+          .select('nombre, stock_disponible')
+          .eq('id_producto', detalle.id_producto)
+          .single()
+
+        if (errProd || !producto) {
+          return { exito: false, error: `Producto no encontrado (ID: ${detalle.id_producto})` }
+        }
+
+        if ((producto.stock_disponible || 0) < detalle.cantidad) {
+          return {
+            exito: false,
+            error: `Stock insuficiente para "${producto.nombre}". Disponible: ${producto.stock_disponible}, solicitado: ${detalle.cantidad}`
+          }
+        }
+      }
+
       // 1. Crear el pedido
       const { data: pedidoData, error: errorPedido } = await insforgeClient.database
         .from('pedidos')

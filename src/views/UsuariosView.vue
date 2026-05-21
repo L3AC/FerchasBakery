@@ -25,16 +25,14 @@
           <thead>
             <tr class="bg-ferchas-fondo-oscuro text-ferchas-cafe text-xs uppercase tracking-wider">
               <th class="text-left py-3 px-4 font-bold">Usuario</th>
-              <th class="text-left py-3 px-4 font-bold">Correo</th>
               <th class="text-left py-3 px-4 font-bold">Rol</th>
-              <th class="text-left py-3 px-4 font-bold">Último acceso</th>
               <th class="text-left py-3 px-4 font-bold">Registrado</th>
               <th class="text-center py-3 px-4 font-bold">Estado</th>
               <th class="text-center py-3 px-4 font-bold">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="u in usuarios" :key="u.correo"
+            <tr v-for="u in usuariosMapeados" :key="u.user_id"
                 :class="['border-b border-ferchas-cafe/10 last:border-0 hover:bg-ferchas-fondo transition-colors', !u.activo && 'opacity-50']">
               <td class="py-3 px-4">
                 <div class="flex items-center gap-3">
@@ -45,15 +43,8 @@
                   <span class="font-semibold text-ferchas-cafe">{{ u.nombre }}</span>
                 </div>
               </td>
-              <td class="py-3 px-4 text-ferchas-cafe-claro">{{ u.correo }}</td>
-              <td class="py-3 px-4">
-                <span :class="['px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider',
-                              u.rol === 'admin' ? 'bg-ferchas-vino text-white' : 'bg-ferchas-rosa-suave text-ferchas-vino']">
-                  {{ u.rol }}
-                </span>
-              </td>
-              <td class="py-3 px-4 text-ferchas-cafe-claro">{{ u.ultimoAcceso }}</td>
-              <td class="py-3 px-4 text-ferchas-cafe-claro">{{ u.registrado }}</td>
+              <td class="py-3 px-4 text-ferchas-cafe-claro">{{ u.rol }}</td>
+              <td class="py-3 px-4 text-ferchas-cafe-claro">{{ u.created_at ? new Date(u.created_at).toLocaleDateString() : '-' }}</td>
               <td class="py-3 px-4 text-center">
                 <span :class="['px-2 py-0.5 rounded-full text-[11px] font-bold',
                               u.activo ? 'bg-ferchas-exito/30 text-ferchas-cafe' : 'bg-ferchas-fondo-oscuro text-ferchas-cafe-claro']">
@@ -77,13 +68,24 @@
 </template>
 
 <script setup>
+import { ref, computed, onMounted } from 'vue'
 import LayoutPanel from '../components/shared/LayoutPanel.vue'
 import Icono from '../components/shared/Icono.vue'
-import { mockUsuarios } from '../lib/datosMock.js'
+import { servicioPerfiles } from '../services/servicioPerfiles.js'
 
-// Versión real (descomentar cuando Insforge esté conectado):
-// import { servicioPerfiles } from '../services/servicioPerfiles.js'
-// onMounted(async () => usuarios.value = await servicioPerfiles.obtenerTodos())
+const usuarios = ref([])
 
-const usuarios = mockUsuarios
+const usuariosMapeados = computed(() => {
+  return usuarios.value.map(u => ({
+    ...u,
+    iniciales: u.nombre.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2)
+  }))
+})
+
+onMounted(async () => {
+  const resultado = await servicioPerfiles.obtenerTodos()
+  if (resultado.exito) {
+    usuarios.value = resultado.perfiles
+  }
+})
 </script>

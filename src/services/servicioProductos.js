@@ -176,5 +176,26 @@ export const servicioProductos = {
     } catch (err) {
       return { exito: false, error: err.message }
     }
+  },
+
+  async buscarDisponibles(termino) {
+    try {
+      const { data, error } = await insforgeClient.database
+        .from('productos')
+        .select('*')
+        .eq('activo', true)
+        .gt('stock_disponible', 0)
+        .or(`nombre.ilike.%${termino}%,descripcion.ilike.%${termino}%`)
+        .order('nombre', { ascending: true })
+        .limit(8)
+
+      if (error) {
+        return { exito: false, error: error.message }
+      }
+
+      return { exito: true, productos: data || [] }
+    } catch (err) {
+      return { exito: false, error: err.message }
+    }
   }
 }

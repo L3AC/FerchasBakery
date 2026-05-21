@@ -64,9 +64,27 @@ export const useAlmacenAutenticacion = defineStore('autenticacion', () => {
     }
   }
 
+  async function cambiarContrasena(contrasenaNueva, contrasenaActual) {
+    cargando.value = true
+    error.value = null
+    try {
+      const resultado = await servicioAutenticacion.cambiarContrasena(contrasenaNueva, contrasenaActual)
+      if (resultado.exito) {
+        return { exito: true }
+      }
+      error.value = resultado.error
+      return { exito: false, error: resultado.error }
+    } catch (err) {
+      error.value = err.message
+      return { exito: false, error: err.message }
+    } finally {
+      cargando.value = false
+    }
+  }
+
   return {
     usuario, perfil, token, cargando, error,
     estaAutenticado, esAdmin, esEmpleado,
-    iniciarSesion, cerrarSesion, obtenerUsuarioActual
+    iniciarSesion, cerrarSesion, obtenerUsuarioActual, cambiarContrasena
   }
 })

@@ -4,9 +4,9 @@
       <div class="flex items-start justify-between mb-6">
         <div>
           <h1 class="font-titulo text-3xl text-ferchas-cafe">Clientes</h1>
-          <p class="text-sm text-ferchas-cafe-claro mt-1">{{ clientes.length }} clientes registrados</p>
+          <p class="text-sm text-ferchas-cafe-claro mt-1">{{ clientesFiltrados.length }} clientes registrados</p>
         </div>
-        <button @click="mostrarModal = true" class="btn-principal flex items-center gap-2">
+        <button @click="abrirModalCrear" class="btn-principal flex items-center gap-2">
           <Icono nombre="mas" :tamano="16" /> Nuevo cliente
         </button>
       </div>
@@ -28,13 +28,12 @@
               <th class="text-left py-3 px-4 font-bold">Teléfono</th>
               <th class="text-left py-3 px-4 font-bold">Correo</th>
               <th class="text-left py-3 px-4 font-bold">Dirección</th>
-              <th class="text-center py-3 px-4 font-bold">Pedidos</th>
-              <th class="text-left py-3 px-4 font-bold">Último</th>
+              <th class="text-left py-3 px-4 font-bold">Registrado</th>
               <th class="text-center py-3 px-4 font-bold">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="c in clientes" :key="c.nombre"
+            <tr v-for="c in clientesFiltrados" :key="c.id_cliente"
                 class="border-b border-ferchas-cafe/10 last:border-0 hover:bg-ferchas-fondo transition-colors">
               <td class="py-3 px-4">
                 <div class="flex items-center gap-3">
@@ -45,15 +44,12 @@
               <td class="py-3 px-4 text-ferchas-cafe">{{ c.telefono }}</td>
               <td class="py-3 px-4 text-ferchas-cafe-claro">{{ c.correo }}</td>
               <td class="py-3 px-4 text-ferchas-cafe-claro text-xs">{{ c.direccion }}</td>
-              <td class="py-3 px-4 text-center">
-                <span class="bg-ferchas-rosa-suave text-ferchas-vino text-xs font-bold px-2 py-0.5 rounded-full">{{ c.pedidos }}</span>
-              </td>
-              <td class="py-3 px-4 text-ferchas-cafe-claro">{{ c.ultimo }}</td>
-              <td class="py-3 px-4 text-center">
-                <button class="text-ferchas-cafe-claro hover:text-ferchas-vino hover:bg-ferchas-fondo p-1.5 rounded">
+              <td class="py-3 px-4 text-ferchas-cafe-claro text-xs">{{ c.created_at ? new Date(c.created_at).toLocaleDateString() : '-' }}</td>
+              <td class="py-3 px-4 text-center space-x-1">
+                <button @click="abrirModalEditar(c)" class="text-ferchas-cafe-claro hover:text-ferchas-vino hover:bg-ferchas-fondo p-1.5 rounded">
                   <Icono nombre="editar" :tamano="16" />
                 </button>
-                <button class="text-ferchas-error hover:bg-ferchas-error/10 p-1.5 rounded ml-1">
+                <button @click="eliminarCliente(c)" class="text-ferchas-error hover:bg-ferchas-error/10 p-1.5 rounded">
                   <Icono nombre="basurero" :tamano="16" />
                 </button>
               </td>
@@ -63,28 +59,77 @@
       </div>
     </div>
 
-    <ModalCliente v-if="mostrarModal" @cerrar="mostrarModal = false" @guardar="guardar" />
+    <ModalCliente v-if="mostrarModal" :cliente="clienteAEditar" @cerrar="cerrarModal" @guardar="guardarCliente" />
   </LayoutPanel>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import LayoutPanel from '../components/shared/LayoutPanel.vue'
 import Icono from '../components/shared/Icono.vue'
 import ModalCliente from '../components/clientes/ModalCliente.vue'
-import { mockClientes } from '../lib/datosMock.js'
+import { useAlmacenClientes } from '../stores/almacenClientes.js'
 
-// Versión real (descomentar cuando Insforge esté conectado):
-// import { useAlmacenClientes } from '../stores/almacenClientes.js'
-// const almacenClientes = useAlmacenClientes()
-// onMounted(() => almacenClientes.obtenerTodos())
+const almacenClientes = useAlmacenClientes()
 
-const clientes = mockClientes
 const busqueda = ref('')
 const mostrarModal = ref(false)
+const clienteAEditar = ref(null)
 
-function guardar(formulario) {
-  console.log('Guardar cliente (mock):', formulario)
-  mostrarModal.value = false
+const clientesFiltrados = computed(() => {
+  return almacenClientes.clientes
+    .filter(c => {
+      if (!busqueda.value) return true
+      const t = busqueda.value.toLowerCase()
+      return c.nombre.toLowerCase().includes(t) ||
+             (c.telefono && c.telefono.includes(busqueda.value)) ||
+             (c.correo && c.correo.toLowerCase().includes(t))
+    })
+    .map(c => ({
+      ...c,
+      iniciales: c.nombre.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2)
+    }))
+})
+
+function abrirModalCrear() {
+  clienteAEditar.value = null
+  mostrarModal.value = true
 }
+
+function abrirModalEditar(cliente) {
+  clienteAEditar.value = cliente
+  mostrarModal.value = true
+}
+
+function cerrarModal() {
+  mostrarModal.value = false
+  clienteAEditar.value = null
+}
+
+async function guardarCliente(formulario) {
+  let resultado
+  if (formulario.id_cliente) {
+    resultado = await almacenClientes.actualizar(formulario.id_cliente, {
+      nombre: formulario.nombre,
+      telefono: formulario.telefono || null,
+      correo: formulario.correo || null,
+      direccion: formulario.direccion || null
+    })
+  } else {
+    const { id_cliente, ...datosCrear } = formulario
+    resultado = await almacenClientes.crear(datosCrear)
+  }
+  if (resultado.exito) {
+    cerrarModal()
+  }
+}
+
+async function eliminarCliente(cliente) {
+  if (!confirm(`¿Eliminar a ${cliente.nombre}? Esta acción no se puede deshacer.`)) return
+  await almacenClientes.eliminar(cliente.id_cliente)
+}
+
+onMounted(async () => {
+  await almacenClientes.obtenerTodos()
+})
 </script>

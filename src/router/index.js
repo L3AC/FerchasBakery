@@ -8,6 +8,7 @@ import ProductosView from '../views/ProductosView.vue'
 import PedidosView from '../views/PedidosView.vue'
 import ClientesView from '../views/ClientesView.vue'
 import ProveedoresView from '../views/ProveedoresView.vue'
+import CategoriasView from '../views/CategoriasView.vue'
 import UsuariosView from '../views/UsuariosView.vue'
 import MiPerfilView from '../views/MiPerfilView.vue'
 
@@ -54,6 +55,15 @@ const rutas = [
     component: ClientesView,
     meta: {
       requiereAutenticacion: true
+    }
+  },
+  {
+    path: '/categorias',
+    name: 'Categorias',
+    component: CategoriasView,
+    meta: {
+      requiereAutenticacion: true,
+      requiereAdmin: true
     }
   },
   {

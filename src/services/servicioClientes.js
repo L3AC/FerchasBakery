@@ -105,5 +105,22 @@ export const servicioClientes = {
     } catch (err) {
       return { exito: false, error: err.message }
     }
+  },
+
+  async eliminar(idCliente) {
+    try {
+      const { error } = await insforgeClient.database
+        .from('clientes')
+        .delete()
+        .eq('id_cliente', idCliente)
+
+      if (error) {
+        return { exito: false, error: error.message }
+      }
+
+      return { exito: true }
+    } catch (err) {
+      return { exito: false, error: err.message }
+    }
   }
 }

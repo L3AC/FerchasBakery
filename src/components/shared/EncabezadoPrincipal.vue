@@ -11,7 +11,6 @@
     <div class="flex items-center gap-5">
       <button class="relative text-white hover:text-ferchas-rosa-suave transition-colors" title="Notificaciones">
         <Icono nombre="campana" :tamano="20" />
-        <span class="absolute -top-1 -right-1 w-4 h-4 bg-ferchas-rosa text-ferchas-vino text-[10px] font-bold rounded-full flex items-center justify-center">3</span>
       </button>
 
       <div class="flex items-center gap-2.5">
@@ -31,18 +30,26 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Icono from './Icono.vue'
-import { mockUsuarioActual } from '../../lib/datosMock.js'
+import { useAlmacenAutenticacion } from '../../stores/almacenAutenticacion.js'
 
-const usuario = mockUsuarioActual
+const auth = useAlmacenAutenticacion()
 const router = useRouter()
 
-function cerrarSesion() {
-  // Limpia la sesión del prototipo y vuelve al login
-  if (typeof localStorage !== 'undefined') {
-    localStorage.removeItem('prototipo_sesion')
+const usuario = computed(() => {
+  const nombre = auth.perfil?.nombre || 'Usuario'
+  const partes = nombre.split(' ')
+  return {
+    iniciales: partes.map(p => p[0]).join('').toUpperCase().slice(0, 2),
+    nombreCorto: partes[0] || 'Usuario',
+    rolEtiqueta: auth.perfil?.rol === 'admin' ? 'Admin' : auth.perfil?.rol === 'empleado' ? 'Empleado' : 'Usuario'
   }
+})
+
+async function cerrarSesion() {
+  await auth.cerrarSesion()
   router.push('/login')
 }
 </script>

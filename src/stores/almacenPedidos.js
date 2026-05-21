@@ -112,6 +112,10 @@ export const useAlmacenPedidos = defineStore('pedidos', () => {
     }
   }
 
+  async function cancelar(idPedido) {
+    return await actualizarEstado(idPedido, 'Cancelado')
+  }
+
   return {
     pedidos,
     pedidoActivo,
@@ -124,6 +128,7 @@ export const useAlmacenPedidos = defineStore('pedidos', () => {
     crear,
     agregarDetalle,
     actualizarEstado,
-    obtenerVentasDelDia
+    obtenerVentasDelDia,
+    cancelar
   }
 })

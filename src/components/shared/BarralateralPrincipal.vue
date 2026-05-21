@@ -44,8 +44,9 @@ const itemsPrincipales = [
 ]
 
 const itemsAdmin = [
-  { ruta: '/usuarios',  etiqueta: 'Usuarios',  icono: 'usuarios' },
-  { ruta: '/mi-perfil', etiqueta: 'Mi perfil', icono: 'perfil'   },
+  { ruta: '/categorias', etiqueta: 'Categorias', icono: 'categorias' },
+  { ruta: '/usuarios',   etiqueta: 'Usuarios',   icono: 'usuarios'   },
+  { ruta: '/mi-perfil',  etiqueta: 'Mi perfil',  icono: 'perfil'     },
 ]
 
 function esRutaActiva(ruta) { return route.path.startsWith(ruta) }
