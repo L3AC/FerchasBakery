@@ -1,231 +1,252 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
-  <root>
-    <mxCell id="0" />
-    <mxCell id="1" parent="0" />
-
-    <!-- ===================== TÍTULO ===================== -->
-    <mxCell id="title" value="FerchasBakery – Diagrama de Componentes" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=20;fontStyle=1;" vertex="1" parent="1">
-      <mxGeometry x="300" y="20" width="1000" height="40" as="geometry" />
-    </mxCell>
-
-    <!-- ============================================================ -->
-    <!--   CAPA: CLIENTE (Frontend - Vue.js SPA)                      -->
-    <!-- ============================================================ -->
-    <mxCell id="layer_frontend" value="&lt;b&gt;Capa Cliente — Frontend (Vue.js + Vite + Tailwind CSS)&lt;/b&gt;" style="swimlane;startSize=35;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
-      <mxGeometry x="40" y="80" width="1560" height="420" as="geometry" />
-    </mxCell>
-
-    <!-- Sub-bloque: Router-->
-    <mxCell id="comp_router" value="«component»&#xa;router/index.js&#xa;(Vue Router)" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;" vertex="1" parent="layer_frontend">
-      <mxGeometry x="30" y="70" width="170" height="70" as="geometry" />
-    </mxCell>
-
-    <!--   Sub-bloque: Middleware   -->
-    <mxCell id="comp_middleware" value="«component»&#xa;authMiddleware.js" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;" vertex="1" parent="layer_frontend">
-      <mxGeometry x="30" y="175" width="170" height="70" as="geometry" />
-    </mxCell>
-
-    <!--   Sub-bloque: Store   -->
-    <mxCell id="comp_store" value="«component»&#xa;stores/authStore.js&#xa;(Pinia)" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;" vertex="1" parent="layer_frontend">
-      <mxGeometry x="30" y="280" width="170" height="70" as="geometry" />
-    </mxCell>
-
-    <!--   Sub-bloque: Layout   -->
-    <mxCell id="comp_layout" value="«component»&#xa;AdminLayout.vue" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;" vertex="1" parent="layer_frontend">
-      <mxGeometry x="240" y="70" width="170" height="70" as="geometry" />
-    </mxCell>
-
-    <!--   Sub-bloque: Views   -->
-    <mxCell id="pkg_views" value="«package» Views" style="swimlane;startSize=25;fillColor=#fffde7;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="layer_frontend">
-      <mxGeometry x="450" y="55" width="580" height="340" as="geometry" />
-    </mxCell>
-
-    <mxCell id="view_login" value="«component»&#xa;LoginView.vue" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" vertex="1" parent="pkg_views">
-      <mxGeometry x="20" y="45" width="155" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="view_dashboard" value="«component»&#xa;DashboardView.vue" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" vertex="1" parent="pkg_views">
-      <mxGeometry x="200" y="45" width="155" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="view_productos" value="«component»&#xa;ProductosView.vue" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" vertex="1" parent="pkg_views">
-      <mxGeometry x="380" y="45" width="155" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="view_pedidos" value="«component»&#xa;PedidosView.vue" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" vertex="1" parent="pkg_views">
-      <mxGeometry x="20" y="145" width="155" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="view_clientes" value="«component»&#xa;ClientesView.vue" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" vertex="1" parent="pkg_views">
-      <mxGeometry x="200" y="145" width="155" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="view_proveedores" value="«component»&#xa;ProveedoresView.vue" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" vertex="1" parent="pkg_views">
-      <mxGeometry x="380" y="145" width="155" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="view_reportes" value="«component»&#xa;ReportesView.vue" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" vertex="1" parent="pkg_views">
-      <mxGeometry x="20" y="245" width="155" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="view_usuarios" value="«component»&#xa;UsuariosView.vue" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" vertex="1" parent="pkg_views">
-      <mxGeometry x="200" y="245" width="155" height="60" as="geometry" />
-    </mxCell>
-
-    <!--   Sub-bloque: Services   -->
-    <mxCell id="pkg_services" value="«package» Services" style="swimlane;startSize=25;fillColor=#e8f5e9;strokeColor=#82b366;fontSize=11;" vertex="1" parent="layer_frontend">
-      <mxGeometry x="1070" y="55" width="460" height="340" as="geometry" />
-    </mxCell>
-
-    <mxCell id="svc_auth" value="«component»&#xa;authService.js" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;" vertex="1" parent="pkg_services">
-      <mxGeometry x="20" y="45" width="190" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="svc_producto" value="«component»&#xa;productoService.js" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;" vertex="1" parent="pkg_services">
-      <mxGeometry x="240" y="45" width="190" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="svc_pedido" value="«component»&#xa;pedidoService.js" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;" vertex="1" parent="pkg_services">
-      <mxGeometry x="20" y="135" width="190" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="svc_cliente" value="«component»&#xa;clienteService.js" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;" vertex="1" parent="pkg_services">
-      <mxGeometry x="240" y="135" width="190" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="svc_proveedor" value="«component»&#xa;proveedorService.js" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;" vertex="1" parent="pkg_services">
-      <mxGeometry x="20" y="225" width="190" height="60" as="geometry" />
-    </mxCell>
-
-    <!-- ============================================================ -->
-    <!--   FLECHA: Frontend → Backend (HTTP/REST)                     -->
-    <!-- ============================================================ -->
-    <mxCell id="arrow_fe_be" value="HTTP / REST API&#xa;(HTTPS)" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#6c8ebf;strokeWidth=2;dashed=0;fontSize=11;fontStyle=1;" edge="1" source="pkg_services" target="layer_backend" parent="1">
-      <mxGeometry relative="1" as="geometry" />
-    </mxCell>
-
-    <!-- ============================================================ -->
-    <!--   CAPA: BACKEND (Insforge BaaS)                              -->
-    <!-- ============================================================ -->
-    <mxCell id="layer_backend" value="&lt;b&gt;Capa Backend — Insforge (BaaS)&lt;/b&gt;" style="swimlane;startSize=35;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
-      <mxGeometry x="200" y="600" width="1200" height="320" as="geometry" />
-    </mxCell>
-
-    <!--   Auth Module   -->
-    <mxCell id="comp_insforge_auth" value="«component»&#xa;Insforge Auth&#xa;(Autenticación + JWT)" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;align=center;" vertex="1" parent="layer_backend">
-      <mxGeometry x="40" y="65" width="200" height="80" as="geometry" />
-    </mxCell>
-
-    <!--   API REST Gateway   -->
-    <mxCell id="comp_api_gateway" value="«component»&#xa;API REST Gateway&#xa;(Endpoints / Rutas)" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;align=center;" vertex="1" parent="layer_backend">
-      <mxGeometry x="290" y="65" width="200" height="80" as="geometry" />
-    </mxCell>
-
-    <!--   Controllers package   -->
-    <mxCell id="pkg_controllers" value="«package» Controllers (Lógica de Negocio)" style="swimlane;startSize=25;fillColor=#e8f5e9;strokeColor=#82b366;fontSize=11;" vertex="1" parent="layer_backend">
-      <mxGeometry x="540" y="50" width="620" height="240" as="geometry" />
-    </mxCell>
-
-    <mxCell id="ctrl_auth" value="«component»&#xa;AuthController" style="shape=component;whiteSpace=wrap;html=1;fillColor=#a5d6a7;strokeColor=#388e3c;fontSize=11;" vertex="1" parent="pkg_controllers">
-      <mxGeometry x="20" y="45" width="165" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="ctrl_producto" value="«component»&#xa;ProductoController&#xa;(+ control stock)" style="shape=component;whiteSpace=wrap;html=1;fillColor=#a5d6a7;strokeColor=#388e3c;fontSize=11;" vertex="1" parent="pkg_controllers">
-      <mxGeometry x="210" y="45" width="165" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="ctrl_pedido" value="«component»&#xa;PedidoController&#xa;(+ descuento stock)" style="shape=component;whiteSpace=wrap;html=1;fillColor=#a5d6a7;strokeColor=#388e3c;fontSize=11;" vertex="1" parent="pkg_controllers">
-      <mxGeometry x="400" y="45" width="165" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="ctrl_cliente" value="«component»&#xa;ClienteController" style="shape=component;whiteSpace=wrap;html=1;fillColor=#a5d6a7;strokeColor=#388e3c;fontSize=11;" vertex="1" parent="pkg_controllers">
-      <mxGeometry x="20" y="150" width="165" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="ctrl_proveedor" value="«component»&#xa;ProveedorController" style="shape=component;whiteSpace=wrap;html=1;fillColor=#a5d6a7;strokeColor=#388e3c;fontSize=11;" vertex="1" parent="pkg_controllers">
-      <mxGeometry x="210" y="150" width="165" height="60" as="geometry" />
-    </mxCell>
-    <mxCell id="ctrl_reporte" value="«component»&#xa;ReporteController" style="shape=component;whiteSpace=wrap;html=1;fillColor=#a5d6a7;strokeColor=#388e3c;fontSize=11;" vertex="1" parent="pkg_controllers">
-      <mxGeometry x="400" y="150" width="165" height="60" as="geometry" />
-    </mxCell>
-
-    <!-- Relaciones internas backend -->
-    <mxCell id="e_auth_gate" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;" edge="1" source="comp_insforge_auth" target="comp_api_gateway" parent="layer_backend"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="e_gate_ctrl" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;" edge="1" source="comp_api_gateway" target="pkg_controllers" parent="layer_backend"><mxGeometry relative="1" as="geometry" /></mxCell>
-
-    <!-- ============================================================ -->
-    <!--   FLECHA: Backend → Base de Datos                            -->
-    <!-- ============================================================ -->
-    <mxCell id="arrow_be_db" value="SQL Queries&#xa;(PostgreSQL Driver)" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#82b366;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" source="layer_backend" target="layer_db" parent="1">
-      <mxGeometry relative="1" as="geometry" />
-    </mxCell>
-
-    <!-- ============================================================ -->
-    <!--   CAPA: BASE DE DATOS (PostgreSQL)                           -->
-    <!-- ============================================================ -->
-    <mxCell id="layer_db" value="&lt;b&gt;Capa de Datos — PostgreSQL (Insforge / BaaS)&lt;/b&gt;" style="swimlane;startSize=35;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
-      <mxGeometry x="100" y="1030" width="1400" height="220" as="geometry" />
-    </mxCell>
-
-    <!-- Tablas BD -->
-    <mxCell id="tbl_perfiles" value="«table»&#xa;perfiles&#xa;(user_id, nombre, rol, activo)" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#d79b00;fontSize=10;align=center;" vertex="1" parent="layer_db">
-      <mxGeometry x="30" y="60" width="180" height="70" as="geometry" />
-    </mxCell>
-    <mxCell id="tbl_clientes" value="«table»&#xa;clientes&#xa;(id, nombre, teléfono, correo)" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#d79b00;fontSize=10;align=center;" vertex="1" parent="layer_db">
-      <mxGeometry x="230" y="60" width="180" height="70" as="geometry" />
-    </mxCell>
-    <mxCell id="tbl_categorias" value="«table»&#xa;categorias_productos&#xa;(id, nombre_categoria)" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#d79b00;fontSize=10;align=center;" vertex="1" parent="layer_db">
-      <mxGeometry x="430" y="60" width="180" height="70" as="geometry" />
-    </mxCell>
-    <mxCell id="tbl_proveedores" value="«table»&#xa;proveedores&#xa;(id, nombre, teléfono, contacto)" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#d79b00;fontSize=10;align=center;" vertex="1" parent="layer_db">
-      <mxGeometry x="630" y="60" width="180" height="70" as="geometry" />
-    </mxCell>
-    <mxCell id="tbl_productos" value="«table»&#xa;productos&#xa;(id, nombre, precio, stock,&#xa;tipo_origen, id_proveedor)" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#d79b00;fontSize=10;align=center;" vertex="1" parent="layer_db">
-      <mxGeometry x="830" y="55" width="190" height="80" as="geometry" />
-    </mxCell>
-    <mxCell id="tbl_pedidos" value="«table»&#xa;pedidos&#xa;(id, id_cliente, user_id,&#xa;estado, total, fecha_entrega)" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#d79b00;fontSize=10;align=center;" vertex="1" parent="layer_db">
-      <mxGeometry x="1040" y="55" width="190" height="80" as="geometry" />
-    </mxCell>
-    <mxCell id="tbl_detalles" value="«table»&#xa;detalles_pedido&#xa;(id, id_pedido, id_producto,&#xa;cantidad, precio_unitario)" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#d79b00;fontSize=10;align=center;" vertex="1" parent="layer_db">
-      <mxGeometry x="1250" y="55" width="190" height="80" as="geometry" />
-    </mxCell>
-
-    <!-- Relaciones FK dentro de BD -->
-    <mxCell id="fk1" style="edgeStyle=none;strokeColor=#d79b00;dashed=1;endArrow=open;" edge="1" source="tbl_productos" target="tbl_categorias" parent="layer_db"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="fk2" style="edgeStyle=none;strokeColor=#d79b00;dashed=1;endArrow=open;" edge="1" source="tbl_productos" target="tbl_proveedores" parent="layer_db"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="fk3" style="edgeStyle=none;strokeColor=#d79b00;dashed=1;endArrow=open;" edge="1" source="tbl_pedidos" target="tbl_clientes" parent="layer_db"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="fk4" style="edgeStyle=none;strokeColor=#d79b00;dashed=1;endArrow=open;" edge="1" source="tbl_pedidos" target="tbl_perfiles" parent="layer_db"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="fk5" style="edgeStyle=none;strokeColor=#d79b00;dashed=1;endArrow=open;" edge="1" source="tbl_detalles" target="tbl_pedidos" parent="layer_db"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="fk6" style="edgeStyle=none;strokeColor=#d79b00;dashed=1;endArrow=open;" edge="1" source="tbl_detalles" target="tbl_productos" parent="layer_db"><mxGeometry relative="1" as="geometry" /></mxCell>
-
-    <!-- ============================================================ -->
-    <!--   RELACIONES ENTRE VIEWS Y SERVICES (dentro de frontend)     -->
-    <!-- ============================================================ -->
-    <mxCell id="r_login_auth" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b0bec5;dashed=1;" edge="1" source="view_login" target="svc_auth" parent="layer_frontend"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="r_prod_svc" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b0bec5;dashed=1;" edge="1" source="view_productos" target="svc_producto" parent="layer_frontend"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="r_ped_svc" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b0bec5;dashed=1;" edge="1" source="view_pedidos" target="svc_pedido" parent="layer_frontend"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="r_cli_svc" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b0bec5;dashed=1;" edge="1" source="view_clientes" target="svc_cliente" parent="layer_frontend"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <mxCell id="r_prov_svc" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b0bec5;dashed=1;" edge="1" source="view_proveedores" target="svc_proveedor" parent="layer_frontend"><mxGeometry relative="1" as="geometry" /></mxCell>
-
-    <!-- Router controla views -->
-    <mxCell id="r_router_views" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d6b656;dashed=0;" edge="1" source="comp_router" target="pkg_views" parent="layer_frontend"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <!-- Middleware protege router -->
-    <mxCell id="r_mid_router" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d6b656;" edge="1" source="comp_middleware" target="comp_router" parent="layer_frontend"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <!-- Store alimenta views -->
-    <mxCell id="r_store_views" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d6b656;dashed=1;" edge="1" source="comp_store" target="pkg_views" parent="layer_frontend"><mxGeometry relative="1" as="geometry" /></mxCell>
-    <!-- Layout envuelve views -->
-    <mxCell id="r_layout_views" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d6b656;" edge="1" source="comp_layout" target="pkg_views" parent="layer_frontend"><mxGeometry relative="1" as="geometry" /></mxCell>
-
-    <!-- ============================================================ -->
-    <!--   LEYENDA                                                     -->
-    <!-- ============================================================ -->
-    <mxCell id="legend_box" value="Leyenda" style="swimlane;startSize=25;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;" vertex="1" parent="1">
-      <mxGeometry x="1350" y="630" width="260" height="230" as="geometry" />
-    </mxCell>
-    <mxCell id="leg1" value="«component»  Componente de software" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="legend_box">
-      <mxGeometry x="10" y="35" width="240" height="25" as="geometry" />
-    </mxCell>
-    <mxCell id="leg2" value="«package»  Agrupación lógica" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="legend_box">
-      <mxGeometry x="10" y="65" width="240" height="25" as="geometry" />
-    </mxCell>
-    <mxCell id="leg3" value="«table»  Tabla en BD PostgreSQL" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="legend_box">
-      <mxGeometry x="10" y="95" width="240" height="25" as="geometry" />
-    </mxCell>
-    <mxCell id="leg4" value="────  Dependencia / uso" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="legend_box">
-      <mxGeometry x="10" y="125" width="240" height="25" as="geometry" />
-    </mxCell>
-    <mxCell id="leg5" value="- - -  Relación FK (BD)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="legend_box">
-      <mxGeometry x="10" y="155" width="240" height="25" as="geometry" />
-    </mxCell>
-    <mxCell id="leg6" value="══  Comunicación entre capas" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="legend_box">
-      <mxGeometry x="10" y="185" width="240" height="25" as="geometry" />
-    </mxCell>
-
-  </root>
-</mxGraphModel>
+<mxfile host="app.diagrams.net">
+  <diagram id="alcCVQnyTJ32viCFQKkS" name="Página-1">
+    <mxGraphModel dx="1558" dy="989" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=20;fontStyle=1;" value="FerchasBakery – Diagrama de Componentes" vertex="1">
+          <mxGeometry height="40" width="1000" x="300" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="layer_frontend" parent="1" style="swimlane;startSize=35;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;verticalAlign=top;" value="Capa Cliente — Frontend (Vue.js + Vite + Tailwind CSS)" vertex="1">
+          <mxGeometry height="420" width="1560" x="40" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_router" parent="layer_frontend" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;" value="«component»&#xa;router/index.js&#xa;(Vue Router)" vertex="1">
+          <mxGeometry height="70" width="170" x="30" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_middleware" parent="layer_frontend" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;" value="«component»&#xa;authMiddleware.js" vertex="1">
+          <mxGeometry height="70" width="170" x="30" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_store" parent="layer_frontend" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;" value="«component»&#xa;stores/authStore.js&#xa;(Pinia)" vertex="1">
+          <mxGeometry height="70" width="170" x="30" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_layout" parent="layer_frontend" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;" value="«component»&#xa;AdminLayout.vue" vertex="1">
+          <mxGeometry height="70" width="170" x="30" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="pkg_views" parent="layer_frontend" style="swimlane;startSize=25;fillColor=#fffde7;strokeColor=#d6b656;fontSize=11;" value="«package» Views" vertex="1">
+          <mxGeometry height="340" width="580" x="450" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="view_login" parent="pkg_views" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" value="«component»&#xa;LoginView.vue" vertex="1">
+          <mxGeometry height="60" width="155" x="110" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="view_dashboard" parent="pkg_views" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" value="«component»&#xa;DashboardView.vue" vertex="1">
+          <mxGeometry height="60" width="155" x="110" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="view_productos" parent="pkg_views" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" value="«component»&#xa;ProductosView.vue" vertex="1">
+          <mxGeometry height="60" width="155" x="300" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="view_pedidos" parent="pkg_views" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" value="«component»&#xa;PedidosView.vue" vertex="1">
+          <mxGeometry height="60" width="155" x="300" y="275" as="geometry" />
+        </mxCell>
+        <mxCell id="view_clientes" parent="pkg_views" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" value="«component»&#xa;ClientesView.vue" vertex="1">
+          <mxGeometry height="60" width="155" x="300" y="135" as="geometry" />
+        </mxCell>
+        <mxCell id="view_proveedores" parent="pkg_views" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" value="«component»&#xa;ProveedoresView.vue" vertex="1">
+          <mxGeometry height="60" width="155" x="300" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="view_reportes" parent="pkg_views" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" value="«component»&#xa;ReportesView.vue" vertex="1">
+          <mxGeometry height="60" width="155" x="110" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="view_usuarios" parent="pkg_views" style="shape=component;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#f9a825;fontSize=11;" value="«component»&#xa;UsuariosView.vue" vertex="1">
+          <mxGeometry height="60" width="155" x="110" y="185" as="geometry" />
+        </mxCell>
+        <mxCell id="pkg_services" parent="layer_frontend" style="swimlane;startSize=25;fillColor=#e8f5e9;strokeColor=#82b366;fontSize=11;" value="«package» Services" vertex="1">
+          <mxGeometry height="340" width="460" x="1070" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="svc_auth" parent="pkg_services" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;" value="«component»&#xa;authService.js" vertex="1">
+          <mxGeometry height="60" width="190" x="20" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="svc_producto" parent="pkg_services" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;" value="«component»&#xa;productoService.js" vertex="1">
+          <mxGeometry height="60" width="190" x="240" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="svc_cliente" parent="pkg_services" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;" value="«component»&#xa;clienteService.js" vertex="1">
+          <mxGeometry height="60" width="190" x="270" y="175" as="geometry" />
+        </mxCell>
+        <mxCell id="svc_proveedor" parent="pkg_services" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;" value="«component»&#xa;proveedorService.js" vertex="1">
+          <mxGeometry height="60" width="190" x="20" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="svc_pedido" parent="pkg_services" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;" value="«component»&#xa;pedidoService.js" vertex="1">
+          <mxGeometry height="60" width="190" x="20" y="275" as="geometry" />
+        </mxCell>
+        <mxCell id="r_login_auth" edge="1" parent="layer_frontend" source="view_login" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#0999E1;dashed=1;entryX=0.053;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=3;" target="svc_auth">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="100" />
+              <mxPoint x="1050" y="130" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r_prod_svc" edge="1" parent="layer_frontend" source="view_productos" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#0999E1;dashed=1;strokeWidth=3;" target="svc_producto">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1060" y="160" />
+              <mxPoint x="1060" y="190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r_cli_svc" edge="1" parent="layer_frontend" source="view_clientes" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#0999E1;dashed=1;strokeWidth=3;" target="svc_cliente">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1300" y="220" />
+              <mxPoint x="1300" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r_prov_svc" edge="1" parent="layer_frontend" source="view_proveedores" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#0999E1;dashed=1;strokeWidth=3;" target="svc_proveedor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_router_views" edge="1" parent="layer_frontend" source="comp_router" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d6b656;dashed=0;strokeWidth=3;" target="pkg_views">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_mid_router" edge="1" parent="layer_frontend" source="comp_middleware" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d6b656;strokeWidth=3;" target="comp_router">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_store_views" edge="1" parent="layer_frontend" source="comp_store" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d6b656;dashed=1;strokeWidth=3;" target="pkg_views">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="330" y="355" />
+              <mxPoint x="330" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r_layout_views" edge="1" parent="layer_frontend" source="comp_layout" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d6b656;strokeWidth=3;" target="pkg_views">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="85" />
+              <mxPoint x="380" y="190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r_ped_svc" edge="1" parent="layer_frontend" source="view_pedidos" style="edgeStyle=orthogonalEdgeStyle;strokeColor=light-dark(#0999e1, #424e54);dashed=1;strokeWidth=3;" target="svc_pedido">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow_fe_be" edge="1" parent="1" source="pkg_services" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#6c8ebf;strokeWidth=3;dashed=0;fontSize=11;fontStyle=1;" target="layer_backend" value="HTTP / REST API&#xa;(HTTPS)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="layer_backend" parent="1" style="swimlane;startSize=35;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontStyle=1;verticalAlign=top;" value="Capa Backend — Insforge (BaaS)" vertex="1">
+          <mxGeometry height="320" width="1200" x="200" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_insforge_auth" parent="layer_backend" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;align=center;" value="«component»&#xa;Insforge Auth&#xa;(Autenticación + JWT)" vertex="1">
+          <mxGeometry height="80" width="200" x="30" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_api_gateway" parent="layer_backend" style="shape=component;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;align=center;" value="«component»&#xa;API REST Gateway&#xa;(Endpoints / Rutas)" vertex="1">
+          <mxGeometry height="80" width="200" x="270" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="pkg_controllers" parent="layer_backend" style="swimlane;startSize=25;fillColor=#e8f5e9;strokeColor=#82b366;fontSize=11;" value="«package» Controllers (Lógica de Negocio)" vertex="1">
+          <mxGeometry height="250" width="660" x="520" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_auth" parent="pkg_controllers" style="shape=component;whiteSpace=wrap;html=1;fillColor=#a5d6a7;strokeColor=#388e3c;fontSize=11;" value="«component»&#xa;AuthController" vertex="1">
+          <mxGeometry height="60" width="165" x="20" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_producto" parent="pkg_controllers" style="shape=component;whiteSpace=wrap;html=1;fillColor=#a5d6a7;strokeColor=#388e3c;fontSize=11;" value="«component»&#xa;ProductoController&#xa;(+ control stock)" vertex="1">
+          <mxGeometry height="60" width="165" x="210" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_pedido" parent="pkg_controllers" style="shape=component;whiteSpace=wrap;html=1;fillColor=#a5d6a7;strokeColor=#388e3c;fontSize=11;" value="«component»&#xa;PedidoController&#xa;(+ descuento stock)" vertex="1">
+          <mxGeometry height="60" width="165" x="400" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_cliente" parent="pkg_controllers" style="shape=component;whiteSpace=wrap;html=1;fillColor=#a5d6a7;strokeColor=#388e3c;fontSize=11;" value="«component»&#xa;ClienteController" vertex="1">
+          <mxGeometry height="60" width="165" x="20" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_proveedor" parent="pkg_controllers" style="shape=component;whiteSpace=wrap;html=1;fillColor=#a5d6a7;strokeColor=#388e3c;fontSize=11;" value="«component»&#xa;ProveedorController" vertex="1">
+          <mxGeometry height="60" width="165" x="210" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl_reporte" parent="pkg_controllers" style="shape=component;whiteSpace=wrap;html=1;fillColor=#a5d6a7;strokeColor=#388e3c;fontSize=11;" value="«component»&#xa;ReporteController" vertex="1">
+          <mxGeometry height="60" width="165" x="400" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="e_auth_gate" edge="1" parent="layer_backend" source="comp_insforge_auth" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;entryX=0.103;entryY=0.508;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=3;" target="comp_api_gateway">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_gate_ctrl" edge="1" parent="layer_backend" source="comp_api_gateway" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;strokeWidth=3;" target="pkg_controllers">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow_be_db" edge="1" parent="1" source="layer_backend" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#82b366;strokeWidth=3;fontSize=11;fontStyle=1;" target="layer_db" value="SQL Queries&#xa;(PostgreSQL Driver)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="layer_db" parent="1" style="swimlane;startSize=35;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;fontStyle=1;verticalAlign=top;" value="Capa de Datos — PostgreSQL (Insforge / BaaS)" vertex="1">
+          <mxGeometry height="220" width="1530" x="100" y="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="1vRX8uR5DfSs9_bovQCT-7" edge="1" parent="layer_db" source="tbl_perfiles" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;dashed=1;strokeWidth=3;strokeColor=#D79B00;entryX=0.85;entryY=0.05;entryDx=0;entryDy=0;entryPerimeter=0;" target="tbl_detalles">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="110" y="50" />
+              <mxPoint x="1411" y="50" />
+            </Array>
+            <mxPoint x="1440" y="70" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tbl_perfiles" parent="layer_db" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#d79b00;fontSize=10;align=center;" value="«table»&#xa;perfiles&#xa;(user_id, nombre, rol, activo)" vertex="1">
+          <mxGeometry height="70" width="180" x="20" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_clientes" parent="layer_db" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#d79b00;fontSize=10;align=center;" value="«table»&#xa;clientes&#xa;(id, nombre, teléfono, correo)" vertex="1">
+          <mxGeometry height="70" width="180" x="220" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_categorias" parent="layer_db" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#d79b00;fontSize=10;align=center;" value="«table»&#xa;categorias_productos&#xa;(id, nombre_categoria)" vertex="1">
+          <mxGeometry height="70" width="180" x="430" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_proveedores" parent="layer_db" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#d79b00;fontSize=10;align=center;" value="«table»&#xa;proveedores&#xa;(id, nombre, teléfono, contacto)" vertex="1">
+          <mxGeometry height="70" width="180" x="630" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="1vRX8uR5DfSs9_bovQCT-9" edge="1" parent="layer_db" source="tbl_pedidos" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;startArrow=classic;startFill=1;dashed=1;strokeColor=#D79B00;strokeWidth=3;" target="tbl_clientes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_pedidos" parent="layer_db" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#d79b00;fontSize=10;align=center;" value="«table»&#xa;pedidos&#xa;(id, id_cliente, user_id,&#xa;estado, total, fecha_entrega)" vertex="1">
+          <mxGeometry height="80" width="190" x="1040" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl_detalles" parent="layer_db" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#d79b00;fontSize=10;align=center;" value="«table»&#xa;detalles_pedido&#xa;(id, id_pedido, id_producto,&#xa;cantidad, precio_unitario)" vertex="1">
+          <mxGeometry height="80" width="190" x="1250" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="fk2" edge="1" parent="layer_db" source="tbl_productos" style="edgeStyle=none;strokeColor=#d79b00;dashed=1;endArrow=none;startArrow=classic;startFill=1;endFill=0;strokeWidth=3;" target="tbl_proveedores">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fk4" edge="1" parent="layer_db" source="tbl_productos" style="edgeStyle=none;strokeColor=#d79b00;dashed=1;endArrow=classic;startArrow=none;startFill=0;endFill=1;exitX=0.15;exitY=0.95;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=3;" target="tbl_categorias">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="860" y="190" />
+              <mxPoint x="520" y="190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fk5" edge="1" parent="layer_db" source="tbl_detalles" style="edgeStyle=none;strokeColor=#d79b00;dashed=1;endArrow=none;startArrow=classic;startFill=1;endFill=0;strokeWidth=3;" target="tbl_pedidos">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1340" y="70" />
+              <mxPoint x="1140" y="70" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fk6" edge="1" parent="layer_db" source="tbl_detalles" style="edgeStyle=none;strokeColor=#d79b00;dashed=1;endArrow=none;startArrow=classic;startFill=1;endFill=0;strokeWidth=3;" target="tbl_productos">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1340" y="190" />
+              <mxPoint x="1170" y="190" />
+              <mxPoint x="920" y="190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tbl_productos" parent="layer_db" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#d79b00;fontSize=10;align=center;" value="«table»&#xa;productos&#xa;(id, nombre, precio, stock,&#xa;tipo_origen, id_proveedor)" vertex="1">
+          <mxGeometry height="80" width="190" x="830" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_box" parent="1" style="swimlane;startSize=25;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;" value="Leyenda" vertex="1">
+          <mxGeometry height="230" width="260" x="1400" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="leg1" parent="legend_box" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" value="«component»  Componente de software" vertex="1">
+          <mxGeometry height="25" width="240" x="10" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="leg2" parent="legend_box" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" value="«package»  Agrupación lógica" vertex="1">
+          <mxGeometry height="25" width="240" x="10" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="leg3" parent="legend_box" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" value="«table»  Tabla en BD PostgreSQL" vertex="1">
+          <mxGeometry height="25" width="240" x="10" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="leg4" parent="legend_box" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" value="────  Dependencia / uso" vertex="1">
+          <mxGeometry height="25" width="240" x="10" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="leg5" parent="legend_box" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" value="- - -  Relación FK (BD)" vertex="1">
+          <mxGeometry height="25" width="240" x="10" y="155" as="geometry" />
+        </mxCell>
+        <mxCell id="leg6" parent="legend_box" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" value="══  Comunicación entre capas" vertex="1">
+          <mxGeometry height="25" width="240" x="10" y="185" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
