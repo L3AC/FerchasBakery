@@ -1,91 +1,52 @@
 <template>
-  <aside class="bg-ferchas-fondo-oscuro border-r-2 border-ferchas-cafe/10 w-64 min-h-screen p-4">
-    <nav class="space-y-2">
-      <!-- Dashboard -->
+  <aside class="w-60 bg-ferchas-fondo-oscuro min-h-[calc(100vh-64px)] border-r-2 border-ferchas-cafe/10 py-5">
+    <nav>
       <router-link
-        to="/dashboard"
-        :class="[
-          'block px-5 py-3 rounded-lg font-cuerpo transition-all duration-200',
-          $route.path === '/dashboard'
-            ? 'bg-ferchas-rosa text-white shadow-md'
-            : 'text-ferchas-cafe hover:bg-ferchas-fondo hover:translate-x-1'
-        ]"
+        v-for="item in itemsPrincipales"
+        :key="item.ruta"
+        :to="item.ruta"
+        :class="['flex items-center gap-3 px-5 py-3 transition-all duration-200',
+          esRutaActiva(item.ruta) ? 'nav-item-activo' : 'text-ferchas-cafe hover:bg-ferchas-fondo hover:translate-x-1']"
       >
-        📊 Dashboard
+        <Icono :nombre="item.icono" :tamano="18" />
+        <span>{{ item.etiqueta }}</span>
       </router-link>
 
-      <!-- Productos -->
-      <router-link
-        to="/productos"
-        :class="[
-          'block px-5 py-3 rounded-lg font-cuerpo transition-all duration-200',
-          $route.path === '/productos'
-            ? 'bg-ferchas-rosa text-white shadow-md'
-            : 'text-ferchas-cafe hover:bg-ferchas-fondo hover:translate-x-1'
-        ]"
-      >
-        🧁 Productos
-      </router-link>
-
-      <!-- Pedidos -->
-      <router-link
-        to="/pedidos"
-        :class="[
-          'block px-5 py-3 rounded-lg font-cuerpo transition-all duration-200',
-          $route.path === '/pedidos'
-            ? 'bg-ferchas-rosa text-white shadow-md'
-            : 'text-ferchas-cafe hover:bg-ferchas-fondo hover:translate-x-1'
-        ]"
-      >
-        📦 Pedidos
-      </router-link>
-
-      <!-- Clientes -->
-      <router-link
-        to="/clientes"
-        :class="[
-          'block px-5 py-3 rounded-lg font-cuerpo transition-all duration-200',
-          $route.path === '/clientes'
-            ? 'bg-ferchas-rosa text-white shadow-md'
-            : 'text-ferchas-cafe hover:bg-ferchas-fondo hover:translate-x-1'
-        ]"
-      >
-        👥 Clientes
-      </router-link>
-
-      <!-- Proveedores (Solo Admin) -->
-      <router-link
-        v-if="almacenAuth.esAdmin"
-        to="/proveedores"
-        :class="[
-          'block px-5 py-3 rounded-lg font-cuerpo transition-all duration-200',
-          $route.path === '/proveedores'
-            ? 'bg-ferchas-rosa text-white shadow-md'
-            : 'text-ferchas-cafe hover:bg-ferchas-fondo hover:translate-x-1'
-        ]"
-      >
-        🚚 Proveedores
-      </router-link>
-
-      <!-- Usuarios (Solo Admin) -->
-      <router-link
-        v-if="almacenAuth.esAdmin"
-        to="/usuarios"
-        :class="[
-          'block px-5 py-3 rounded-lg font-cuerpo transition-all duration-200',
-          $route.path === '/usuarios'
-            ? 'bg-ferchas-rosa text-white shadow-md'
-            : 'text-ferchas-cafe hover:bg-ferchas-fondo hover:translate-x-1'
-        ]"
-      >
-        👨‍💼 Usuarios
-      </router-link>
+      <div class="mt-4 pt-4 border-t border-ferchas-cafe/10">
+        <div class="px-5 text-xs uppercase text-ferchas-cafe-claro font-bold tracking-wider mb-2">Administración</div>
+        <router-link
+          v-for="item in itemsAdmin"
+          :key="item.ruta"
+          :to="item.ruta"
+          :class="['flex items-center gap-3 px-5 py-3 transition-all duration-200',
+            esRutaActiva(item.ruta) ? 'nav-item-activo' : 'text-ferchas-cafe hover:bg-ferchas-fondo hover:translate-x-1']"
+        >
+          <Icono :nombre="item.icono" :tamano="18" />
+          <span>{{ item.etiqueta }}</span>
+        </router-link>
+      </div>
     </nav>
   </aside>
 </template>
 
 <script setup>
-import { useAlmacenAutenticacion } from '../../stores/almacenAutenticacion.js'
+import { useRoute } from 'vue-router'
+import Icono from './Icono.vue'
 
-const almacenAuth = useAlmacenAutenticacion()
+const route = useRoute()
+
+const itemsPrincipales = [
+  { ruta: '/dashboard',   etiqueta: 'Dashboard',   icono: 'dashboard'   },
+  { ruta: '/productos',   etiqueta: 'Productos',   icono: 'productos'   },
+  { ruta: '/pedidos',     etiqueta: 'Pedidos',     icono: 'pedidos'     },
+  { ruta: '/clientes',    etiqueta: 'Clientes',    icono: 'clientes'    },
+  { ruta: '/proveedores', etiqueta: 'Proveedores', icono: 'proveedores' },
+]
+
+const itemsAdmin = [
+  { ruta: '/usuarios',  etiqueta: 'Usuarios',  icono: 'usuarios' },
+  { ruta: '/mi-perfil', etiqueta: 'Mi perfil', icono: 'perfil'   },
+]
+
+function esRutaActiva(ruta) { return route.path.startsWith(ruta) }
 </script>

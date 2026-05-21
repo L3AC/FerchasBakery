@@ -2,92 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Estilos personalizados artesanales */
-
 @layer base {
-  body {
-    @apply bg-ferchas-fondo text-ferchas-cafe font-cuerpo;
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-titulo text-ferchas-cafe;
-  }
-
-  h1 {
-    @apply text-3xl font-bold;
-  }
-
-  h2 {
-    @apply text-2xl font-semibold;
-  }
-
-  h3 {
-    @apply text-xl font-semibold;
-  }
+  body { @apply bg-ferchas-fondo text-ferchas-cafe font-cuerpo; }
+  h1, h2, h3, h4, h5, h6 { @apply font-titulo text-ferchas-cafe; }
 }
 
 @layer components {
-  .btn-principal {
-    @apply bg-ferchas-rosa text-white font-cuerpo px-6 py-2.5 rounded-lg hover:bg-ferchas-rosa-oscuro transition-colors duration-200 cursor-pointer;
-  }
-
-  .btn-secundario {
-    @apply bg-ferchas-fondo text-ferchas-cafe font-cuerpo px-6 py-2.5 rounded-lg border-2 border-ferchas-cafe/30 hover:bg-ferchas-fondo-oscuro transition-colors duration-200 cursor-pointer;
-  }
-
-  .btn-peligro {
-    @apply bg-ferchas-error text-white font-cuerpo px-6 py-2.5 rounded-lg hover:bg-ferchas-error/90 transition-colors duration-200 cursor-pointer;
-  }
-
-  .input-base {
-    @apply w-full px-4 py-3 bg-white border-2 border-ferchas-cafe/20 rounded-lg text-ferchas-cafe placeholder-ferchas-cafe-claro focus:border-ferchas-rosa focus:ring-2 focus:ring-ferchas-rosa/20 outline-none transition-all duration-200;
-  }
-
-  .card-base {
-    @apply bg-ferchas-fondo border-2 border-ferchas-rosa/40 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 p-5;
-  }
-
-  .tabla-base {
-    @apply w-full border-collapse border-2 border-ferchas-cafe/10;
-  }
-
-  .tabla-header {
-    @apply bg-ferchas-fondo-oscuro text-ferchas-cafe font-semibold;
-  }
-
-  .tabla-fila {
-    @apply border-2 border-ferchas-cafe/10 hover:bg-ferchas-fondo transition-colors duration-200;
-  }
-
-  .badge-exito {
-    @apply inline-block bg-ferchas-exito/10 text-ferchas-exito px-3 py-1 rounded-full text-sm font-semibold;
-  }
-
-  .badge-error {
-    @apply inline-block bg-ferchas-error/10 text-ferchas-error px-3 py-1 rounded-full text-sm font-semibold;
-  }
-
-  .badge-advertencia {
-    @apply inline-block bg-ferchas-advertencia/10 text-ferchas-advertencia px-3 py-1 rounded-full text-sm font-semibold;
-  }
-
-  .badge-info {
-    @apply inline-block bg-ferchas-rosa/10 text-ferchas-rosa px-3 py-1 rounded-full text-sm font-semibold;
-  }
+  .btn-principal { @apply bg-ferchas-rosa text-white font-bold px-6 py-2.5 rounded-lg hover:bg-ferchas-rosa-oscuro transition-colors; }
+  .btn-secundario { @apply bg-ferchas-fondo text-ferchas-cafe font-cuerpo px-6 py-2.5 rounded-lg border-2 border-ferchas-cafe/30 hover:bg-ferchas-fondo-oscuro transition-colors; }
+  .btn-vino { @apply bg-ferchas-vino text-white font-bold px-6 py-2.5 rounded-lg hover:bg-ferchas-vino-claro transition-colors; }
+  .input-base { @apply w-full px-4 py-2.5 bg-white border-2 border-ferchas-cafe/20 rounded-lg text-ferchas-cafe focus:border-ferchas-rosa focus:ring-2 focus:ring-ferchas-rosa/20 outline-none transition-all; }
+  .badge-stock-bajo { background: #C47B7B; color: white; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .estado-pendiente  { background: #D4A574; color: #381414; }
+  .estado-preparando { background: #DF9CB4; color: #4A1818; }
+  .estado-entregado  { background: #8FB996; color: #2D4A33; }
+  .estado-cancelado  { background: #C47B7B; color: white; }
+  .nav-item-activo { background-color: #EBCED6; border-left: 4px solid #4A1818; color: #4A1818; font-weight: 700; }
 }
 
-/* Animaciones suaves */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #E5E5E5; }
+::-webkit-scrollbar-thumb { background: #C4889A; border-radius: 5px; }
 
-.animate-fade-in {
-  animation: fade-in 0.3s ease-in-out;
-}
+@keyframes aparecer-modal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.animacion-modal { animation: aparecer-modal 0.18s ease-out; }

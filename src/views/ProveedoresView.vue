@@ -1,118 +1,73 @@
 <template>
-  <div class="flex min-h-screen bg-ferchas-fondo">
-    <BarralateralPrincipal />
-    <div class="flex-1 flex flex-col">
-      <EncabezadoPrincipal />
-      <main class="flex-1 p-8 overflow-y-auto">
-        <div class="max-w-6xl mx-auto">
-          <div class="flex justify-between items-center mb-8">
-            <h1 class="font-titulo text-4xl text-ferchas-cafe">🚚 Proveedores</h1>
-            <button @click="abrirFormulario" class="btn-principal">+ Nuevo Proveedor</button>
-          </div>
+  <LayoutPanel>
+    <div class="p-7">
+      <div class="flex items-start justify-between mb-6">
+        <div>
+          <h1 class="font-titulo text-3xl text-ferchas-cafe">Proveedores</h1>
+          <p class="text-sm text-ferchas-cafe-claro mt-1">{{ proveedores.length }} proveedores activos · {{ totalProductos }} productos asociados</p>
+        </div>
+        <button @click="mostrarModal = true" class="btn-principal flex items-center gap-2">
+          <Icono nombre="mas" :tamano="16" /> Nuevo proveedor
+        </button>
+      </div>
 
-          <!-- Tabla de Proveedores -->
-          <div class="card-base overflow-x-auto">
-            <table class="tabla-base w-full">
-              <thead class="tabla-header">
-                <tr>
-                  <th class="px-4 py-3 text-left">Nombre</th>
-                  <th class="px-4 py-3 text-left">Teléfono</th>
-                  <th class="px-4 py-3 text-left">Contacto</th>
-                  <th class="px-4 py-3 text-left">Descripción</th>
-                  <th class="px-4 py-3 text-center">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="proveedor in proveedores" :key="proveedor.id_proveedor" class="tabla-fila border-b">
-                  <td class="px-4 py-3 font-semibold">{{ proveedor.nombre }}</td>
-                  <td class="px-4 py-3">{{ proveedor.telefono || '-' }}</td>
-                  <td class="px-4 py-3">{{ proveedor.contacto || '-' }}</td>
-                  <td class="px-4 py-3 text-sm">{{ proveedor.descripcion || '-' }}</td>
-                  <td class="px-4 py-3 text-center">
-                    <button @click="editarProveedor(proveedor)" class="text-ferchas-rosa hover:text-ferchas-rosa-oscuro">✏️</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <!-- Buscador -->
+      <div class="bg-white rounded-lg border border-ferchas-cafe/10 shadow-sm p-4 mb-6">
+        <div class="relative">
+          <input v-model="busqueda" type="text" placeholder="Buscar proveedor por nombre o contacto..." class="input-base pl-10">
+          <div class="absolute left-3 top-1/2 -translate-y-1/2 text-ferchas-cafe-claro"><Icono nombre="buscar" :tamano="18" /></div>
+        </div>
+      </div>
 
-          <div v-if="proveedores.length === 0" class="card-base text-center py-12">
-            <p class="text-2xl mb-2">📦</p>
-            <p class="text-ferchas-cafe font-semibold">No hay proveedores registrados</p>
+      <!-- Cards de proveedores -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div v-for="p in proveedores" :key="p.nombre"
+             class="bg-white rounded-lg border border-ferchas-cafe/10 shadow-sm p-5 hover:shadow-md transition-shadow">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <h3 class="font-titulo text-lg text-ferchas-vino">{{ p.nombre }}</h3>
+              <p class="text-sm text-ferchas-cafe-claro mt-0.5">{{ p.contacto }}</p>
+            </div>
+            <span class="bg-ferchas-rosa-suave text-ferchas-vino text-xs font-bold px-2.5 py-1 rounded-full">{{ p.productos }} productos</span>
+          </div>
+          <p class="text-sm text-ferchas-cafe leading-relaxed mb-4">{{ p.descripcion }}</p>
+          <div class="flex items-center justify-between pt-3 border-t border-ferchas-cafe/10">
+            <span class="text-sm font-bold text-ferchas-cafe">{{ p.telefono }}</span>
+            <div class="flex gap-1">
+              <button class="text-ferchas-cafe-claro hover:text-ferchas-vino hover:bg-ferchas-fondo p-1.5 rounded">
+                <Icono nombre="editar" :tamano="16" />
+              </button>
+              <button class="text-ferchas-error hover:bg-ferchas-error/10 p-1.5 rounded">
+                <Icono nombre="basurero" :tamano="16" />
+              </button>
+            </div>
           </div>
         </div>
-      </main>
-    </div>
-
-    <!-- Modal Formulario -->
-    <div v-if="mostrarFormulario" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
-      <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
-        <h2 class="font-titulo text-2xl text-ferchas-cafe mb-4">{{ proveedorEditando ? 'Editar' : 'Nuevo' }} Proveedor</h2>
-        <form @submit.prevent="guardarProveedor" class="space-y-4">
-          <input v-model="formulario.nombre" type="text" placeholder="Nombre" class="input-base" required />
-          <input v-model="formulario.telefono" type="tel" placeholder="Teléfono" class="input-base" />
-          <input v-model="formulario.contacto" type="text" placeholder="Contacto" class="input-base" />
-          <textarea v-model="formulario.descripcion" placeholder="Descripción" class="input-base" rows="2"></textarea>
-          <div class="flex gap-2">
-            <button type="submit" class="btn-principal flex-1">Guardar</button>
-            <button type="button" @click="cerrarFormulario" class="btn-secundario flex-1">Cancelar</button>
-          </div>
-        </form>
       </div>
     </div>
-  </div>
+
+    <ModalProveedor v-if="mostrarModal" @cerrar="mostrarModal = false" @guardar="guardar" />
+  </LayoutPanel>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import EncabezadoPrincipal from '../components/shared/EncabezadoPrincipal.vue'
-import BarralateralPrincipal from '../components/shared/BarralateralPrincipal.vue'
-import { servicioProveedores } from '../services/servicioProveedores.js'
+import { ref, computed } from 'vue'
+import LayoutPanel from '../components/shared/LayoutPanel.vue'
+import Icono from '../components/shared/Icono.vue'
+import ModalProveedor from '../components/proveedores/ModalProveedor.vue'
+import { mockProveedores } from '../lib/datosMock.js'
 
-const proveedores = ref([])
-const mostrarFormulario = ref(false)
-const proveedorEditando = ref(null)
-const formulario = ref({
-  nombre: '',
-  telefono: '',
-  contacto: '',
-  descripcion: ''
-})
+// Versión real (descomentar cuando Insforge esté conectado):
+// import { servicioProveedores } from '../services/servicioProveedores.js'
+// onMounted(async () => proveedores.value = await servicioProveedores.obtenerTodos())
 
-function abrirFormulario() {
-  proveedorEditando.value = null
-  formulario.value = { nombre: '', telefono: '', contacto: '', descripcion: '' }
-  mostrarFormulario.value = true
+const proveedores = mockProveedores
+const busqueda = ref('')
+const mostrarModal = ref(false)
+const totalProductos = computed(() => proveedores.reduce((s, p) => s + p.productos, 0))
+
+function guardar(formulario) {
+  console.log('Guardar proveedor (mock):', formulario)
+  mostrarModal.value = false
 }
-
-function cerrarFormulario() {
-  mostrarFormulario.value = false
-}
-
-function editarProveedor(proveedor) {
-  proveedorEditando.value = proveedor
-  formulario.value = { ...proveedor }
-  mostrarFormulario.value = true
-}
-
-async function guardarProveedor() {
-  if (proveedorEditando.value) {
-    await servicioProveedores.actualizar(proveedorEditando.value.id_proveedor, formulario.value)
-  } else {
-    await servicioProveedores.crear(formulario.value)
-  }
-  cerrarFormulario()
-  await obtenerProveedores()
-}
-
-async function obtenerProveedores() {
-  const resultado = await servicioProveedores.obtenerTodos()
-  if (resultado.exito) {
-    proveedores.value = resultado.proveedores
-  }
-}
-
-onMounted(async () => {
-  await obtenerProveedores()
-})
 </script>

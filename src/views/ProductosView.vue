@@ -1,145 +1,107 @@
 <template>
-  <div class="flex min-h-screen bg-ferchas-fondo">
-    <BarralateralPrincipal />
-    <div class="flex-1 flex flex-col">
-      <EncabezadoPrincipal />
-      <main class="flex-1 p-8 overflow-y-auto">
-        <div class="max-w-6xl mx-auto">
-          <div class="flex justify-between items-center mb-8">
-            <h1 class="font-titulo text-4xl text-ferchas-cafe">🧁 Productos</h1>
-            <button v-if="almacenAuth.esAdmin" @click="abrirFormulario" class="btn-principal">
-              + Nuevo Producto
-            </button>
-          </div>
+  <LayoutPanel>
+    <div class="p-7">
+      <div class="flex items-start justify-between mb-6">
+        <div>
+          <h1 class="font-titulo text-3xl text-ferchas-cafe">Productos</h1>
+          <p class="text-sm text-ferchas-cafe-claro mt-1">{{ productos.length }} productos activos · {{ productos.filter(p => p.stockBajo).length }} con stock bajo</p>
+        </div>
+        <button @click="mostrarModal = true" class="btn-principal flex items-center gap-2">
+          <Icono nombre="mas" :tamano="16" /> Nuevo producto
+        </button>
+      </div>
 
-          <!-- Buscador -->
-          <div class="mb-6">
-            <input
-              v-model="busqueda"
-              type="text"
-              placeholder="Buscar productos..."
-              class="input-base"
-            />
-          </div>
+      <!-- Filtros -->
+      <div class="bg-white rounded-lg border border-ferchas-cafe/10 shadow-sm p-4 mb-6 flex gap-3 items-center">
+        <div class="relative flex-1">
+          <input v-model="busqueda" type="text" placeholder="Buscar por nombre o descripción..." class="input-base pl-10">
+          <div class="absolute left-3 top-1/2 -translate-y-1/2 text-ferchas-cafe-claro"><Icono nombre="buscar" :tamano="18" /></div>
+        </div>
+        <select v-model="filtroCategoria" class="input-base w-auto">
+          <option>Todas las categorías</option>
+          <option>Pan dulce tradicional</option>
+          <option>Crepas y postres</option>
+          <option>Postres y especialidades</option>
+          <option>Pasteles personalizados</option>
+          <option>Productos salados</option>
+          <option>Bebidas</option>
+        </select>
+        <select v-model="filtroTipo" class="input-base w-auto">
+          <option>Todos los tipos</option>
+          <option>Internos</option>
+          <option>De proveedor</option>
+        </select>
+      </div>
 
-          <!-- Lista de Productos -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div
-              v-for="producto in productosFiltrados"
-              :key="producto.id_producto"
-              class="card-base hover:shadow-lg transition-shadow"
-            >
-              <div class="flex justify-between items-start mb-3">
-                <h3 class="font-titulo text-lg text-ferchas-cafe font-semibold">{{ producto.nombre }}</h3>
-                <span v-if="producto.stock_disponible < 10" class="badge-advertencia text-xs">⚠️ Bajo</span>
+      <!-- Grid de productos -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div v-for="p in productos" :key="p.id"
+             class="bg-white rounded-lg shadow-sm border border-ferchas-cafe/10 overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+          <div :class="['h-32 flex items-center justify-center', `bg-ferchas-${p.fondoColor}`]" v-html="ilustraciones[p.ilustracion]"></div>
+          <div class="p-4 flex-1 flex flex-col">
+            <div class="flex items-start justify-between mb-2 gap-2">
+              <h3 class="font-titulo text-base text-ferchas-cafe leading-tight">{{ p.nombre }}</h3>
+              <span v-if="p.stockBajo" class="badge-stock-bajo whitespace-nowrap">Stock bajo</span>
+              <span v-else class="bg-ferchas-rosa/30 text-ferchas-vino text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap">{{ p.tipo }}</span>
+            </div>
+            <p class="text-xs text-ferchas-cafe-claro leading-relaxed line-clamp-2 flex-1">{{ p.descripcion }}</p>
+            <div class="flex items-end justify-between mt-3 pt-3 border-t border-ferchas-cafe/10">
+              <div>
+                <div class="font-titulo text-xl text-ferchas-vino">${{ p.precio.toFixed(2) }}</div>
+                <div :class="['text-xs font-semibold', p.stockBajo ? 'text-ferchas-error' : p.stockMedio ? 'text-ferchas-advertencia' : 'text-ferchas-exito']">
+                  {{ p.stockBajo ? `Solo ${p.stock} unidades` : `${p.stock} unidades` }}
+                </div>
               </div>
-              <p class="text-sm text-ferchas-cafe-claro mb-3">{{ producto.descripcion }}</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="text-2xl font-titulo text-ferchas-rosa">${{ parseFloat(producto.precio).toFixed(2) }}</span>
-                <span class="text-sm font-semibold text-ferchas-cafe">Stock: {{ producto.stock_disponible }}</span>
-              </div>
-              <div v-if="almacenAuth.esAdmin" class="flex gap-2">
-                <button @click="editarProducto(producto)" class="btn-secundario flex-1 text-sm py-2">Editar</button>
-                <button @click="desactivarProducto(producto.id_producto)" class="btn-peligro flex-1 text-sm py-2">Eliminar</button>
+              <div class="flex gap-1">
+                <button class="text-ferchas-cafe-claro hover:text-ferchas-vino hover:bg-ferchas-fondo p-1.5 rounded transition-colors">
+                  <Icono nombre="editar" :tamano="16" />
+                </button>
+                <button class="text-ferchas-error hover:bg-ferchas-error/10 p-1.5 rounded transition-colors">
+                  <Icono nombre="basurero" :tamano="16" />
+                </button>
               </div>
             </div>
           </div>
-
-          <!-- Mensaje vacío -->
-          <div v-if="productosFiltrados.length === 0" class="card-base text-center py-12">
-            <p class="text-2xl mb-2">🔍</p>
-            <p class="text-ferchas-cafe font-semibold">No hay productos</p>
-          </div>
         </div>
-      </main>
-    </div>
+      </div>
 
-    <!-- Modal de Formulario -->
-    <div v-if="mostrarFormulario" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
-      <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
-        <h2 class="font-titulo text-2xl text-ferchas-cafe mb-4">{{ productoEditando ? 'Editar' : 'Nuevo' }} Producto</h2>
-        <form @submit.prevent="guardarProducto" class="space-y-4">
-          <input v-model="formulario.nombre" type="text" placeholder="Nombre" class="input-base" required />
-          <textarea v-model="formulario.descripcion" placeholder="Descripción" class="input-base" rows="2"></textarea>
-          <input v-model.number="formulario.precio" type="number" placeholder="Precio" class="input-base" step="0.01" required />
-          <input v-model.number="formulario.stock_disponible" type="number" placeholder="Stock" class="input-base" required />
-          <div class="flex gap-2">
-            <button type="submit" class="btn-principal flex-1">Guardar</button>
-            <button type="button" @click="cerrarFormulario" class="btn-secundario flex-1">Cancelar</button>
-          </div>
-        </form>
+      <!-- Paginación simple -->
+      <div class="flex items-center justify-between mt-6 text-sm">
+        <span class="text-ferchas-cafe-claro">Mostrando 1–{{ productos.length }} de {{ productos.length }}</span>
+        <div class="flex gap-1">
+          <button class="px-3 py-1.5 bg-white border border-ferchas-cafe/20 rounded text-ferchas-cafe-claro disabled:opacity-40" disabled>Anterior</button>
+          <button class="px-3 py-1.5 bg-ferchas-rosa text-white rounded font-bold">1</button>
+          <button class="px-3 py-1.5 bg-white border border-ferchas-cafe/20 rounded text-ferchas-cafe-claro disabled:opacity-40" disabled>Siguiente</button>
+        </div>
       </div>
     </div>
-  </div>
+
+    <ModalProducto v-if="mostrarModal" @cerrar="mostrarModal = false" @guardar="guardar" />
+  </LayoutPanel>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import EncabezadoPrincipal from '../components/shared/EncabezadoPrincipal.vue'
-import BarralateralPrincipal from '../components/shared/BarralateralPrincipal.vue'
-import { useAlmacenAutenticacion } from '../stores/almacenAutenticacion.js'
-import { useAlmacenProductos } from '../stores/almacenProductos.js'
+import { ref } from 'vue'
+import LayoutPanel from '../components/shared/LayoutPanel.vue'
+import Icono from '../components/shared/Icono.vue'
+import ModalProducto from '../components/productos/ModalProducto.vue'
+import { mockProductos, ilustracionesProductos } from '../lib/datosMock.js'
 
-const almacenAuth = useAlmacenAutenticacion()
-const almacenProductos = useAlmacenProductos()
+// Versión real (descomentar cuando Insforge esté conectado):
+// import { useAlmacenProductos } from '../stores/almacenProductos.js'
+// const almacenProductos = useAlmacenProductos()
+// onMounted(() => almacenProductos.obtenerTodos())
 
+const productos = mockProductos
+const ilustraciones = ilustracionesProductos
 const busqueda = ref('')
-const mostrarFormulario = ref(false)
-const productoEditando = ref(null)
-const formulario = ref({
-  nombre: '',
-  descripcion: '',
-  precio: 0,
-  stock_disponible: 0
-})
+const filtroCategoria = ref('Todas las categorías')
+const filtroTipo = ref('Todos los tipos')
+const mostrarModal = ref(false)
 
-const productosFiltrados = computed(() => {
-  if (!busqueda.value) return almacenProductos.productos
-  return almacenProductos.productos.filter(p =>
-    p.nombre.toLowerCase().includes(busqueda.value.toLowerCase())
-  )
-})
-
-function abrirFormulario() {
-  productoEditando.value = null
-  formulario.value = { nombre: '', descripcion: '', precio: 0, stock_disponible: 0 }
-  mostrarFormulario.value = true
+function guardar(formulario) {
+  // En el sistema real: await almacenProductos.crear(formulario)
+  console.log('Guardar producto (mock):', formulario)
+  mostrarModal.value = false
 }
-
-function cerrarFormulario() {
-  mostrarFormulario.value = false
-  productoEditando.value = null
-}
-
-function editarProducto(producto) {
-  productoEditando.value = producto
-  formulario.value = { ...producto }
-  mostrarFormulario.value = true
-}
-
-async function guardarProducto() {
-  if (productoEditando.value) {
-    await almacenProductos.actualizar(productoEditando.value.id_producto, formulario.value)
-  } else {
-    await almacenProductos.crear({
-      ...formulario.value,
-      id_categoria: null,
-      id_proveedor: null,
-      tipo_origen: 'interno',
-      es_personalizable: false,
-      activo: true
-    })
-  }
-  cerrarFormulario()
-}
-
-async function desactivarProducto(idProducto) {
-  if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
-    await almacenProductos.desactivar(idProducto)
-  }
-}
-
-onMounted(async () => {
-  await almacenProductos.obtenerTodos()
-})
 </script>

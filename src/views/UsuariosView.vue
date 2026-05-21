@@ -1,82 +1,89 @@
 <template>
-  <div class="flex min-h-screen bg-ferchas-fondo">
-    <BarralateralPrincipal />
-    <div class="flex-1 flex flex-col">
-      <EncabezadoPrincipal />
-      <main class="flex-1 p-8 overflow-y-auto">
-        <div class="max-w-6xl mx-auto">
-          <h1 class="font-titulo text-4xl text-ferchas-cafe mb-8">👨‍💼 Gestión de Usuarios</h1>
-
-          <!-- Tabla de Usuarios -->
-          <div class="card-base overflow-x-auto">
-            <table class="tabla-base w-full">
-              <thead class="tabla-header">
-                <tr>
-                  <th class="px-4 py-3 text-left">Nombre</th>
-                  <th class="px-4 py-3 text-left">Correo</th>
-                  <th class="px-4 py-3 text-left">Rol</th>
-                  <th class="px-4 py-3 text-center">Estado</th>
-                  <th class="px-4 py-3 text-center">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="usuario in usuarios" :key="usuario.user_id" class="tabla-fila border-b">
-                  <td class="px-4 py-3 font-semibold">{{ usuario.nombre }}</td>
-                  <td class="px-4 py-3 text-sm">{{ usuario.user_id }}</td>
-                  <td class="px-4 py-3">
-                    <span v-if="usuario.rol === 'admin'" class="badge-exito">{{ usuario.rol }}</span>
-                    <span v-else class="badge-info">{{ usuario.rol }}</span>
-                  </td>
-                  <td class="px-4 py-3 text-center">
-                    <span v-if="usuario.activo" class="badge-exito">Activo</span>
-                    <span v-else class="badge-error">Inactivo</span>
-                  </td>
-                  <td class="px-4 py-3 text-center space-x-2">
-                    <button @click="cambiarRol(usuario)" class="text-ferchas-rosa hover:text-ferchas-rosa-oscuro text-sm">
-                      Cambiar Rol
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div v-if="usuarios.length === 0" class="card-base text-center py-12">
-            <p class="text-2xl mb-2">👤</p>
-            <p class="text-ferchas-cafe font-semibold">No hay usuarios registrados</p>
-          </div>
+  <LayoutPanel>
+    <div class="p-7">
+      <div class="flex items-start justify-between mb-6">
+        <div>
+          <h1 class="font-titulo text-3xl text-ferchas-cafe">Gestión de usuarios</h1>
+          <p class="text-sm text-ferchas-cafe-claro mt-1">{{ usuarios.length }} usuarios registrados · {{ usuarios.filter(u => u.activo).length }} activos</p>
         </div>
-      </main>
+        <button class="btn-principal flex items-center gap-2">
+          <Icono nombre="mas" :tamano="16" /> Invitar usuario
+        </button>
+      </div>
+
+      <!-- Banner informativo -->
+      <div class="bg-ferchas-rosa-suave/30 border-l-4 border-ferchas-rosa rounded-lg px-5 py-3.5 mb-6 flex items-start gap-3">
+        <div class="text-ferchas-vino mt-0.5"><Icono nombre="usuarios" :tamano="18" /></div>
+        <div class="text-sm text-ferchas-cafe leading-relaxed">
+          <strong>Permisos por rol:</strong> Los administradores tienen acceso completo al sistema. Los empleados solo pueden registrar ventas, pedidos y clientes; no pueden gestionar usuarios, proveedores ni eliminar información.
+        </div>
+      </div>
+
+      <!-- Tabla -->
+      <div class="bg-white rounded-lg border border-ferchas-cafe/10 shadow-sm overflow-hidden">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-ferchas-fondo-oscuro text-ferchas-cafe text-xs uppercase tracking-wider">
+              <th class="text-left py-3 px-4 font-bold">Usuario</th>
+              <th class="text-left py-3 px-4 font-bold">Correo</th>
+              <th class="text-left py-3 px-4 font-bold">Rol</th>
+              <th class="text-left py-3 px-4 font-bold">Último acceso</th>
+              <th class="text-left py-3 px-4 font-bold">Registrado</th>
+              <th class="text-center py-3 px-4 font-bold">Estado</th>
+              <th class="text-center py-3 px-4 font-bold">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="u in usuarios" :key="u.correo"
+                :class="['border-b border-ferchas-cafe/10 last:border-0 hover:bg-ferchas-fondo transition-colors', !u.activo && 'opacity-50']">
+              <td class="py-3 px-4">
+                <div class="flex items-center gap-3">
+                  <div :class="['w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs',
+                                u.rol === 'admin' ? 'bg-ferchas-vino text-ferchas-rosa' : 'bg-ferchas-rosa-suave text-ferchas-vino']">
+                    {{ u.iniciales }}
+                  </div>
+                  <span class="font-semibold text-ferchas-cafe">{{ u.nombre }}</span>
+                </div>
+              </td>
+              <td class="py-3 px-4 text-ferchas-cafe-claro">{{ u.correo }}</td>
+              <td class="py-3 px-4">
+                <span :class="['px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider',
+                              u.rol === 'admin' ? 'bg-ferchas-vino text-white' : 'bg-ferchas-rosa-suave text-ferchas-vino']">
+                  {{ u.rol }}
+                </span>
+              </td>
+              <td class="py-3 px-4 text-ferchas-cafe-claro">{{ u.ultimoAcceso }}</td>
+              <td class="py-3 px-4 text-ferchas-cafe-claro">{{ u.registrado }}</td>
+              <td class="py-3 px-4 text-center">
+                <span :class="['px-2 py-0.5 rounded-full text-[11px] font-bold',
+                              u.activo ? 'bg-ferchas-exito/30 text-ferchas-cafe' : 'bg-ferchas-fondo-oscuro text-ferchas-cafe-claro']">
+                  {{ u.activo ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td class="py-3 px-4 text-center">
+                <button class="text-ferchas-cafe-claro hover:text-ferchas-vino hover:bg-ferchas-fondo p-1.5 rounded">
+                  <Icono nombre="editar" :tamano="16" />
+                </button>
+                <button class="text-xs font-bold text-ferchas-rosa-oscuro uppercase tracking-wider ml-2 hover:underline">
+                  Cambiar rol
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  </LayoutPanel>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import EncabezadoPrincipal from '../components/shared/EncabezadoPrincipal.vue'
-import BarralateralPrincipal from '../components/shared/BarralateralPrincipal.vue'
-import { servicioPerfiles } from '../services/servicioPerfiles.js'
+import LayoutPanel from '../components/shared/LayoutPanel.vue'
+import Icono from '../components/shared/Icono.vue'
+import { mockUsuarios } from '../lib/datosMock.js'
 
-const usuarios = ref([])
+// Versión real (descomentar cuando Insforge esté conectado):
+// import { servicioPerfiles } from '../services/servicioPerfiles.js'
+// onMounted(async () => usuarios.value = await servicioPerfiles.obtenerTodos())
 
-async function obtenerUsuarios() {
-  const resultado = await servicioPerfiles.obtenerTodos()
-  if (resultado.exito) {
-    usuarios.value = resultado.perfiles
-  }
-}
-
-async function cambiarRol(usuario) {
-  const nuevoRol = usuario.rol === 'admin' ? 'empleado' : 'admin'
-  if (confirm(`¿Cambiar rol de ${usuario.nombre} a ${nuevoRol}?`)) {
-    const resultado = await servicioPerfiles.cambiarRol(usuario.user_id, nuevoRol)
-    if (resultado.exito) {
-      await obtenerUsuarios()
-    }
-  }
-}
-
-onMounted(async () => {
-  await obtenerUsuarios()
-})
+const usuarios = mockUsuarios
 </script>

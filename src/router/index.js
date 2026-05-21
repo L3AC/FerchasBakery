@@ -9,6 +9,7 @@ import PedidosView from '../views/PedidosView.vue'
 import ClientesView from '../views/ClientesView.vue'
 import ProveedoresView from '../views/ProveedoresView.vue'
 import UsuariosView from '../views/UsuariosView.vue'
+import MiPerfilView from '../views/MiPerfilView.vue'
 
 const rutas = [
   {
@@ -71,6 +72,14 @@ const rutas = [
     meta: {
       requiereAutenticacion: true,
       requiereAdmin: true
+    }
+  },
+  {
+    path: '/mi-perfil',
+    name: 'MiPerfil',
+    component: MiPerfilView,
+    meta: {
+      requiereAutenticacion: true
     }
   }
 ]
