@@ -16,6 +16,16 @@
           </button>
         </div>
 
+        <!-- Buscador -->
+        <div class="mb-6">
+          <input
+            v-model="busqueda"
+            type="text"
+            placeholder="Buscar categorías..."
+            class="input-base"
+          />
+        </div>
+
         <!-- Tabla de Categorías -->
         <div class="bg-white rounded-lg shadow-sm overflow-hidden">
           <table class="tabla-base">
@@ -26,12 +36,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-if="categorias.length === 0" class="tabla-fila">
+              <tr v-if="categoriasFiltradas.length === 0" class="tabla-fila">
                 <td colspan="2" class="px-6 py-4 text-center text-ferchas-cafe-claro">
                   No hay categorías registradas
                 </td>
               </tr>
-              <tr v-for="categoria in categorias" :key="categoria.id_categoria" class="tabla-fila">
+              <tr v-for="categoria in categoriasFiltradas" :key="categoria.id_categoria" class="tabla-fila">
                 <td class="px-6 py-4">{{ categoria.nombre_categoria }}</td>
                 <td class="px-6 py-4 text-center space-x-2">
                   <button
@@ -100,17 +110,26 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import EncabezadoPrincipal from '../components/shared/EncabezadoPrincipal.vue'
 import BarralateralPrincipal from '../components/shared/BarralateralPrincipal.vue'
 import { servicioCategorias } from '../services/servicioCategorias.js'
 
 const categorias = ref([])
+const busqueda = ref('')
 const mostrarFormulario = ref(false)
 const categoriaEnEdicion = ref(null)
 const formulario = ref({ nombre: '' })
 const cargando = ref(false)
 const error = ref('')
+
+const categoriasFiltradas = computed(() => {
+  if (!busqueda.value) return categorias.value
+  const term = busqueda.value.toLowerCase()
+  return categorias.value.filter(c =>
+    c.nombre_categoria.toLowerCase().includes(term)
+  )
+})
 
 onMounted(() => {
   cargarCategorias()

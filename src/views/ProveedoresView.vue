@@ -11,6 +11,16 @@
           <button @click="abrirFormulario" class="btn-principal">+ Nuevo Proveedor</button>
         </div>
 
+        <!-- Buscador -->
+        <div class="mb-6">
+          <input
+            v-model="busqueda"
+            type="text"
+            placeholder="Buscar proveedores por nombre, teléfono o contacto..."
+            class="input-base"
+          />
+        </div>
+
         <!-- Tabla de Proveedores -->
         <div class="bg-white rounded-lg shadow-sm overflow-hidden">
           <table class="tabla-base w-full">
@@ -24,10 +34,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-if="proveedores.length === 0">
+              <tr v-if="proveedoresFiltrados.length === 0">
                 <td colspan="5" class="px-4 py-8 text-center text-ferchas-cafe-claro">No hay proveedores</td>
               </tr>
-              <tr v-for="proveedor in proveedores" :key="proveedor.id_proveedor" class="tabla-fila border-b">
+              <tr v-for="proveedor in proveedoresFiltrados" :key="proveedor.id_proveedor" class="tabla-fila border-b">
                 <td class="px-4 py-3 font-semibold">{{ proveedor.nombre }}</td>
                 <td class="px-4 py-3">{{ proveedor.telefono || '-' }}</td>
                 <td class="px-4 py-3">{{ proveedor.contacto || '-' }}</td>
@@ -67,14 +77,27 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import EncabezadoPrincipal from '../components/shared/EncabezadoPrincipal.vue'
 import BarralateralPrincipal from '../components/shared/BarralateralPrincipal.vue'
 import { servicioProveedores } from '../services/servicioProveedores.js'
 
 const proveedores = ref([])
+const busqueda = ref('')
 const mostrarFormulario = ref(false)
 const proveedorEditando = ref(null)
+
+const proveedoresFiltrados = computed(() => {
+  if (!busqueda.value) return proveedores.value
+  const term = busqueda.value.toLowerCase()
+  return proveedores.value.filter(p =>
+    p.nombre.toLowerCase().includes(term) ||
+    (p.telefono && p.telefono.includes(term)) ||
+    (p.contacto && p.contacto.toLowerCase().includes(term)) ||
+    (p.descripcion && p.descripcion.toLowerCase().includes(term))
+  )
+})
+
 const formulario = ref({
   nombre: '',
   telefono: '',

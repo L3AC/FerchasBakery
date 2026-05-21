@@ -5,22 +5,7 @@
 </template>
 
 <script setup>
-import { useAlmacenAutenticacion } from './stores/almacenAutenticacion.js'
-import { onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-
-const almacenAuth = useAlmacenAutenticacion()
-const router = useRouter()
-
-onMounted(async () => {
-  // Intentar recuperar sesión guardada
-  const resultado = await almacenAuth.obtenerUsuarioActual()
-  
-  // Si no está autenticado y no estamos en login, redirigir
-  if (!resultado.exito && router.currentRoute.value.path !== '/login') {
-    router.push('/login')
-  }
-})
+// La sesión se restaura automáticamente en el guard de rutas (router/index.js)
 </script>
 
 <style>
