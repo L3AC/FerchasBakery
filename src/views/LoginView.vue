@@ -9,6 +9,7 @@
          style="background: radial-gradient(circle, #4A1818 0%, transparent 70%);"></div>
 
     <div class="w-full max-w-md">
+      <!-- Logo y Branding -->
       <div class="text-center mb-8">
         <div class="w-20 h-20 bg-ferchas-vino rounded-full flex items-center justify-center mx-auto mb-5 shadow-lg">
           <span class="font-titulo text-4xl text-ferchas-rosa font-bold">F</span>

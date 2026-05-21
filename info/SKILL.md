@@ -5,13 +5,45 @@ description: "Usa cuando trabajes en la interfaz Vue.js de FerchasBakery. Propor
 
 # FerchasBakery - Guía de Diseño UI/UX
 
+## REGLAS IMPORTANTES
+
+1. **NO usar tipografía de tipo IA**: Evitar fuentes como Inter, Roboto, system-ui. Usar Playfair Display para títulos y Lato para cuerpo.
+2. **NO usar emojis como iconos**: Los emojis se ven genéricos y feitos. Usar iconos SVG inline o de librerías como Heroicons/Lucide pero con estilo fill (no line), o mejor aún, crear iconos SVG personalizados que combinen con la paleta.
+3. **NO interfaces genéricas de IA**: Evitar layouts muy estructurados, bordes redondeados excesivos, gradientes azul/purple, spacing perfectamente uniforme.
+4. **USAR el logo de la repostería**: Located at `img/logo.jpg`. Incluir en el login y como favicon.
+5. **USAR la paleta de colores del logo**: Colores cálidos pasteles - rosa, café, vino.
+
 ## filosofía de diseño
 
 Evitar el aspecto "AI-generated" significa:
 - NO usar gradientes genéricos azul/purple
 - NO usar tarjetas con bordes redondeados excesivos (border-radius everywhere)
 - NO usar espaciado uniforme robotico
-- NO usar icons de linea genericos (lucide, heroicons default)
+- NO usar icons de linea genericos (lucide, heroicons default) - usar version fill
+- NO emojis como reemplazo de iconos
+
+## Logo
+
+- **Ubicación**: `img/logo.jpg`
+- **Uso obligatorio**: Incluir en la página de login, navbar, y como favicon
+- **Aplicación**: 
+  - Login: Mostrar logo pequeño arriba del título
+  - Favicon: Usar el logo como icono del navegador
+
+## Iconos (NO EMOJIS)
+
+Los emojis parecen genéricos y "feitos". Opciones preferidas:
+
+1. **Iconos SVG inline personalizados**: Crear iconos que usen la paleta de colores de Ferchas (rosa, café, vino)
+2. **Heroicons/Lucide versión fill**: No usar versión outline/line
+3. **Iconos simples sin detalles**: Menos es más, artesanal
+
+```html
+<!-- Ejemplo icono SVG artesanal (rosa) -->
+<svg class="w-6 h-6 text-ferchas-rosa" fill="currentColor" viewBox="0 0 24 24">
+  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+</svg>
+```
 
 ## Colores del Logo (BASE)
 
@@ -142,6 +174,8 @@ Tu spacing debe ser:
 | `border-gray-200` | `border-ferchas-cafe/20` |
 | `shadow-xl` | `shadow-sm` o `shadow-md` |
 | Icons linea muy finos | Icons fill o más gruesos |
+| Emojis como iconos | Iconos SVG fill o inline |
+| Inter, Roboto, system-ui | Playfair Display, Lato |
 
 ## Layout Sugerido
 
@@ -160,8 +194,10 @@ Tu spacing debe ser:
 
 - Background: `bg-ferchas-fondo`
 - Card: `bg-white border-2 border-ferchas-rosa/30`
+- **Logo**: Mostrar `img/logo.jpg` arriba del título (tamaño apropiado, ej: 80x80px)
 - Titulo: Playfair Display, color `ferchas-cafe`
 - Botón: `bg-ferchas-rosa`
+- NO usar emojis en botones o mensajes
 
 ## Para el Dashboard
 

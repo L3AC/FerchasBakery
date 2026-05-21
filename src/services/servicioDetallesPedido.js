@@ -1,55 +1,56 @@
 import { insforgeClient } from '../lib/insforge.js'
 
-export const servicioCategorias = {
-  async obtenerTodas() {
+export const servicioDetallesPedido = {
+  async obtenerPorPedido(idPedido) {
     try {
       const { data, error } = await insforgeClient.database
-        .from('categorias_productos')
-        .select('*')
-        .order('nombre_categoria', { ascending: true })
+        .from('detalles_pedido')
+        .select('*, productos(*)')
+        .eq('id_pedido', idPedido)
+        .order('id_detalle', { ascending: true })
 
       if (error) return { exito: false, error: error.message }
-      return { exito: true, categorias: data || [] }
+      return { exito: true, detalles: data || [] }
     } catch (err) {
       return { exito: false, error: err.message }
     }
   },
 
-  async crear(nombre) {
+  async crear(datosDetalle) {
     try {
       const { data, error } = await insforgeClient.database
-        .from('categorias_productos')
-        .insert([{ nombre_categoria: nombre }])
+        .from('detalles_pedido')
+        .insert([datosDetalle])
         .select()
 
       if (error) return { exito: false, error: error.message }
-      return { exito: true, categoria: data?.[0] }
+      return { exito: true, detalle: data?.[0] }
     } catch (err) {
       return { exito: false, error: err.message }
     }
   },
 
-  async actualizar(id, nombre) {
+  async actualizar(idDetalle, datosDetalle) {
     try {
       const { data, error } = await insforgeClient.database
-        .from('categorias_productos')
-        .update({ nombre_categoria: nombre })
-        .eq('id_categoria', id)
+        .from('detalles_pedido')
+        .update(datosDetalle)
+        .eq('id_detalle', idDetalle)
         .select()
 
       if (error) return { exito: false, error: error.message }
-      return { exito: true, categoria: data?.[0] }
+      return { exito: true, detalle: data?.[0] }
     } catch (err) {
       return { exito: false, error: err.message }
     }
   },
 
-  async eliminar(id) {
+  async eliminar(idDetalle) {
     try {
       const { error } = await insforgeClient.database
-        .from('categorias_productos')
+        .from('detalles_pedido')
         .delete()
-        .eq('id_categoria', id)
+        .eq('id_detalle', idDetalle)
 
       if (error) return { exito: false, error: error.message }
       return { exito: true }

@@ -5,5 +5,7 @@ const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3OC0xMj
 
 export const insforgeClient = createClient({
   baseUrl,
-  anonKey
+  anonKey,
+  persistSession: true,
+  storage: localStorage
 })
