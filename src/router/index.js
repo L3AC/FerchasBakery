@@ -89,16 +89,13 @@ const router = createRouter({
   routes: rutas
 })
 
-router.beforeEach(async (hacia, desde, siguiente) => {
+router.beforeEach((hacia, desde, siguiente) => {
   const almacenAuth = useAlmacenAutenticacion()
 
-  // Intentar restaurar sesión si no está autenticado y va a ruta protegida
+  // Si no estamos autenticados y tratamos de ir a una ruta protegida
   if (!almacenAuth.estaAutenticado && hacia.meta.requiereAutenticacion) {
-    await almacenAuth.obtenerUsuarioActual()
-    if (!almacenAuth.estaAutenticado) {
-      siguiente('/login')
-      return
-    }
+    siguiente('/login')
+    return
   }
 
   // Si ya estamos autenticados y tratamos de ir al login

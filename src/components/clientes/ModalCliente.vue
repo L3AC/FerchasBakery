@@ -1,5 +1,5 @@
 <template>
-  <ModalBase titulo="Nuevo cliente" ancho="xl" padding-top="pt-16" @cerrar="$emit('cerrar')">
+  <ModalBase :titulo="clienteEditando ? 'Editar cliente' : 'Nuevo cliente'" ancho="xl" padding-top="pt-16" @cerrar="$emit('cerrar')">
     <form @submit.prevent="$emit('guardar', formulario)">
       <label class="block mb-4">
         <span class="text-sm font-semibold text-ferchas-cafe block mb-1.5">Nombre completo <span class="text-ferchas-error">*</span></span>
@@ -30,7 +30,7 @@
 
       <div class="flex justify-end gap-3 pt-4 border-t-2 border-ferchas-cafe/10">
         <button type="button" @click="$emit('cerrar')" class="btn-secundario">Cancelar</button>
-        <button type="submit" class="btn-principal">Guardar cliente</button>
+        <button type="submit" class="btn-principal">{{ clienteEditando ? 'Actualizar cliente' : 'Guardar cliente' }}</button>
       </div>
     </form>
   </ModalBase>
@@ -39,6 +39,16 @@
 <script setup>
 import { ref } from 'vue'
 import ModalBase from '../shared/ModalBase.vue'
+
+const props = defineProps({
+  clienteEditando: { type: Object, default: null }
+})
 defineEmits(['cerrar', 'guardar'])
-const formulario = ref({ nombre: '', telefono: '', correo: '', direccion: '' })
+
+const formulario = ref({
+  nombre: props.clienteEditando?.nombre || '',
+  telefono: props.clienteEditando?.telefono || '',
+  correo: props.clienteEditando?.correo || '',
+  direccion: props.clienteEditando?.direccion || '',
+})
 </script>

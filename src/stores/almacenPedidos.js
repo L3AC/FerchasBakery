@@ -1,17 +1,24 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { servicioPedidos } from '../services/servicioPedidos.js'
-import { servicioDetallesPedido } from '../services/servicioDetallesPedido.js'
 
 export const useAlmacenPedidos = defineStore('pedidos', () => {
   const pedidos = ref([])
-  const pedidoActivo = ref(null)
+  const pedidoActual = ref(null)
   const detallesActuales = ref([])
   const cargando = ref(false)
   const error = ref(null)
 
   const pedidosPendientes = computed(() => {
     return pedidos.value.filter(p => p.estado_pedido === 'Pendiente')
+  })
+
+  const pedidosPreparando = computed(() => {
+    return pedidos.value.filter(p => p.estado_pedido === 'Preparando')
+  })
+
+  const pedidosEntregados = computed(() => {
+    return pedidos.value.filter(p => p.estado_pedido === 'Entregado')
   })
 
   async function obtenerTodos() {
@@ -34,28 +41,14 @@ export const useAlmacenPedidos = defineStore('pedidos', () => {
     }
   }
 
-  async function obtenerDetalles(idPedido) {
+  async function obtenerPorId(idPedido) {
+    cargando.value = true
+    error.value = null
     try {
-      const resultado = await servicioDetallesPedido.obtenerPorPedido(idPedido)
+      const resultado = await servicioPedidos.obtenerPorId(idPedido)
       if (resultado.exito) {
-        detallesActuales.value = resultado.detalles
-        return { exito: true }
-      } else {
-        error.value = resultado.error
-        return { exito: false, error: resultado.error }
-      }
-    } catch (err) {
-      error.value = err.message
-      return { exito: false, error: err.message }
-    }
-  }
-
-  async function crear(datosPedido) {
-    try {
-      const resultado = await servicioPedidos.crear(datosPedido)
-      if (resultado.exito) {
-        pedidos.value.push(resultado.pedido)
-        pedidoActivo.value = resultado.pedido
+        pedidoActual.value = resultado.pedido
+        detallesActuales.value = resultado.pedido.detalles_pedido || []
         return { exito: true, pedido: resultado.pedido }
       } else {
         error.value = resultado.error
@@ -64,15 +57,16 @@ export const useAlmacenPedidos = defineStore('pedidos', () => {
     } catch (err) {
       error.value = err.message
       return { exito: false, error: err.message }
+    } finally {
+      cargando.value = false
     }
   }
 
-  async function agregarDetalle(datosDetalle) {
+  async function obtenerPendientes() {
     try {
-      const resultado = await servicioDetallesPedido.crear(datosDetalle)
+      const resultado = await servicioPedidos.obtenerPendientes()
       if (resultado.exito) {
-        detallesActuales.value.push(resultado.detalle)
-        return { exito: true, detalle: resultado.detalle }
+        return { exito: true, pedidos: resultado.pedidos }
       } else {
         error.value = resultado.error
         return { exito: false, error: resultado.error }
@@ -80,6 +74,26 @@ export const useAlmacenPedidos = defineStore('pedidos', () => {
     } catch (err) {
       error.value = err.message
       return { exito: false, error: err.message }
+    }
+  }
+
+  async function registrarCompleto(datosPedido, detalles) {
+    cargando.value = true
+    error.value = null
+    try {
+      const resultado = await servicioPedidos.registrarPedidoCompleto(datosPedido, detalles)
+      if (resultado.exito) {
+        pedidos.value.unshift(resultado.pedido)
+        return { exito: true, pedido: resultado.pedido }
+      } else {
+        error.value = resultado.error
+        return { exito: false, error: resultado.error }
+      }
+    } catch (err) {
+      error.value = err.message
+      return { exito: false, error: err.message }
+    } finally {
+      cargando.value = false
     }
   }
 
@@ -90,6 +104,9 @@ export const useAlmacenPedidos = defineStore('pedidos', () => {
         const indice = pedidos.value.findIndex(p => p.id_pedido === idPedido)
         if (indice !== -1) {
           pedidos.value[indice] = resultado.pedido
+        }
+        if (pedidoActual.value?.id_pedido === idPedido) {
+          pedidoActual.value.estado_pedido = nuevoEstado
         }
         return { exito: true }
       } else {
@@ -105,25 +122,36 @@ export const useAlmacenPedidos = defineStore('pedidos', () => {
   async function obtenerVentasDelDia() {
     try {
       const resultado = await servicioPedidos.obtenerVentasDelDia()
-      return resultado
+      if (resultado.exito) {
+        return { exito: true, total: resultado.total }
+      } else {
+        return { exito: false, error: resultado.error, total: 0 }
+      }
     } catch (err) {
-      error.value = err.message
       return { exito: false, error: err.message, total: 0 }
     }
   }
 
+  function limpiarActual() {
+    pedidoActual.value = null
+    detallesActuales.value = []
+  }
+
   return {
     pedidos,
-    pedidoActivo,
+    pedidoActual,
     detallesActuales,
     cargando,
     error,
     pedidosPendientes,
+    pedidosPreparando,
+    pedidosEntregados,
     obtenerTodos,
-    obtenerDetalles,
-    crear,
-    agregarDetalle,
+    obtenerPorId,
+    obtenerPendientes,
+    registrarCompleto,
     actualizarEstado,
-    obtenerVentasDelDia
+    obtenerVentasDelDia,
+    limpiarActual
   }
 })

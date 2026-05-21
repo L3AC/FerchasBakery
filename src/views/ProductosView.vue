@@ -91,7 +91,7 @@ import { ref, computed, onMounted } from 'vue'
 import LayoutPanel from '../components/shared/LayoutPanel.vue'
 import Icono from '../components/shared/Icono.vue'
 import ModalProducto from '../components/productos/ModalProducto.vue'
-import { ilustracionesProductos } from '../lib/datosMock.js'
+import { ilustracionesProductos } from '../lib/ilustracionesCategorias.js'
 import { useAlmacenAutenticacion } from '../stores/almacenAutenticacion.js'
 import { useAlmacenProductos } from '../stores/almacenProductos.js'
 

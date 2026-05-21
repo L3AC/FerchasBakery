@@ -35,7 +35,9 @@
 <script setup>
 import ModalBase from '../shared/ModalBase.vue'
 import Icono from '../shared/Icono.vue'
-import { mockErroresStock } from '../../lib/datosMock.js'
+
+defineProps({
+  errores: { type: Array, default: () => [] }
+})
 defineEmits(['cerrar', 'ajustar'])
-const errores = mockErroresStock
 </script>

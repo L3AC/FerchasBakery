@@ -9,7 +9,6 @@
          style="background: radial-gradient(circle, #4A1818 0%, transparent 70%);"></div>
 
     <div class="w-full max-w-md">
-      <!-- Logo y Branding -->
       <div class="text-center mb-8">
         <div class="w-20 h-20 bg-ferchas-vino rounded-full flex items-center justify-center mx-auto mb-5 shadow-lg">
           <span class="font-titulo text-4xl text-ferchas-rosa font-bold">F</span>
@@ -60,7 +59,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Icono from '../components/shared/Icono.vue'
-import { mockUsuarioActual } from '../lib/datosMock.js'
 import { useAlmacenAutenticacion } from '../stores/almacenAutenticacion.js'
 
 const router = useRouter()
@@ -70,38 +68,20 @@ const error = ref(null)
 const mostrarPassword = ref(false)
 
 const formulario = ref({
-  correo: mockUsuarioActual.correo,
-  contrasena: '••••••••',
+  correo: '',
+  contrasena: '',
 })
 
 async function iniciarSesion() {
   cargando.value = true
   error.value = null
 
-  // ---- VERSIÓN PROTOTIPO ----
-  // Hidrata el almacenAuth con datos mock para que el guard del router
-  // permita la navegación sin Insforge corriendo.
-  almacenAuth.usuario = { id: 'mock-id', email: mockUsuarioActual.correo }
-  almacenAuth.token = 'mock-token'
-  almacenAuth.perfil = {
-    nombre: mockUsuarioActual.nombreCompleto,
-    rol: mockUsuarioActual.rol,
-    activo: true,
-  }
-  // Persiste la sesión para que F5 / refrescar no la pierda
-  if (typeof localStorage !== 'undefined') {
-    localStorage.setItem('prototipo_sesion', 'true')
-  }
-
-  setTimeout(() => {
+  const resultado = await almacenAuth.iniciarSesion(formulario.value.correo, formulario.value.contrasena)
+  if (resultado.exito) {
     router.push('/dashboard')
-    cargando.value = false
-  }, 400)
-
-  // ---- VERSIÓN REAL (descomentar cuando Insforge esté conectado) ----
-  // const resultado = await almacenAuth.iniciarSesion(formulario.value.correo, formulario.value.contrasena)
-  // if (resultado.exito) router.push('/dashboard')
-  // else error.value = resultado.error
-  // cargando.value = false
+  } else {
+    error.value = resultado.error || 'Credenciales inválidas'
+  }
+  cargando.value = false
 }
 </script>

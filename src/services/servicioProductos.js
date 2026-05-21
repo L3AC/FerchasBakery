@@ -80,7 +80,7 @@ export const servicioProductos = {
       const { data, error } = await insforgeClient.database
         .from('productos')
         .insert([datosProducto])
-        .select('*, categorias_productos(nombre_categoria), proveedores(nombre)')
+        .select()
 
       if (error) {
         return { exito: false, error: error.message }
@@ -98,7 +98,7 @@ export const servicioProductos = {
         .from('productos')
         .update(datosProducto)
         .eq('id_producto', idProducto)
-        .select('*, categorias_productos(nombre_categoria), proveedores(nombre)')
+        .select()
 
       if (error) {
         return { exito: false, error: error.message }
