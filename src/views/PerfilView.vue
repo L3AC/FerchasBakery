@@ -144,7 +144,7 @@
 import { ref, onMounted } from 'vue'
 import EncabezadoPrincipal from '../components/shared/EncabezadoPrincipal.vue'
 import BarralateralPrincipal from '../components/shared/BarralateralPrincipal.vue'
-import { useAlmacenAutenticacion } from '../stores/almacenAutenticacion.js'
+import { useAlmacenAutenticacion } from '../controllers/ControladorAutenticacion.js'
 
 const almacenAuth = useAlmacenAutenticacion()
 

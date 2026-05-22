@@ -33,7 +33,7 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Icono from './Icono.vue'
-import { useAlmacenAutenticacion } from '../../stores/almacenAutenticacion.js'
+import { useAlmacenAutenticacion } from '../../controllers/ControladorAutenticacion.js'
 
 const auth = useAlmacenAutenticacion()
 const router = useRouter()

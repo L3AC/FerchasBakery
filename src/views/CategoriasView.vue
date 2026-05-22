@@ -73,7 +73,7 @@ import { ref, computed, onMounted } from 'vue'
 import LayoutPanel from '../components/shared/LayoutPanel.vue'
 import Icono from '../components/shared/Icono.vue'
 import ModalBase from '../components/shared/ModalBase.vue'
-import { servicioCategorias } from '../services/servicioCategorias.js'
+import { servicioCategorias } from '../models/ModeloCategorias.js'
 
 const categorias = ref([])
 const busqueda = ref('')

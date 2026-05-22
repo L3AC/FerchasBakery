@@ -71,7 +71,7 @@
 import { ref, computed, onMounted } from 'vue'
 import LayoutPanel from '../components/shared/LayoutPanel.vue'
 import Icono from '../components/shared/Icono.vue'
-import { servicioPerfiles } from '../services/servicioPerfiles.js'
+import { servicioPerfiles } from '../models/ModeloPerfiles.js'
 
 const usuarios = ref([])
 

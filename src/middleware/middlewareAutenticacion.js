@@ -1,4 +1,4 @@
-import { useAlmacenAutenticacion } from '../stores/almacenAutenticacion.js'
+import { useAlmacenAutenticacion } from '../controllers/ControladorAutenticacion.js'
 
 export function crearMiddlewareAutenticacion(hacia, desde, siguiente) {
   const almacenAuth = useAlmacenAutenticacion()

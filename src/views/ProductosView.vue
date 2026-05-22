@@ -82,8 +82,8 @@ import { ref, computed, onMounted } from 'vue'
 import LayoutPanel from '../components/shared/LayoutPanel.vue'
 import Icono from '../components/shared/Icono.vue'
 import ModalProducto from '../components/productos/ModalProducto.vue'
-import { useAlmacenProductos } from '../stores/almacenProductos.js'
-import { useAlmacenCategorias } from '../stores/almacenCategorias.js'
+import { useAlmacenProductos } from '../controllers/ControladorProductos.js'
+import { useAlmacenCategorias } from '../controllers/ControladorCategorias.js'
 
 const almacenProductos = useAlmacenProductos()
 const almacenCategorias = useAlmacenCategorias()

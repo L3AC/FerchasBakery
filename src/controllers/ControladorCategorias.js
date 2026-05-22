@@ -1,19 +1,19 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { servicioProveedores } from '../services/servicioProveedores.js'
+import { servicioCategorias } from '../models/ModeloCategorias.js'
 
-export const useAlmacenProveedores = defineStore('proveedores', () => {
-  const proveedores = ref([])
+export const useAlmacenCategorias = defineStore('categorias', () => {
+  const categorias = ref([])
   const cargando = ref(false)
   const error = ref(null)
 
-  async function obtenerTodos() {
+  async function obtenerTodas() {
     cargando.value = true
     error.value = null
     try {
-      const resultado = await servicioProveedores.obtenerTodos()
+      const resultado = await servicioCategorias.obtenerTodas()
       if (resultado.exito) {
-        proveedores.value = resultado.proveedores
+        categorias.value = resultado.categorias
         return { exito: true }
       } else {
         error.value = resultado.error
@@ -27,12 +27,12 @@ export const useAlmacenProveedores = defineStore('proveedores', () => {
     }
   }
 
-  async function crear(datosProveedor) {
+  async function crear(nombre) {
     try {
-      const resultado = await servicioProveedores.crear(datosProveedor)
+      const resultado = await servicioCategorias.crear(nombre)
       if (resultado.exito) {
-        proveedores.value.push(resultado.proveedor)
-        return { exito: true, proveedor: resultado.proveedor }
+        categorias.value.push(resultado.categoria)
+        return { exito: true, categoria: resultado.categoria }
       } else {
         error.value = resultado.error
         return { exito: false, error: resultado.error }
@@ -43,15 +43,15 @@ export const useAlmacenProveedores = defineStore('proveedores', () => {
     }
   }
 
-  async function actualizar(idProveedor, datosProveedor) {
+  async function actualizar(id, nombre) {
     try {
-      const resultado = await servicioProveedores.actualizar(idProveedor, datosProveedor)
+      const resultado = await servicioCategorias.actualizar(id, nombre)
       if (resultado.exito) {
-        const indice = proveedores.value.findIndex(p => p.id_proveedor === idProveedor)
+        const indice = categorias.value.findIndex(c => c.id_categoria === id)
         if (indice !== -1) {
-          proveedores.value[indice] = resultado.proveedor
+          categorias.value[indice] = resultado.categoria
         }
-        return { exito: true, proveedor: resultado.proveedor }
+        return { exito: true, categoria: resultado.categoria }
       } else {
         error.value = resultado.error
         return { exito: false, error: resultado.error }
@@ -62,13 +62,13 @@ export const useAlmacenProveedores = defineStore('proveedores', () => {
     }
   }
 
-  async function eliminar(idProveedor) {
+  async function eliminar(id) {
     try {
-      const resultado = await servicioProveedores.eliminar(idProveedor)
+      const resultado = await servicioCategorias.eliminar(id)
       if (resultado.exito) {
-        const indice = proveedores.value.findIndex(p => p.id_proveedor === idProveedor)
+        const indice = categorias.value.findIndex(c => c.id_categoria === id)
         if (indice !== -1) {
-          proveedores.value.splice(indice, 1)
+          categorias.value.splice(indice, 1)
         }
         return { exito: true }
       } else {
@@ -82,10 +82,10 @@ export const useAlmacenProveedores = defineStore('proveedores', () => {
   }
 
   return {
-    proveedores,
+    categorias,
     cargando,
     error,
-    obtenerTodos,
+    obtenerTodas,
     crear,
     actualizar,
     eliminar

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAlmacenAutenticacion } from '../stores/almacenAutenticacion.js'
+import { useAlmacenAutenticacion } from '../controllers/ControladorAutenticacion.js'
 
 // Views
 import LoginView from '../views/LoginView.vue'

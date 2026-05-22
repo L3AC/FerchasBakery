@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { servicioProductos } from '../services/servicioProductos.js'
-import { servicioCategorias } from '../services/servicioCategorias.js'
+import { servicioProductos } from '../models/ModeloProductos.js'
+import { servicioCategorias } from '../models/ModeloCategorias.js'
 
 export const useAlmacenProductos = defineStore('productos', () => {
   const productos = ref([])

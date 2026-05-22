@@ -54,7 +54,7 @@ import { ref, computed, onMounted } from 'vue'
 import LayoutPanel from '../components/shared/LayoutPanel.vue'
 import Icono from '../components/shared/Icono.vue'
 import ModalProveedor from '../components/proveedores/ModalProveedor.vue'
-import { useAlmacenProveedores } from '../stores/almacenProveedores.js'
+import { useAlmacenProveedores } from '../controllers/ControladorProveedores.js'
 
 const almacenProveedores = useAlmacenProveedores()
 

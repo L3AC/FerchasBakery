@@ -76,8 +76,8 @@ import LayoutPanel from '../components/shared/LayoutPanel.vue'
 import Icono from '../components/shared/Icono.vue'
 import ModalPedido from '../components/pedidos/ModalPedido.vue'
 import ModalDetallePedido from '../components/pedidos/ModalDetallePedido.vue'
-import { useAlmacenPedidos } from '../stores/almacenPedidos.js'
-import { servicioPedidos } from '../services/servicioPedidos.js'
+import { useAlmacenPedidos } from '../controllers/ControladorPedidos.js'
+import { servicioPedidos } from '../models/ModeloPedidos.js'
 
 const almacenPedidos = useAlmacenPedidos()
 

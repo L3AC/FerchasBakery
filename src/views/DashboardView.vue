@@ -105,10 +105,10 @@
 import { ref, computed, onMounted } from 'vue'
 import LayoutPanel from '../components/shared/LayoutPanel.vue'
 import Icono from '../components/shared/Icono.vue'
-import { useAlmacenAutenticacion } from '../stores/almacenAutenticacion.js'
-import { useAlmacenProductos } from '../stores/almacenProductos.js'
-import { useAlmacenPedidos } from '../stores/almacenPedidos.js'
-import { useAlmacenClientes } from '../stores/almacenClientes.js'
+import { useAlmacenAutenticacion } from '../controllers/ControladorAutenticacion.js'
+import { useAlmacenProductos } from '../controllers/ControladorProductos.js'
+import { useAlmacenPedidos } from '../controllers/ControladorPedidos.js'
+import { useAlmacenClientes } from '../controllers/ControladorClientes.js'
 
 const auth = useAlmacenAutenticacion()
 const almacenProductos = useAlmacenProductos()

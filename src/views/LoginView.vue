@@ -60,7 +60,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Icono from '../components/shared/Icono.vue'
-import { useAlmacenAutenticacion } from '../stores/almacenAutenticacion.js'
+import { useAlmacenAutenticacion } from '../controllers/ControladorAutenticacion.js'
 
 const router = useRouter()
 const almacenAuth = useAlmacenAutenticacion()

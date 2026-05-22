@@ -1,5 +1,5 @@
 import { insforgeClient } from '../lib/insforge.js'
-import { servicioProductos } from './servicioProductos.js'
+import { servicioProductos } from './ModeloProductos.js'
 
 export const servicioPedidos = {
   async obtenerTodos() {

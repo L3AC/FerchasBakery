@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { useAlmacenAutenticacion } from './stores/almacenAutenticacion.js'
+import { useAlmacenAutenticacion } from './controllers/ControladorAutenticacion.js'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 

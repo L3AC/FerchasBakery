@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { servicioClientes } from '../services/servicioClientes.js'
+import { servicioClientes } from '../models/ModeloClientes.js'
 
 export const useAlmacenClientes = defineStore('clientes', () => {
   const clientes = ref([])

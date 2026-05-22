@@ -146,8 +146,8 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import ModalBase from '../shared/ModalBase.vue'
 import Icono from '../shared/Icono.vue'
-import { useAlmacenClientes } from '../../stores/almacenClientes.js'
-import { servicioProductos } from '../../services/servicioProductos.js'
+import { useAlmacenClientes } from '../../controllers/ControladorClientes.js'
+import { servicioProductos } from '../../models/ModeloProductos.js'
 
 const emit = defineEmits(['cerrar', 'guardar'])
 

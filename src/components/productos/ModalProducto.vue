@@ -81,8 +81,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import ModalBase from '../shared/ModalBase.vue'
-import { useAlmacenCategorias } from '../../stores/almacenCategorias'
-import { useAlmacenProveedores } from '../../stores/almacenProveedores'
+import { useAlmacenCategorias } from '../../controllers/ControladorCategorias'
+import { useAlmacenProveedores } from '../../controllers/ControladorProveedores'
 
 const props = defineProps({
   producto: { type: Object, default: null }

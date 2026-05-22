@@ -99,7 +99,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import ModalBase from '../shared/ModalBase.vue'
 import Icono from '../shared/Icono.vue'
-import { useAlmacenPedidos } from '../../stores/almacenPedidos.js'
+import { useAlmacenPedidos } from '../../controllers/ControladorPedidos.js'
 
 const props = defineProps({
   pedido: { type: Object, required: true }

@@ -68,7 +68,7 @@ import { ref, computed, onMounted } from 'vue'
 import LayoutPanel from '../components/shared/LayoutPanel.vue'
 import Icono from '../components/shared/Icono.vue'
 import ModalCliente from '../components/clientes/ModalCliente.vue'
-import { useAlmacenClientes } from '../stores/almacenClientes.js'
+import { useAlmacenClientes } from '../controllers/ControladorClientes.js'
 
 const almacenClientes = useAlmacenClientes()
 

@@ -68,7 +68,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import LayoutPanel from '../components/shared/LayoutPanel.vue'
-import { useAlmacenAutenticacion } from '../stores/almacenAutenticacion.js'
+import { useAlmacenAutenticacion } from '../controllers/ControladorAutenticacion.js'
 
 const auth = useAlmacenAutenticacion()
 const errorContrasena = ref(null)

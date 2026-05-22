@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { servicioAutenticacion } from '../services/servicioAutenticacion.js'
-import { servicioPerfiles } from '../services/servicioPerfiles.js'
+import { servicioAutenticacion } from '../models/ModeloAutenticacion.js'
+import { servicioPerfiles } from '../models/ModeloPerfiles.js'
 
 export const useAlmacenAutenticacion = defineStore('autenticacion', () => {
   const usuario = ref(null)
