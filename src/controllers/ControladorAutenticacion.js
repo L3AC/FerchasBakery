@@ -82,9 +82,30 @@ export const useAlmacenAutenticacion = defineStore('autenticacion', () => {
     }
   }
 
+  async function registrarPrimerUsuario(correo, contrasena, nombre) {
+    cargando.value = true
+    error.value = null
+    try {
+      const resultado = await servicioAutenticacion.registrarPrimerUsuario(correo, contrasena, nombre)
+      if (resultado.exito) {
+        usuario.value = resultado.usuario
+        token.value = resultado.token
+        await cargarPerfil()
+        return { exito: true }
+      }
+      error.value = resultado.error
+      return { exito: false, error: resultado.error }
+    } catch (err) {
+      error.value = err.message
+      return { exito: false, error: err.message }
+    } finally {
+      cargando.value = false
+    }
+  }
+
   return {
     usuario, perfil, token, cargando, error,
     estaAutenticado, esAdmin, esEmpleado,
-    iniciarSesion, cerrarSesion, obtenerUsuarioActual, cambiarContrasena
+    iniciarSesion, cerrarSesion, obtenerUsuarioActual, cambiarContrasena, registrarPrimerUsuario
   }
 })
