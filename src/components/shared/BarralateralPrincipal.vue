@@ -1,28 +1,45 @@
 <template>
-  <aside class="w-60 bg-ferchas-fondo-oscuro min-h-[calc(100vh-64px)] border-r-2 border-ferchas-cafe/10 py-5">
-    <nav>
+  <aside
+    :class="[
+      'bg-ferchas-fondo-oscuro border-r-2 border-ferchas-cafe/10 py-5 transition-all duration-300 flex flex-col',
+      'fixed lg:static inset-y-0 left-0 z-20 lg:min-h-[calc(100vh-56px)]',
+      mobileAbierta ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
+      colapsada ? 'w-16' : 'w-60'
+    ]"
+  >
+    <nav class="flex-1 overflow-y-auto">
       <router-link
         v-for="item in itemsPrincipales"
         :key="item.ruta"
         :to="item.ruta"
-        :class="['flex items-center gap-3 px-5 py-3 transition-all duration-200',
-          esRutaActiva(item.ruta) ? 'nav-item-activo' : 'text-ferchas-cafe hover:bg-ferchas-fondo hover:translate-x-1']"
+        @click="$emit('cerrarMobile')"
+        :class="[
+          'flex items-center transition-all duration-200',
+          colapsada ? 'justify-center px-0 py-3' : 'gap-3 px-5 py-3',
+          esRutaActiva(item.ruta) ? 'nav-item-activo' : 'text-ferchas-cafe hover:bg-ferchas-fondo hover:translate-x-1'
+        ]"
+        :title="colapsada ? item.etiqueta : ''"
       >
-        <Icono :nombre="item.icono" :tamano="18" />
-        <span>{{ item.etiqueta }}</span>
+        <Icono :nombre="item.icono" :tamano="20" />
+        <span v-if="!colapsada" class="whitespace-nowrap">{{ item.etiqueta }}</span>
       </router-link>
 
-      <div class="mt-4 pt-4 border-t border-ferchas-cafe/10">
-        <div class="px-5 text-xs uppercase text-ferchas-cafe-claro font-bold tracking-wider mb-2">Administración</div>
+      <div :class="['border-t border-ferchas-cafe/10', colapsada ? 'mt-2 pt-2 mx-2' : 'mt-4 pt-4']">
+        <div v-if="!colapsada" class="px-5 text-xs uppercase text-ferchas-cafe-claro font-bold tracking-wider mb-2">Administración</div>
         <router-link
           v-for="item in itemsAdmin"
           :key="item.ruta"
           :to="item.ruta"
-          :class="['flex items-center gap-3 px-5 py-3 transition-all duration-200',
-            esRutaActiva(item.ruta) ? 'nav-item-activo' : 'text-ferchas-cafe hover:bg-ferchas-fondo hover:translate-x-1']"
+          @click="$emit('cerrarMobile')"
+          :class="[
+            'flex items-center transition-all duration-200',
+            colapsada ? 'justify-center px-0 py-3' : 'gap-3 px-5 py-3',
+            esRutaActiva(item.ruta) ? 'nav-item-activo' : 'text-ferchas-cafe hover:bg-ferchas-fondo hover:translate-x-1'
+          ]"
+          :title="colapsada ? item.etiqueta : ''"
         >
-          <Icono :nombre="item.icono" :tamano="18" />
-          <span>{{ item.etiqueta }}</span>
+          <Icono :nombre="item.icono" :tamano="20" />
+          <span v-if="!colapsada" class="whitespace-nowrap">{{ item.etiqueta }}</span>
         </router-link>
       </div>
     </nav>
@@ -32,6 +49,13 @@
 <script setup>
 import { useRoute } from 'vue-router'
 import Icono from './Icono.vue'
+
+defineProps({
+  colapsada: { type: Boolean, default: false },
+  mobileAbierta: { type: Boolean, default: false }
+})
+
+defineEmits(['toggleColapso', 'cerrarMobile'])
 
 const route = useRoute()
 

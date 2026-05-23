@@ -88,6 +88,9 @@ export const useAlmacenAutenticacion = defineStore('autenticacion', () => {
     try {
       const resultado = await servicioAutenticacion.registrarPrimerUsuario(correo, contrasena, nombre)
       if (resultado.exito) {
+        if (resultado.requiereVerificacion) {
+          return { exito: true, requiereVerificacion: true, email: resultado.email }
+        }
         usuario.value = resultado.usuario
         token.value = resultado.token
         await cargarPerfil()
@@ -103,9 +106,39 @@ export const useAlmacenAutenticacion = defineStore('autenticacion', () => {
     }
   }
 
+  async function verificarEmail(email, otp, nombre) {
+    cargando.value = true
+    error.value = null
+    try {
+      const resultado = await servicioAutenticacion.verificarEmail(email, otp, nombre)
+      if (resultado.exito) {
+        usuario.value = resultado.usuario
+        token.value = resultado.token
+        await cargarPerfil()
+        return { exito: true }
+      }
+      error.value = resultado.error
+      return { exito: false, error: resultado.error }
+    } catch (err) {
+      error.value = err.message
+      return { exito: false, error: err.message }
+    } finally {
+      cargando.value = false
+    }
+  }
+
+  async function reenviarCodigo(email) {
+    try {
+      return await servicioAutenticacion.reenviarVerificacion(email)
+    } catch (err) {
+      return { exito: false, error: err.message }
+    }
+  }
+
   return {
     usuario, perfil, token, cargando, error,
     estaAutenticado, esAdmin, esEmpleado,
-    iniciarSesion, cerrarSesion, obtenerUsuarioActual, cambiarContrasena, registrarPrimerUsuario
+    iniciarSesion, cerrarSesion, obtenerUsuarioActual, cambiarContrasena,
+    registrarPrimerUsuario, verificarEmail, reenviarCodigo
   }
 })

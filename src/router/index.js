@@ -131,11 +131,12 @@ async function verificarSiExistenUsuarios() {
   try {
     const { data, error } = await insforgeClient.database
       .from('perfiles')
-      .select('user_id', { count: 'exact', head: true })
+      .select('user_id')
+      .limit(1)
     
     existenUsuarios = !error && data && data.length > 0
   } catch (err) {
-    existenUsuarios = true // Asumir que existen usuarios en caso de error
+    existenUsuarios = true
   }
   verificandoUsuarios = false
   return existenUsuarios

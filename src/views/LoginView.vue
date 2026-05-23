@@ -18,7 +18,11 @@
         <p class="text-sm text-ferchas-cafe-claro">Panel administrativo</p>
       </div>
 
+      <!-- Formulario de inicio de sesión -->
       <div class="bg-white border-2 border-ferchas-rosa/30 rounded-xl shadow-xl p-8">
+        <div v-if="exitoVerificacion" class="bg-ferchas-exito/10 border-l-4 border-ferchas-exito text-ferchas-exito p-3 rounded mb-4">
+          <p class="text-sm">{{ exitoVerificacion }}</p>
+        </div>
         <h2 class="font-titulo text-2xl text-ferchas-cafe mb-1">Iniciar sesión</h2>
         <p class="text-sm text-ferchas-cafe-claro mb-6">Acceso para personal autorizado</p>
 
@@ -57,21 +61,39 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import Icono from '../components/shared/Icono.vue'
 import { useAlmacenAutenticacion } from '../controllers/ControladorAutenticacion.js'
 
 const router = useRouter()
+const route = useRoute()
 const almacenAuth = useAlmacenAutenticacion()
 const cargando = ref(false)
 const error = ref(null)
 const mostrarPassword = ref(false)
 
+onMounted(() => {
+  const status = route.query.insforge_status
+  const tipo = route.query.insforge_type
+  const errMsg = route.query.insforge_error
+
+  if (status === 'success' && tipo === 'verify_email') {
+    error.value = null
+    exitoVerificacion.value = 'Correo verificado correctamente. Ya puedes iniciar sesión.'
+    window.history.replaceState(null, '', window.location.pathname)
+  } else if (status === 'error' && tipo === 'verify_email') {
+    error.value = errMsg || 'Error al verificar el correo. Solicita un nuevo enlace.'
+    window.history.replaceState(null, '', window.location.pathname)
+  }
+})
+
 const formulario = ref({
   correo: '',
   contrasena: '',
 })
+
+const exitoVerificacion = ref(null)
 
 async function iniciarSesion() {
   cargando.value = true

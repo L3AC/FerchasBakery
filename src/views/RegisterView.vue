@@ -111,20 +111,35 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import Icono from '../components/shared/Icono.vue'
 import { useAlmacenAutenticacion } from '../controllers/ControladorAutenticacion.js'
-import { servicioAutenticacion } from '../models/ModeloAutenticacion.js'
 
 const router = useRouter()
+const route = useRoute()
 const almacenAuth = useAlmacenAutenticacion()
 const cargando = ref(false)
 const error = ref(null)
 const mostrarPassword = ref(false)
 const mostrarPassword2 = ref(false)
 
+onMounted(() => {
+  const status = route.query.insforge_status
+  const tipo = route.query.insforge_type
+
+  if (status === 'success' && tipo === 'verify_email') {
+    error.value = null
+    exitoVerificacion.value = 'Correo verificado correctamente. Ya puedes iniciar sesión.'
+    window.history.replaceState(null, '', window.location.pathname)
+  } else if (status === 'error' && tipo === 'verify_email') {
+    error.value = route.query.insforge_error || 'Error al verificar el correo. Solicita un nuevo enlace.'
+    window.history.replaceState(null, '', window.location.pathname)
+  }
+})
+
 // Estados para verificación
+const exitoVerificacion = ref(null)
 const mostrandoVerificacion = ref(false)
 const emailVerificacion = ref('')
 const codigoVerificacion = ref('')
@@ -225,14 +240,13 @@ async function verificarCodigo() {
   cargandoVerificacion.value = true
   errorVerificacion.value = null
 
-  const resultado = await servicioAutenticacion.verificarEmail(
+  const resultado = await almacenAuth.verificarEmail(
     emailVerificacion.value,
-    codigoVerificacion.value
+    codigoVerificacion.value,
+    formulario.value.nombre
   )
 
   if (resultado.exito) {
-    // Email verificado, iniciar sesión automáticamente
-    await almacenAuth.iniciarSesion(formulario.value.correo, formulario.value.contrasena)
     router.push('/dashboard')
   } else {
     errorVerificacion.value = resultado.error || 'Código inválido o expirado'
@@ -245,11 +259,9 @@ async function reenviarCodigo() {
   cargandoReenvio.value = true
   errorVerificacion.value = null
 
-  const resultado = await servicioAutenticacion.reenviarVerificacion(emailVerificacion.value)
+  const resultado = await almacenAuth.reenviarCodigo(emailVerificacion.value)
 
-  if (resultado.exito) {
-    errorVerificacion.value = null
-  } else {
+  if (!resultado.exito) {
     errorVerificacion.value = resultado.error || 'No se pudo reenviar el código'
   }
 

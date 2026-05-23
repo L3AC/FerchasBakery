@@ -22,7 +22,8 @@ export const servicioAutenticacion = {
       const { data, error } = await insforgeClient.auth.signUp({
         email: correo,
         password: contrasena,
-        name: nombre
+        name: nombre,
+        redirectTo: window.location.origin + '/login'
       })
       
       if (error) return { exito: false, error: error.message }
@@ -39,122 +40,52 @@ export const servicioAutenticacion = {
 
   async registrarPrimerUsuario(correo, contrasena, nombre) {
     try {
-      console.log('📝 Iniciando registro con:', { correo, nombre })
-      
-      // 1. Registrar usuario en auth.users
-      const respuesta = await insforgeClient.auth.signUp({
+      const { data, error } = await insforgeClient.auth.signUp({
         email: correo,
-        password: contrasena
+        password: contrasena,
+        name: nombre,
+        redirectTo: window.location.origin + '/login'
       })
-      
-      console.log('=== RESPUESTA COMPLETA DE SIGNUP ===')
-      console.log('Tipo de respuesta:', typeof respuesta)
-      console.log('Respuesta completa:', respuesta)
-      console.log('Keys de respuesta:', Object.keys(respuesta || {}))
-      
-      const { data: authData, error: authError } = respuesta
-      
-      console.log('data:', authData)
-      console.log('error:', authError)
-      console.log('====================================')
-      
-      if (authError) {
-        console.error('❌ Error en signUp:', authError)
-        return { exito: false, error: 'Error al registrar: ' + authError.message }
-      }
-      
-      if (!authData) {
-        console.error('❌ authData es null/undefined, respuesta completa:', respuesta)
-        return { exito: false, error: 'No se recibió respuesta del servidor' }
-      }
 
-      // Intentar extraer ID de todas las posibilidades
-      const userId = authData?.user?.id || authData?.id || authData?.uid || (typeof authData === 'string' ? authData : null)
-      
-      console.log('🔍 Buscando userId en authData:')
-      console.log('  authData.user?.id:', authData?.user?.id)
-      console.log('  authData.id:', authData?.id)
-      console.log('  authData.uid:', authData?.uid)
-      console.log('  userId final:', userId)
+      if (error) return { exito: false, error: error.message }
+      if (!data) return { exito: false, error: 'No se recibió respuesta del servidor' }
 
-      if (!userId) {
-        console.error('❌ No se encontró user ID')
-        console.error('Estructura de authData:', JSON.stringify(authData, null, 2))
-        return { exito: false, error: 'No se pudo obtener el ID del usuario.' }
-      }
-
-      console.log('✅ userId obtenido:', userId)
-
-      // 2. Actualizar el perfil de Insforge con el nombre
-      console.log('📋 Actualizando perfil Insforge...')
-      const { error: profileError } = await insforgeClient.auth.setProfile({
-        name: nombre
-      })
-      
-      if (profileError) {
-        console.warn('⚠️ Advertencia al actualizar perfil Insforge:', profileError.message)
-      } else {
-        console.log('✅ Perfil Insforge actualizado')
-      }
-
-      // 3. Crear perfil manualmente en la tabla perfiles
-      console.log('🗄️ Creando perfil en BD...')
-      const { error: perfilError } = await insforgeClient.database
-        .from('perfiles')
-        .insert([{
-          user_id: userId,
-          nombre: nombre,
-          rol: 'admin',
-          activo: true
-        }])
-      
-      if (perfilError) {
-        console.error('❌ Error al crear perfil en BD:', perfilError.message)
-        return { exito: false, error: 'No se pudo crear el perfil: ' + perfilError.message }
-      }
-
-      console.log('✅ Perfil creado en BD exitosamente')
-
-      // 4. Si requiere verificación de email, mostrar mensaje
-      if (authData?.requireEmailVerification) {
-        console.log('📧 Email verification requerida')
-        return { 
-          exito: true, 
+      if (data?.requireEmailVerification) {
+        return {
+          exito: true,
           requiereVerificacion: true,
           email: correo,
-          usuario: authData?.user
+          usuario: { email: correo }
         }
       }
 
-      // 5. Si no requiere verificación, iniciar sesión automáticamente
-      console.log('🔓 No requiere verificación, iniciando sesión automáticamente')
-      const { data: sessionData, error: sessionError } = await insforgeClient.auth.signInWithPassword({
-        email: correo,
-        password: contrasena
+      if (data?.accessToken) localStorage.setItem('insforge_token', data.accessToken)
+
+      await insforgeClient.database.rpc('crear_perfil', {
+        p_email: correo, p_nombre: nombre, p_rol: 'admin'
       })
 
-      if (sessionError) {
-        console.error('❌ Error al iniciar sesión:', sessionError)
-        return { exito: false, error: 'Error al iniciar sesión: ' + sessionError.message }
-      }
-      
-      if (sessionData?.accessToken) localStorage.setItem('insforge_token', sessionData.accessToken)
-
-      console.log('✅ Login exitoso')
-      return { exito: true, usuario: sessionData?.user, token: sessionData?.accessToken }
+      return { exito: true, usuario: data?.user, token: data?.accessToken }
     } catch (err) {
-      console.error('❌ Error en registrarPrimerUsuario:', err)
-      console.error('Stack:', err.stack)
-      return { exito: false, error: 'Error inesperado: ' + err.message }
+      return { exito: false, error: err.message }
     }
   },
 
-  async verificarEmail(email, otp) {
+  async verificarEmail(email, otp, nombre) {
     try {
-      const { data, error } = await insforgeClient.auth.verifyEmail({ email, otp })
+      const { data, error } = await insforgeClient.auth.verifyEmail({ email: email.trim(), otp })
       if (error) return { exito: false, error: error.message }
+
       if (data?.accessToken) localStorage.setItem('insforge_token', data.accessToken)
-      return { exito: true, usuario: data?.user }
+
+      if (nombre) {
+        const { error: rpcError } = await insforgeClient.database
+          .rpc('crear_perfil', { p_email: email, p_nombre: nombre, p_rol: 'admin' })
+
+        if (rpcError) console.error('Error creando perfil:', rpcError.message)
+      }
+
+      return { exito: true, usuario: data?.user, token: data?.accessToken }
     } catch (err) {
       return { exito: false, error: err.message }
     }
@@ -177,6 +108,42 @@ export const servicioAutenticacion = {
       return { exito: true, usuario: data.user }
     } catch (err) {
       return { exito: false, usuario: null }
+    }
+  },
+
+  async registrarUsuario(correo, contrasena, nombre, rol) {
+    try {
+      const { data, error } = await insforgeClient.auth.signUp({
+        email: correo,
+        password: contrasena,
+        name: nombre,
+        redirectTo: window.location.origin + '/login'
+      })
+
+      if (error) return { exito: false, error: error.message }
+
+      const { data: userId, error: rpcError } = await insforgeClient.database
+        .rpc('crear_perfil', { p_email: correo, p_nombre: nombre, p_rol: rol })
+
+      if (rpcError) return { exito: false, error: 'Error al crear perfil: ' + rpcError.message }
+
+      return {
+        exito: true,
+        usuario: { id: userId, email: correo },
+        requiereVerificacion: !!data?.requireEmailVerification
+      }
+    } catch (err) {
+      return { exito: false, error: err.message }
+    }
+  },
+
+  async verificarEmailAdmin(email, otp) {
+    try {
+      const { data, error } = await insforgeClient.auth.verifyEmail({ email: email.trim(), otp })
+      if (error) return { exito: false, error: error.message }
+      return { exito: true }
+    } catch (err) {
+      return { exito: false, error: err.message }
     }
   },
 

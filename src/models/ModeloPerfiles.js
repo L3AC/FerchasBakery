@@ -22,15 +22,12 @@ export const servicioPerfiles = {
     try {
       const { data, error } = await insforgeClient.database
         .from('perfiles')
-        .select('id', { count: 'exact', head: true })
+        .select('user_id')
+        .limit(1)
 
-      if (error) {
-        return { existenUsuarios: true }
-      }
+      if (error) return { existenUsuarios: true }
 
-      return { 
-        existenUsuarios: (data?.length || 0) > 0 
-      }
+      return { existenUsuarios: !!data && data.length > 0 }
     } catch (err) {
       return { existenUsuarios: true }
     }
