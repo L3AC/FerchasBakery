@@ -236,9 +236,14 @@ const usuarioVerificando = ref(null)
 const usuariosMapeados = computed(() => {
   let filtrados = usuarios.value
   
-  // Admin solo puede ver empleados
+  // Admin solo puede ver empleados (no a sí mismo ni a otros admins)
   if (almacenAuth.esAdmin && !almacenAuth.esPrincipal) {
     filtrados = filtrados.filter(u => u.rol === 'empleado')
+  }
+  
+  // Principal no ve su propio usuario
+  if (almacenAuth.esPrincipal) {
+    filtrados = filtrados.filter(u => u.user_id !== almacenAuth.usuario?.id)
   }
   
   // Empleado no debería ver esta página (bloqueado por router)
