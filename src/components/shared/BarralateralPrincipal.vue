@@ -9,7 +9,7 @@
   >
     <nav class="flex-1 overflow-y-auto">
       <router-link
-        v-for="item in itemsPrincipales"
+        v-for="item in itemsPrincipalesFilttrados"
         :key="item.ruta"
         :to="item.ruta"
         @click="$emit('cerrarMobile')"
@@ -27,7 +27,7 @@
       <div :class="['border-t border-ferchas-cafe/10', colapsada ? 'mt-2 pt-2 mx-2' : 'mt-4 pt-4']">
         <div v-if="!colapsada" class="px-5 text-xs uppercase text-ferchas-cafe-claro font-bold tracking-wider mb-2">Administración</div>
         <router-link
-          v-for="item in itemsAdmin"
+          v-for="item in itemsAdminFiltrados"
           :key="item.ruta"
           :to="item.ruta"
           @click="$emit('cerrarMobile')"
@@ -48,7 +48,9 @@
 
 <script setup>
 import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 import Icono from './Icono.vue'
+import { useAlmacenAutenticacion } from '../../controllers/ControladorAutenticacion.js'
 
 defineProps({
   colapsada: { type: Boolean, default: false },
@@ -58,6 +60,7 @@ defineProps({
 defineEmits(['toggleColapso', 'cerrarMobile'])
 
 const route = useRoute()
+const almacenAuth = useAlmacenAutenticacion()
 
 const itemsPrincipales = [
   { ruta: '/dashboard',   etiqueta: 'Dashboard',   icono: 'dashboard'   },
@@ -72,6 +75,27 @@ const itemsAdmin = [
   { ruta: '/usuarios',   etiqueta: 'Usuarios',   icono: 'usuarios'   },
   { ruta: '/mi-perfil',  etiqueta: 'Mi perfil',  icono: 'perfil'     },
 ]
+
+// Filtrar items según el rol del usuario
+const itemsPrincipalesFilttrados = computed(() => {
+  // Empleados no pueden ver Proveedores
+  if (almacenAuth.esEmpleado) {
+    return itemsPrincipales.filter(item => item.ruta !== '/proveedores')
+  }
+  return itemsPrincipales
+})
+
+const itemsAdminFiltrados = computed(() => {
+  // Solo principal y admin pueden ver items de administración
+  if (almacenAuth.esEmpleado) {
+    return itemsAdmin.filter(item => item.ruta === '/mi-perfil')
+  }
+  // Admin no puede ver Categorias (solo principal)
+  if (almacenAuth.esAdmin && !almacenAuth.esPrincipal) {
+    return itemsAdmin.filter(item => item.ruta !== '/categorias')
+  }
+  return itemsAdmin
+})
 
 function esRutaActiva(ruta) { return route.path.startsWith(ruta) }
 </script>

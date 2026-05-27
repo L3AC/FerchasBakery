@@ -95,7 +95,7 @@
             <span class="text-sm font-semibold text-ferchas-cafe block mb-1.5">Rol <span class="text-ferchas-error">*</span></span>
             <select v-model="formularioInvitar.rol" required class="input-base">
               <option value="empleado">Empleado</option>
-              <option value="admin">Administrador</option>
+              <option v-if="almacenAuth.esPrincipal" value="admin">Administrador</option>
             </select>
           </label>
 
@@ -146,13 +146,13 @@
           <input v-model="formularioEditar.nombre" type="text" required class="input-base" maxlength="70">
         </label>
 
-        <label class="block mb-4">
-          <span class="text-sm font-semibold text-ferchas-cafe block mb-1.5">Rol</span>
-          <select v-model="formularioEditar.rol" required class="input-base">
-            <option value="empleado">Empleado</option>
-            <option value="admin">Administrador</option>
-          </select>
-        </label>
+         <label class="block mb-4">
+           <span class="text-sm font-semibold text-ferchas-cafe block mb-1.5">Rol</span>
+           <select v-model="formularioEditar.rol" required class="input-base">
+             <option value="empleado">Empleado</option>
+             <option v-if="almacenAuth.esPrincipal" value="admin">Administrador</option>
+           </select>
+         </label>
 
         <div v-if="error" class="bg-ferchas-error/10 border-l-4 border-ferchas-error text-ferchas-error p-3 rounded mb-4">
           <p class="text-sm">{{ error }}</p>
@@ -206,6 +206,9 @@ import Icono from '../components/shared/Icono.vue'
 import { servicioPerfiles } from '../models/ModeloPerfiles.js'
 import { servicioAutenticacion } from '../models/ModeloAutenticacion.js'
 import { insforgeClient } from '../lib/insforge.js'
+import { useAlmacenAutenticacion } from '../controllers/ControladorAutenticacion.js'
+
+const almacenAuth = useAlmacenAutenticacion()
 
 const usuarios = ref([])
 const mostrandoModal = ref(null)
@@ -231,7 +234,19 @@ const formularioEditar = ref({
 const usuarioVerificando = ref(null)
 
 const usuariosMapeados = computed(() => {
-  return usuarios.value.map(u => ({
+  let filtrados = usuarios.value
+  
+  // Admin solo puede ver empleados
+  if (almacenAuth.esAdmin && !almacenAuth.esPrincipal) {
+    filtrados = filtrados.filter(u => u.rol === 'empleado')
+  }
+  
+  // Empleado no debería ver esta página (bloqueado por router)
+  if (almacenAuth.esEmpleado) {
+    return []
+  }
+  
+  return filtrados.map(u => ({
     ...u,
     iniciales: u.nombre.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2)
   }))
@@ -277,6 +292,13 @@ async function obtenerEmail(userId) {
 async function invitarUsuario() {
   cargando.value = true
   error.value = null
+
+  // Admin no puede crear otros admins
+  if (almacenAuth.esAdmin && !almacenAuth.esPrincipal && formularioInvitar.value.rol === 'admin') {
+    error.value = 'No tienes permiso para crear administradores'
+    cargando.value = false
+    return
+  }
 
   const resultado = await servicioAutenticacion.registrarUsuario(
     formularioInvitar.value.correo,
@@ -331,6 +353,12 @@ async function verificarUsuario() {
 
 async function guardarEdicion() {
   if (!usuarioEditando.value) return
+
+  // Admin no puede cambiar roles de usuarios a admin
+  if (almacenAuth.esAdmin && !almacenAuth.esPrincipal && formularioEditar.value.rol === 'admin') {
+    error.value = 'No tienes permiso para asignar el rol de administrador'
+    return
+  }
 
   cargando.value = true
   error.value = null

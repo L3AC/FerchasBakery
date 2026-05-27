@@ -11,8 +11,11 @@ export const useAlmacenAutenticacion = defineStore('autenticacion', () => {
   const error = ref(null)
 
   const estaAutenticado = computed(() => !!usuario.value && !!token.value)
+  const esPrincipal = computed(() => perfil.value?.rol === 'principal')
   const esAdmin = computed(() => perfil.value?.rol === 'admin')
   const esEmpleado = computed(() => perfil.value?.rol === 'empleado')
+  const puedeManejarTodo = computed(() => perfil.value?.rol === 'principal')
+  const puedeManejarAdmins = computed(() => perfil.value?.rol === 'principal')
 
   async function iniciarSesion(correo, contrasena) {
     cargando.value = true
@@ -137,7 +140,7 @@ export const useAlmacenAutenticacion = defineStore('autenticacion', () => {
 
   return {
     usuario, perfil, token, cargando, error,
-    estaAutenticado, esAdmin, esEmpleado,
+    estaAutenticado, esPrincipal, esAdmin, esEmpleado, puedeManejarTodo, puedeManejarAdmins,
     iniciarSesion, cerrarSesion, obtenerUsuarioActual, cambiarContrasena,
     registrarPrimerUsuario, verificarEmail, reenviarCodigo
   }

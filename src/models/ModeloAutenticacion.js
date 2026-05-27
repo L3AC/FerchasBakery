@@ -61,11 +61,12 @@ export const servicioAutenticacion = {
 
       if (data?.accessToken) localStorage.setItem('insforge_token', data.accessToken)
 
+      // El primer usuario SIEMPRE recibe el rol "principal"
       await insforgeClient.database.rpc('crear_perfil', {
-        p_email: correo, p_nombre: nombre, p_rol: 'admin'
+        p_email: correo, p_nombre: nombre, p_rol: 'principal'
       })
 
-      return { exito: true, usuario: data?.user, token: data?.accessToken }
+      return { exito: true, usuario: data?.user, token: data?.accessToken, rolAsignado: 'principal' }
     } catch (err) {
       return { exito: false, error: err.message }
     }
@@ -79,8 +80,9 @@ export const servicioAutenticacion = {
       if (data?.accessToken) localStorage.setItem('insforge_token', data.accessToken)
 
       if (nombre) {
+        // El primer usuario recibe rol "principal"
         const { error: rpcError } = await insforgeClient.database
-          .rpc('crear_perfil', { p_email: email, p_nombre: nombre, p_rol: 'admin' })
+          .rpc('crear_perfil', { p_email: email, p_nombre: nombre, p_rol: 'principal' })
 
         if (rpcError) console.error('Error creando perfil:', rpcError.message)
       }
@@ -111,7 +113,7 @@ export const servicioAutenticacion = {
     }
   },
 
-  async registrarUsuario(correo, contrasena, nombre, rol) {
+  async registrarUsuario(correo, contrasena, nombre, rol = 'empleado') {
     try {
       const { data, error } = await insforgeClient.auth.signUp({
         email: correo,
@@ -122,14 +124,18 @@ export const servicioAutenticacion = {
 
       if (error) return { exito: false, error: error.message }
 
+      // Solo permitir roles válidos: empleado o admin
+      const rolPermitido = (rol === 'admin' || rol === 'empleado') ? rol : 'empleado'
+
       const { data: userId, error: rpcError } = await insforgeClient.database
-        .rpc('crear_perfil', { p_email: correo, p_nombre: nombre, p_rol: rol })
+        .rpc('crear_perfil', { p_email: correo, p_nombre: nombre, p_rol: rolPermitido })
 
       if (rpcError) return { exito: false, error: 'Error al crear perfil: ' + rpcError.message }
 
       return {
         exito: true,
         usuario: { id: userId, email: correo },
+        rolAsignado: rolPermitido,
         requiereVerificacion: !!data?.requireEmailVerification
       }
     } catch (err) {

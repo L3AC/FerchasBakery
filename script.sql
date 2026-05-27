@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS perfiles (
     nombre VARCHAR(70) NOT NULL,
 
     rol VARCHAR(15) NOT NULL
-        CHECK (rol IN ('admin', 'empleado')),
+        CHECK (rol IN ('principal', 'admin', 'empleado')),
 
     activo BOOLEAN DEFAULT true,
 

@@ -179,8 +179,8 @@ router.beforeEach(async (hacia, desde, siguiente) => {
     return
   }
 
-  // Si la ruta requiere admin y no somos admin
-  if (hacia.meta.requiereAdmin && !almacenAuth.esAdmin) {
+  // Si la ruta requiere admin y no somos admin ni principal
+  if (hacia.meta.requiereAdmin && !almacenAuth.esAdmin && !almacenAuth.esPrincipal) {
     siguiente('/dashboard')
     return
   }
