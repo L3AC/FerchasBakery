@@ -192,6 +192,108 @@ export const servicioPedidos = {
     }
   },
 
+  async actualizarPedidoCompleto(idPedido, datosPedido, detallesNuevos) {
+    try {
+      // 0. Obtener detalles actuales para restaurar stock viejo
+      const { data: detallesViejos, error: errDetalles } = await insforgeClient.database
+        .from('detalles_pedido')
+        .select('id_producto, cantidad')
+        .eq('id_pedido', idPedido)
+
+      if (errDetalles) {
+        return { exito: false, error: 'Error al obtener detalles actuales: ' + errDetalles.message }
+      }
+
+      // 1. Restaurar stock viejo (devolver cantidades al inventario)
+      for (const detalle of (detallesViejos || [])) {
+        const resultado = await servicioProductos.actualizarStock(
+          detalle.id_producto,
+          detalle.cantidad
+        )
+        if (!resultado.exito) {
+          return { exito: false, error: 'Error restaurando stock: ' + resultado.error }
+        }
+      }
+
+      // 2. Validar stock suficiente para los productos nuevos
+      for (const detalle of detallesNuevos) {
+        const { data: producto, error: errProd } = await insforgeClient.database
+          .from('productos')
+          .select('nombre, stock_disponible')
+          .eq('id_producto', detalle.id_producto)
+          .single()
+
+        if (errProd || !producto) {
+          // Si falló la validación, re-aplicar el stock viejo y salir
+          for (const d of (detallesViejos || [])) {
+            await servicioProductos.actualizarStock(d.id_producto, -d.cantidad)
+          }
+          return { exito: false, error: `Producto no encontrado (ID: ${detalle.id_producto})` }
+        }
+
+        if ((producto.stock_disponible || 0) < detalle.cantidad) {
+          // Re-aplicar stock viejo
+          for (const d of (detallesViejos || [])) {
+            await servicioProductos.actualizarStock(d.id_producto, -d.cantidad)
+          }
+          return {
+            exito: false,
+            error: `Stock insuficiente para "${producto.nombre}". Disponible: ${producto.stock_disponible}, solicitado: ${detalle.cantidad}`
+          }
+        }
+      }
+
+      // 3. Actualizar datos del pedido
+      const { data: pedidoActualizado, error: errorUpdate } = await insforgeClient.database
+        .from('pedidos')
+        .update(datosPedido)
+        .eq('id_pedido', idPedido)
+        .select()
+
+      if (errorUpdate || !pedidoActualizado?.[0]) {
+        // Re-aplicar stock viejo
+        for (const d of (detallesViejos || [])) {
+          await servicioProductos.actualizarStock(d.id_producto, -d.cantidad)
+        }
+        return { exito: false, error: errorUpdate?.message || 'Error actualizando pedido' }
+      }
+
+      // 4. Eliminar detalles viejos
+      const { error: errorDelete } = await insforgeClient.database
+        .from('detalles_pedido')
+        .delete()
+        .eq('id_pedido', idPedido)
+
+      if (errorDelete) {
+        return { exito: false, error: 'Error al eliminar detalles anteriores: ' + errorDelete.message }
+      }
+
+      // 5. Insertar detalles nuevos y descontar stock
+      for (const detalle of detallesNuevos) {
+        const { error: errorDetalle } = await insforgeClient.database
+          .from('detalles_pedido')
+          .insert([{ ...detalle, id_pedido: idPedido }])
+
+        if (errorDetalle) {
+          return { exito: false, error: errorDetalle.message }
+        }
+
+        const resultadoStock = await servicioProductos.actualizarStock(
+          detalle.id_producto,
+          -detalle.cantidad
+        )
+
+        if (!resultadoStock.exito) {
+          return { exito: false, error: 'Error actualizando stock: ' + resultadoStock.error }
+        }
+      }
+
+      return { exito: true, pedido: pedidoActualizado[0] }
+    } catch (err) {
+      return { exito: false, error: err.message }
+    }
+  },
+
   async obtenerVentasDelDia() {
     try {
       const hoy = new Date()

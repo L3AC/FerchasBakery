@@ -1,5 +1,5 @@
 <template>
-  <ModalBase titulo="Nuevo pedido" subtitulo="Registra una venta o un encargo especial" ancho="4xl" padding-top="pt-8" @cerrar="emit('cerrar')">
+  <ModalBase :titulo="modoEdicion ? 'Editar pedido' : 'Nuevo pedido'" :subtitulo="modoEdicion ? `Editando pedido #${pedido.id_pedido.slice(0, 8)}...` : 'Registra una venta o un encargo especial'" ancho="4xl" padding-top="pt-8" @cerrar="emit('cerrar')">
     <form @submit.prevent="guardarPedido">
       <div class="mb-6">
         <h3 class="font-titulo text-base text-ferchas-vino mb-3 pb-2 border-b-2 border-ferchas-rosa/30">1. Cliente y tipo de pedido</h3>
@@ -119,23 +119,23 @@
         </label>
       </div>
 
-      <div v-if="hayStockInsuficiente" class="bg-ferchas-error/15 border-2 border-ferchas-error/40 rounded-lg px-4 py-3 mb-4 flex items-start gap-3">
-        <div class="text-ferchas-error mt-0.5"><Icono nombre="alerta" :tamano="18" /></div>
-        <div class="text-sm text-ferchas-cafe">
-          <strong>Stock insuficiente.</strong> Revisa los productos marcados en rojo. Ajusta las cantidades antes de registrar.
+        <div v-if="hayStockInsuficiente" class="bg-ferchas-error/15 border-2 border-ferchas-error/40 rounded-lg px-4 py-3 mb-4 flex items-start gap-3">
+          <div class="text-ferchas-error mt-0.5"><Icono nombre="alerta" :tamano="18" /></div>
+          <div class="text-sm text-ferchas-cafe">
+            <strong>Stock insuficiente.</strong> Revisa los productos marcados en rojo. Ajusta las cantidades antes de {{ modoEdicion ? 'guardar' : 'registrar' }}.
+          </div>
         </div>
-      </div>
-      <div v-else-if="formulario.productos.length > 0" class="bg-ferchas-exito/15 border-2 border-ferchas-exito/40 rounded-lg px-4 py-3 mb-4 flex items-start gap-3">
-        <div class="text-ferchas-exito mt-0.5"><Icono nombre="exito" :tamano="18" /></div>
-        <div class="text-sm text-ferchas-cafe">
-          <strong>Stock validado.</strong> Al registrar el pedido se descontarán automáticamente las unidades del inventario.
+        <div v-else-if="formulario.productos.length > 0" class="bg-ferchas-exito/15 border-2 border-ferchas-exito/40 rounded-lg px-4 py-3 mb-4 flex items-start gap-3">
+          <div class="text-ferchas-exito mt-0.5"><Icono nombre="exito" :tamano="18" /></div>
+          <div class="text-sm text-ferchas-cafe">
+            <strong>Stock validado.</strong> Al {{ modoEdicion ? 'guardar' : 'registrar' }} el pedido se ajustará automáticamente el inventario.
+          </div>
         </div>
-      </div>
 
       <div class="flex justify-end gap-3 pt-4 border-t-2 border-ferchas-cafe/10">
         <button type="button" @click="emit('cerrar')" class="btn-secundario">Cancelar</button>
         <button type="submit" class="btn-principal" :disabled="hayStockInsuficiente || formulario.productos.length === 0 || cargandoClientes">
-          Registrar pedido — ${{ total.toFixed(2) }}
+          {{ modoEdicion ? 'Guardar cambios' : 'Registrar pedido' }} — ${{ total.toFixed(2) }}
         </button>
       </div>
     </form>
@@ -148,8 +148,14 @@ import ModalBase from '../shared/ModalBase.vue'
 import Icono from '../shared/Icono.vue'
 import { useAlmacenClientes } from '../../controllers/ControladorClientes.js'
 import { servicioProductos } from '../../models/ModeloProductos.js'
+import { servicioPedidos } from '../../models/ModeloPedidos.js'
 
+const props = defineProps({
+  pedido: { type: Object, default: null }
+})
 const emit = defineEmits(['cerrar', 'guardar'])
+
+const modoEdicion = computed(() => !!props.pedido)
 
 const almacenClientes = useAlmacenClientes()
 
@@ -160,6 +166,8 @@ const resultadosBusqueda = ref([])
 let tiempoBusqueda = null
 
 const metodosPago = ['Efectivo', 'Transferencia', 'Tarjeta']
+
+const cargandoDetalles = ref(false)
 
 const formulario = ref({
   id_cliente: '',
@@ -236,12 +244,12 @@ async function guardarPedido() {
   }
   if (hayStockInsuficiente.value) return
 
-  emit('guardar', {
+  const datos = {
     id_cliente: formulario.value.id_cliente,
     tipo_pedido: formulario.value.tipo_pedido,
     metodo_pago: formulario.value.metodo_pago,
     fecha_entrega: formulario.value.fecha_entrega || null,
-    observaciones: formulario.value.observaciones,
+    observaciones: formulario.value.observaciones || null,
     productos: formulario.value.productos.map(p => ({
       id_producto: p.id_producto,
       cantidad: p.cantidad,
@@ -249,7 +257,32 @@ async function guardarPedido() {
       subtotal: p.cantidad * p.precio
     })),
     total: total.value
-  })
+  }
+
+  if (modoEdicion.value) {
+    datos.id_pedido = props.pedido.id_pedido
+  }
+
+  emit('guardar', datos)
+}
+
+async function cargarDetallesPedido() {
+  cargandoDetalles.value = true
+  try {
+    const res = await servicioPedidos.obtenerDetalles(props.pedido.id_pedido)
+    if (res.exito && res.detalles) {
+      formulario.value.productos = res.detalles.map(d => ({
+        id_producto: d.id_producto,
+        nombre: d.productos?.nombre || 'Producto eliminado',
+        precio: parseFloat(d.precio_unitario),
+        stock_disponible: d.productos?.stock_disponible || 0,
+        cantidad: d.cantidad,
+        stockInsuficiente: d.cantidad > (d.productos?.stock_disponible || 0)
+      }))
+    }
+  } finally {
+    cargandoDetalles.value = false
+  }
 }
 
 onMounted(async () => {
@@ -257,6 +290,15 @@ onMounted(async () => {
   const resClientes = await almacenClientes.obtenerTodos()
   if (resClientes.exito) clientes.value = almacenClientes.clientes
   cargandoClientes.value = false
+
+  if (modoEdicion.value && props.pedido) {
+    formulario.value.id_cliente = props.pedido.id_cliente || ''
+    formulario.value.tipo_pedido = props.pedido.tipo_pedido || 'Mostrador'
+    formulario.value.metodo_pago = props.pedido.metodo_pago || 'Efectivo'
+    formulario.value.fecha_entrega = props.pedido.fecha_entrega || ''
+    formulario.value.observaciones = props.pedido.observaciones || ''
+    await cargarDetallesPedido()
+  }
 })
 
 onBeforeUnmount(() => {
