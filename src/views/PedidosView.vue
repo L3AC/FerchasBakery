@@ -43,7 +43,8 @@
           </thead>
           <TransitionGroup name="fila-pedido" tag="tbody">
             <tr v-for="p in pedidosFiltrados" :key="p.id_pedido"
-                class="border-b border-ferchas-cafe/10 last:border-0 hover:bg-ferchas-fondo transition-colors">
+                class="border-b border-ferchas-cafe/10 last:border-0 hover:bg-ferchas-fondo transition-colors cursor-pointer"
+                @click="verDetalle(p)">
               <td class="py-3 px-4 font-bold text-ferchas-vino text-xs">{{ p.id_pedido.slice(0, 8) }}...</td>
               <td class="py-3 px-4 font-semibold text-ferchas-cafe">{{ p.cliente }}</td>
               <td class="py-3 px-4 text-ferchas-cafe-claro">{{ p.fecha }}</td>
@@ -59,25 +60,9 @@
                           class="text-ferchas-cafe-claro hover:text-ferchas-vino p-1.5 hover:bg-ferchas-fondo rounded transition-colors">
                     <Icono nombre="editar" :tamano="15" />
                   </button>
-                  <div class="relative" @click.stop>
-                    <button @click="toggleEstadoDropdown(p.id_pedido)" title="Cambiar estado"
-                            class="text-ferchas-cafe-claro hover:text-ferchas-exito p-1.5 hover:bg-ferchas-fondo rounded transition-colors">
-                      <Icono nombre="estado" :tamano="15" />
-                    </button>
-                    <div v-if="dropdownEstadoAbierto === p.id_pedido"
-                         class="absolute right-0 top-full mt-1 z-10 bg-white border-2 border-ferchas-cafe/20 rounded-lg shadow-lg min-w-[160px] overflow-hidden">
-                      <button v-for="e in opcionesEstado" :key="e"
-                              @click="cambiarEstado(p, e)"
-                              :disabled="e === p.estado"
-                              :class="['w-full text-left px-4 py-2 text-sm transition-colors',
-                                       e === p.estado ? 'text-ferchas-cafe-claro bg-ferchas-fondo cursor-not-allowed' : 'text-ferchas-cafe hover:bg-ferchas-fondo']">
-                        <span v-if="e === p.estado">✓ </span>{{ e }}
-                      </button>
-                    </div>
-                  </div>
-                  <button @click="verDetalle(p)" title="Ver detalle"
-                          class="text-ferchas-cafe-claro hover:text-ferchas-vino p-1.5 hover:bg-ferchas-fondo rounded transition-colors">
-                    <Icono nombre="ojo" :tamano="15" />
+                  <button v-if="p.estado !== 'Entregado' && p.estado !== 'Cancelado'" @click="avanzarEstado(p)" title="Avanzar al siguiente estado"
+                          class="text-ferchas-cafe-claro hover:text-ferchas-exito p-1.5 hover:bg-ferchas-fondo rounded transition-colors">
+                    <Icono nombre="estado" :tamano="15" />
                   </button>
                 </div>
               </td>
@@ -93,7 +78,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import LayoutPanel from '../components/shared/LayoutPanel.vue'
 import Icono from '../components/shared/Icono.vue'
 import ModalPedido from '../components/pedidos/ModalPedido.vue'
@@ -110,16 +95,6 @@ const mostrarFormulario = ref(false)
 const mostrarDetalle = ref(false)
 const pedidoSeleccionado = ref(null)
 const pedidoEditando = ref(null)
-const dropdownEstadoAbierto = ref(null)
-
-function cerrarDropdownGlobal(e) {
-  if (dropdownEstadoAbierto.value) {
-    dropdownEstadoAbierto.value = null
-  }
-}
-
-onMounted(() => document.addEventListener('click', cerrarDropdownGlobal))
-onUnmounted(() => document.removeEventListener('click', cerrarDropdownGlobal))
 
 const estados = [
   { valor: 'todos',      etiqueta: 'Todos' },
@@ -129,7 +104,7 @@ const estados = [
   { valor: 'Cancelado',  etiqueta: 'Cancelados' },
 ]
 
-const opcionesEstado = ['Pendiente', 'Preparando', 'Entregado', 'Cancelado']
+const ordenEstados = { Pendiente: 'Preparando', Preparando: 'Entregado' }
 
 function formatearFecha(fecha) {
   if (!fecha) return '-'
@@ -167,14 +142,10 @@ function cerrarModalPedido() {
   pedidoEditando.value = null
 }
 
-function toggleEstadoDropdown(idPedido) {
-  dropdownEstadoAbierto.value = dropdownEstadoAbierto.value === idPedido ? null : idPedido
-}
-
-async function cambiarEstado(pedido, nuevoEstado) {
-  dropdownEstadoAbierto.value = null
-  if (nuevoEstado === pedido.estado) return
-  const resultado = await almacenPedidos.actualizarEstado(pedido.id_pedido, nuevoEstado)
+async function avanzarEstado(pedido) {
+  const siguiente = ordenEstados[pedido.estado]
+  if (!siguiente) return
+  const resultado = await almacenPedidos.actualizarEstado(pedido.id_pedido, siguiente)
   if (resultado.exito) {
     await almacenPedidos.obtenerTodos()
   }
@@ -189,7 +160,6 @@ async function guardarPedido(formulario) {
   let resultado
 
   if (formulario.id_pedido) {
-    // Editar pedido existente
     resultado = await servicioPedidos.actualizarPedidoCompleto(
       formulario.id_pedido,
       {
@@ -203,7 +173,6 @@ async function guardarPedido(formulario) {
       formulario.productos
     )
   } else {
-    // Crear pedido nuevo
     resultado = await servicioPedidos.registrarPedidoCompleto({
       id_cliente: formulario.id_cliente,
       user_id: almacenAuth.usuario?.id || null,
