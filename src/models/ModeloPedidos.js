@@ -126,6 +126,12 @@ export const servicioPedidos = {
 
   async registrarPedidoCompleto(datosPedido, detalles) {
     try {
+      // Asegurar valores por defecto
+      const pedido = {
+        estado_pedido: 'Pendiente',
+        ...datosPedido
+      }
+
       // 0. Validar stock suficiente para todos los productos antes de empezar
       for (const detalle of detalles) {
         const { data: producto, error: errProd } = await insforgeClient.database
@@ -149,7 +155,7 @@ export const servicioPedidos = {
       // 1. Crear el pedido
       const { data: pedidoData, error: errorPedido } = await insforgeClient.database
         .from('pedidos')
-        .insert([datosPedido])
+        .insert([pedido])
         .select()
 
       if (errorPedido || !pedidoData?.[0]) {

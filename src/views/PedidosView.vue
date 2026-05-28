@@ -77,9 +77,11 @@ import Icono from '../components/shared/Icono.vue'
 import ModalPedido from '../components/pedidos/ModalPedido.vue'
 import ModalDetallePedido from '../components/pedidos/ModalDetallePedido.vue'
 import { useAlmacenPedidos } from '../controllers/ControladorPedidos.js'
+import { useAlmacenAutenticacion } from '../controllers/ControladorAutenticacion.js'
 import { servicioPedidos } from '../models/ModeloPedidos.js'
 
 const almacenPedidos = useAlmacenPedidos()
+const almacenAuth = useAlmacenAutenticacion()
 
 const filtroEstado = ref('todos')
 const mostrarFormulario = ref(false)
@@ -123,11 +125,12 @@ function verDetalle(pedido) {
 async function guardarPedido(formulario) {
   const resultado = await servicioPedidos.registrarPedidoCompleto({
     id_cliente: formulario.id_cliente,
-    user_id: null,
+    user_id: almacenAuth.usuario?.id || null,
     tipo_pedido: formulario.tipo_pedido,
+    estado_pedido: 'Pendiente',
     metodo_pago: formulario.metodo_pago,
-    fecha_entrega: formulario.fecha_entrega,
-    observaciones: formulario.observaciones,
+    fecha_entrega: formulario.fecha_entrega || null,
+    observaciones: formulario.observaciones || null,
     total: formulario.total
   }, formulario.productos)
   if (resultado.exito) {
