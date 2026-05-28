@@ -1,11 +1,12 @@
 <template>
-  <ModalBase :titulo="`Pedido ${pedido.id_pedido.slice(0, 8)}...`" :subtitulo="`Registrado el ${fechaRegistro}`" ancho="4xl" padding-top="pt-8" @cerrar="emit('cerrar')">
+  <ModalBase :titulo="`Pedido ${pedidoActual.id_pedido.slice(0, 8)}...`" :subtitulo="`Registrado el ${fechaRegistro}`" ancho="4xl" padding-top="pt-8" @cerrar="emit('cerrar')">
     <div class="flex justify-end gap-2 mb-5">
       <select v-model="nuevoEstado" class="btn-principal text-sm border-2 border-ferchas-rosa">
-        <option :value="pedido.estado_pedido" disabled>Cambiar estado</option>
-        <option value="Preparando">Marcar como preparando</option>
-        <option value="Entregado">Marcar como entregado</option>
-        <option value="Cancelado">Cancelar pedido</option>
+        <option value="" disabled>Cambiar estado</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="Preparando">Preparando</option>
+        <option value="Entregado">Entregado</option>
+        <option value="Cancelado">Cancelado</option>
       </select>
     </div>
 
@@ -59,15 +60,15 @@
             <tfoot class="bg-ferchas-fondo">
               <tr>
                 <td colspan="3" class="py-3 px-4 text-right font-bold text-ferchas-cafe">Total</td>
-                <td class="py-3 px-4 text-right font-titulo text-2xl text-ferchas-vino">${{ parseFloat(pedido.total).toFixed(2) }}</td>
+                <td class="py-3 px-4 text-right font-titulo text-2xl text-ferchas-vino">${{ parseFloat(pedidoActual.total).toFixed(2) }}</td>
               </tr>
             </tfoot>
           </table>
         </div>
 
-        <div v-if="pedido.observaciones" class="bg-white border-2 border-ferchas-cafe/10 rounded-lg p-5">
+        <div v-if="pedidoActual.observaciones" class="bg-white border-2 border-ferchas-cafe/10 rounded-lg p-5">
           <h3 class="font-titulo text-lg text-ferchas-vino mb-2">Observaciones</h3>
-          <p class="text-sm text-ferchas-cafe leading-relaxed">{{ pedido.observaciones }}</p>
+          <p class="text-sm text-ferchas-cafe leading-relaxed">{{ pedidoActual.observaciones }}</p>
         </div>
       </div>
 
@@ -75,19 +76,19 @@
         <div class="bg-white border-2 border-ferchas-rosa/30 rounded-lg p-5">
           <h3 class="font-titulo text-lg text-ferchas-vino mb-3">Cliente</h3>
           <div class="space-y-2 text-sm">
-            <div class="font-bold text-ferchas-cafe text-base">{{ pedido.clientes?.nombre || 'Cliente eliminado' }}</div>
-            <div class="text-ferchas-cafe-claro">{{ pedido.clientes?.telefono || '' }}</div>
-            <div class="text-ferchas-cafe-claro">{{ pedido.clientes?.correo || '' }}</div>
+            <div class="font-bold text-ferchas-cafe text-base">{{ pedidoActual.clientes?.nombre || 'Cliente eliminado' }}</div>
+            <div class="text-ferchas-cafe-claro">{{ pedidoActual.clientes?.telefono || '' }}</div>
+            <div class="text-ferchas-cafe-claro">{{ pedidoActual.clientes?.correo || '' }}</div>
           </div>
         </div>
 
         <div class="bg-white border-2 border-ferchas-cafe/10 rounded-lg p-5">
           <h3 class="font-titulo text-lg text-ferchas-vino mb-3">Información del pedido</h3>
           <dl class="space-y-2 text-sm">
-            <div class="flex justify-between"><dt class="text-ferchas-cafe-claro">Tipo</dt><dd class="font-semibold text-ferchas-cafe">{{ pedido.tipo_pedido }}</dd></div>
-            <div class="flex justify-between"><dt class="text-ferchas-cafe-claro">Método de pago</dt><dd class="font-semibold text-ferchas-cafe">{{ pedido.metodo_pago || '-' }}</dd></div>
-            <div class="flex justify-between"><dt class="text-ferchas-cafe-claro">Fecha de pedido</dt><dd class="font-semibold text-ferchas-cafe">{{ formatearFecha(pedido.fecha_pedido) }}</dd></div>
-            <div class="flex justify-between"><dt class="text-ferchas-cafe-claro">Fecha de entrega</dt><dd class="font-semibold text-ferchas-cafe">{{ pedido.fecha_entrega || '-' }}</dd></div>
+            <div class="flex justify-between"><dt class="text-ferchas-cafe-claro">Tipo</dt><dd class="font-semibold text-ferchas-cafe">{{ pedidoActual.tipo_pedido }}</dd></div>
+            <div class="flex justify-between"><dt class="text-ferchas-cafe-claro">Método de pago</dt><dd class="font-semibold text-ferchas-cafe">{{ pedidoActual.metodo_pago || '-' }}</dd></div>
+            <div class="flex justify-between"><dt class="text-ferchas-cafe-claro">Fecha de pedido</dt><dd class="font-semibold text-ferchas-cafe">{{ formatearFecha(pedidoActual.fecha_pedido) }}</dd></div>
+            <div class="flex justify-between"><dt class="text-ferchas-cafe-claro">Fecha de entrega</dt><dd class="font-semibold text-ferchas-cafe">{{ pedidoActual.fecha_entrega || '-' }}</dd></div>
           </dl>
         </div>
       </div>
@@ -107,6 +108,7 @@ const props = defineProps({
 const emit = defineEmits(['cerrar'])
 
 const almacenPedidos = useAlmacenPedidos()
+const pedidoActual = ref({ ...props.pedido })
 const nuevoEstado = ref(props.pedido.estado_pedido)
 const detalles = ref([])
 
@@ -115,32 +117,44 @@ function formatearFecha(fecha) {
   return new Date(fecha).toLocaleString('es-MX')
 }
 
-const fechaRegistro = computed(() => formatearFecha(props.pedido.fecha_pedido))
+const fechaRegistro = computed(() => formatearFecha(pedidoActual.value.fecha_pedido))
+
+const indicesEstados = ['Pendiente', 'Preparando', 'Entregado', 'Cancelado']
 
 const estadoTimeline = computed(() => {
   const estados = ['Pendiente', 'Preparando', 'Entregado']
-  const estadoActual = props.pedido.estado_pedido
-  const indiceActual = estados.indexOf(estadoActual) + 1
-
+  const estadoActual = pedidoActual.value.estado_pedido
   return estados.map((e, i) => ({
     etapa: e,
-    completado: i < indicesEstados.indexOf(estadoActual),
+    completado: e === 'Entregado' ? estadoActual === 'Entregado' : i < indicesEstados.indexOf(estadoActual),
     activo: e === estadoActual
   }))
 })
 
-const indicesEstados = ['Pendiente', 'Preparando', 'Entregado', 'Cancelado']
+async function refrescarPedido() {
+  const enc = almacenPedidos.pedidos.find(p => p.id_pedido === props.pedido.id_pedido)
+  if (enc) {
+    pedidoActual.value = { ...enc }
+  }
+  // Reiniciar el select al estado actual
+  nuevoEstado.value = pedidoActual.value.estado_pedido
+}
 
 onMounted(async () => {
   const res = await almacenPedidos.obtenerDetalles(props.pedido.id_pedido)
   if (res.exito) {
     detalles.value = almacenPedidos.detallesActuales
   }
+  await refrescarPedido()
 })
 
 watch(nuevoEstado, async (nuevo) => {
-  if (nuevo !== props.pedido.estado_pedido) {
-    await almacenPedidos.actualizarEstado(props.pedido.id_pedido, nuevo)
+  if (!nuevo || nuevo === pedidoActual.value.estado_pedido) return
+  const resultado = await almacenPedidos.actualizarEstado(props.pedido.id_pedido, nuevo)
+  if (resultado.exito) {
+    // Refrescar el store y actualizar la vista reactiva
+    await almacenPedidos.obtenerTodos()
+    await refrescarPedido()
   }
 })
 </script>
